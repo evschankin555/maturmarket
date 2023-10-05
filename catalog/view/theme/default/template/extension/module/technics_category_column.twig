@@ -1,0 +1,36 @@
+                <!-- Catalog Nav :: Start-->
+                <div class="catalog__nav is-hidden is-lg-visible">
+                  <h2 class="catalog__nav-heading">{% if (title) %}{{ title }}{% else %}{{ heading_title }}{% endif %}</h2>
+                  <ul class="catalog__nav-menu">
+                    {% for category in categories %}
+                      <li {% if (category.category_id == path_ids.0) %}class="is-active" {% endif %}>
+                        <a class="catalog__nav-link" href="{{ category.href }}">{{ category.name }}{% if showcount %}<span class="catalog__nav-counter">{{ category.totalitems }}</span>{% endif %}</a></li>
+                        {% if category.children is not empty %} 
+                          <ul class="catalog__nav-menu">
+                            {% for category2 in category.children %}
+                              <li><a {% if category2.category_id == path_ids.1 %} class="is-active catalog__nav-link" {% else %} class="catalog__nav-link" {% endif %} href="{{ category2.href }}">{{ category2.name }}{% if showcount %}<span class="catalog__nav-counter">{{ category2.totalitems }}</span>{% endif %}</a>
+                                {% if (category2.children is not empty) and (category2.category_id == path_ids.1) %}
+                                  <ul class="catalog__nav-menu">
+                                     {% for category3 in category2.children %}
+                                        {% if (category3.children is not empty)  and (category3.category_id == path_ids.2) %}
+                                          <li><a {% if category3.active %} class="is-active catalog__nav-link" {% else %} class="catalog__nav-link" {% endif %} href="{{ category3.href }}">{{ category3.name }}{% if showcount %}<span class="catalog__nav-counter">{{ category3.totalitems }}</span>{% endif %}</a>
+                                            <ul class="catalog__nav-menu">
+                                              {% for category4 in category3.children %}
+                                                <li><a {% if category4.category_id == path_ids.3 %} class="is-active catalog__nav-link" {% else %} class="catalog__nav-link" {% endif %} href="{{ category4.href }}">{{ category4.name }}{% if showcount %}<span class="catalog__nav-counter">{{ category4.totalitems }}</span>{% endif %}</a></li>
+                                              {% endfor %}
+                                            </ul>
+                                          </li>
+                                        {% else %}
+                                          <li><a {% if category3.active %} class="is-active catalog__nav-link" {% else %} class="catalog__nav-link" {% endif %} href="{{ category3.href }}">{{ category3.name }}{% if showcount %}<span class="catalog__nav-counter">{{ category3.totalitems }}</span>{% endif %}</a></li>
+                                        {% endif %}
+                                     {% endfor %}
+                                  </ul>
+                                {% endif %}
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                    {% endfor %} 
+                  </ul>
+                </div>
+                <!-- Catalog Nav :: End-->

@@ -1,0 +1,110 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+			<div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+				<div class="row">
+					<div class="col-sm-6">
+						<ul>
+							{% for category_1 in categories %} 
+							<li><a href="{{ category_1['href'] }}">{{ category_1['name'] }}</a>
+								{% if (category_1['children']) %} 
+								<ul>
+									{% for category_2 in category_1['children'] %} 
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ category_2['href'] }}">{{ category_2['name'] }}</a>
+										{% if (category_2['children']) %} 
+										<ul>
+											{% for category_3 in category_2['children'] %} 
+											<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ category_3['href'] }}">{{ category_3['name'] }}</a></li>
+											{% endfor %} 
+										</ul>
+										{% endif %} 
+									</li>
+									{% endfor %} 
+								</ul>
+								{% endif %} 
+							</li>
+							{% endfor %} 
+						</ul>
+					</div>
+					<div class="col-sm-6">
+						<ul>
+							<li><a href="{{ special }}">{{ text_special }}</a></li>
+							<li><a href="{{ account }}">{{ text_account }}</a>
+								<ul>
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ edit }}">{{ text_edit }}</a></li>
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ password }}">{{ text_password }}</a></li>
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ address }}">{{ text_address }}</a></li>
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ history }}">{{ text_history }}</a></li>
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ download }}">{{ text_download }}</a></li>
+								</ul>
+							</li>
+							<li><a href="{{ cart }}">{{ text_cart }}</a></li>
+							<li><a href="{{ checkout }}">{{ text_checkout }}</a></li>
+							<li><a href="{{ search }}">{{ text_search }}</a></li>
+							<li>{{ text_information }} 
+								<ul>
+									{% for information in informations %} 
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ information['href'] }}">{{ information['title'] }}</a></li>
+									{% endfor %} 
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ contact }}">{{ text_contact }}</a></li>
+								</ul>
+							</li>
+							{% if (newss is not empty) %} 
+							<li>{{ text_technics_news }} 
+								<ul>
+									{% for news in newss %} 
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ news['href'] }}">{{ news['title'] }}</a></li>
+									{% endfor %} 
+								</ul>
+							</li>
+							{% endif %} 
+							{% if (blogcategories is not empty) %} 
+							<li>{{ text_technics_blogs }} 
+								<ul>
+									{% for blogcategory in blogcategories %} 
+									<li>&nbsp;&nbsp;&nbsp;<a href="{{ blogcategory['href'] }}">{{ blogcategory['name'] }}</a>
+										<ul>
+											{% for subblog in blogcategory['subblogs'] %} 
+												<li>&nbsp;&nbsp;&nbsp;<a href="{{ subblog['href'] }}">{{ subblog['title'] }}</a>
+											{% endfor %} 
+										</ul>
+									</li>
+									{% endfor %} 
+								</ul>
+							</li>
+							{% endif %} 
+						</ul>
+					</div>
+				</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

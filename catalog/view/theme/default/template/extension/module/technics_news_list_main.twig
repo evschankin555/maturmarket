@@ -1,0 +1,48 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li {{ schema ? 'itemscope itemtype="http://data-vocabulary.org/Breadcrumb"' : ''}}><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}" {{ schema ? 'itemprop="url"' : ''}}><span {{ schema ? 'itemprop="title"' : ''}}>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+         <!-- News :: Start-->
+        <div class="news">
+          <div class="container-fluid">
+            <h1 class="news__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+                <div class="news__grid">
+                  <div class="row">
+					{% for news in newss %}
+                    <div class="col-md-6 col-lg-4"><a class="news__item" href="{{ news['href'] }}">
+                        <h2 class="news__item-title">{{ news['title'] }}</h2>
+                        <p class="news__item-text">{{ news['description'] }} </p><span class="news__item-time">{{ news['date_added'] }} </span></a></div>
+					{% endfor %} 
+                  </div>
+                </div>
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+			</div>
+			{{ column_right ? '<div class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- News :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

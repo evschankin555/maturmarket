@@ -1,0 +1,131 @@
+{% for key,link in main_navs[number].type[0].links %} 
+  {% set cat_id = key|slice(1) %} 
+  {% set element = main_navs[number]['addelem'] %}
+
+    {% if (not categories['categoriesls'][cat_id]['childrencount']) %}
+      <li><a class="nav__link" href="{{ categories['categoriesls'][cat_id]['href'] }}">{{ categories['categoriesls'][cat_id]['name'] }}</a></li>
+    {% else %} 
+
+    	 
+           
+
+                  <li class="nav__menu-fullwidth"><a class="nav__link nav__link--arrow" href="{{ categories['categoriesls'][cat_id]['href'] }}">
+                       {{ categories['categoriesls'][cat_id]['name'] }}</a>
+                            <div class="nav__dropdown nav__dropdown--full {% if element['content'] is not empty %}nav__dropdown--type{{ element['settype'] }}{% endif %}">
+                              <div class="nav__group">
+                                <div class="row">
+                                 {% if element['content'] is not empty %}
+							      <div class="col-xl-9">
+							     {% else %}
+							      <div class="col-xl-12">
+							     {% endif %}
+										<div class="row">
+									  {% for categories in main_navs[number].type[0].cattoview[cat_id].columns %}
+											{% set width = main_navs[number].type[0].cattoview[cat_id].width %}                        	  
+										  <div class="col-4 col-lg-3" style="-ms-flex: 0 0 {{ width }}%;flex: 0 0 {{ width }}%;max-width: {{ width }}%;">
+										{% for category in categories %} 
+											<a class="nav__group-title" href="{{ category['href'] }}">{{ category['name'] }}</a>
+										  {% if (category['children']) %}                                   
+											<ul class="nav__group-menu">
+												  {% for category3 in category['children']|slice(0, max_subcat) %}
+													<li><a class="nav__group-link" href="{{ category3['href'] }}">{{ category3['name'] }}</a></li>
+												  {% endfor %}
+
+												  {% if (category.children|length > max_subcat) %}
+													<li><a class="nav__group-link nav__group-link--more" href="{{ category.href }}">{{ text_technics_show_all }}</a></li>
+												  {% endif %}
+											</ul>
+										  {% else %} 
+											
+										  {% endif %}
+										{% endfor %}
+										  </div>
+									  {% endfor %}
+										</div>
+								  </div>
+						  
+                    {% if element['content'] is not empty %}
+                    	
+                                  <div class="col-hidden col-xl-visible col-xl-3"> 
+                                    <div class="nav__promo"><b class="nav__promo-heading">{{ main_navs[number].addelem.name[language_id] }}</b>
+                                      {% if element['settype'] == 0 %}
+
+                                      <div class="nav__promo-slides js-slick-nav">
+                                        {% for product in element['content']['main_prods'] %}
+                                        <div class="products__item">
+                                          <div class="products__item-in">
+										  <div class="products__item-stickers">
+										  {% if (product['rating'] != constant('false')) %}
+											<div class="products__item-rating">
+												<svg class="icon-star">
+													<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+												</svg>{{ product['rating'] }}/5
+											</div>
+											{% endif %}
+											{% if (product['isnewest']) %} 
+												<mark class="products__item-mark products__item-mark--new">{{ element['content']['labelsinfo']['new']['name'][language_id] }}</mark>
+											{% endif %} 
+											{% if (product['special'] and product['sales']) %} 
+												<mark class="products__item-mark products__item-mark--sale">{{ element['content']['labelsinfo']['sale']['name'][language_id] ~ ' ' ~ product['discount'] }}</mark>
+											{% endif %} 
+											{% if (product['popular']) %} 
+												<mark class="products__item-mark products__item-mark--popular">{{ product['popular'] }}</mark>
+											{% endif %} 
+											{% if (product['hit']) %} 
+												<mark class="products__item-mark products__item-mark--hit">{{ product['hit'] }}</mark>
+											{% endif %} 
+											{% if (product['catch']) %} 
+												{% if (product['nocatch']) %} 
+													<mark class="products__item-mark products__item-mark--nocatch">{{ product['catch'] }}</mark>
+												{% else %} 
+													<mark class="products__item-mark products__item-mark--catch">{{ product['catch'] }}</mark>
+												{% endif %} 
+											{% endif %} 
+											{% if (product['reward']) %} 
+												<mark class="products__item-mark products__item-mark--reward">{{ text_reward }} {{ product['reward'] }}</mark>
+											{% endif %} 
+										  </div>
+                                            <div class="products__item-images"><a href="{{ product.href }}"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy="{{ product.thumb }}" alt="{{  product.name }}"></a></div>
+                                            <div class="products__item-desc"><span class="products__item-category">{{  product.category.name }}</span><a href="{{ product.href }}" class="products__item-title">{{  product.name }}</a>
+												<span class="products__item-price">
+												{% if (product.price) %} 
+													{% if (product.special) %} 
+														<u>{{ product.price }}</u>{{ product.special }} 
+													{% else %} 
+														{{ product.price }}
+													{% endif %}
+												{% endif %} 
+												</span>
+											</div>
+                                            <div class="products__item-action"><a class="btn btn--cart" href="#">{{ button_cart }}
+                                                <svg class="icon-cart">
+                                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+                                                </svg></a><a class="btn btn--preview" href="#">
+                                                <svg class="icon-preview">
+                                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                                </svg></a></div>
+                                          </div>
+                                        </div>
+                                        {% endfor %}
+                                      </div>
+
+                                      {% elseif element['settype'] == 2 %}
+									  <div class="nav__promo-manf">
+									  	{% for manufacturer in element['content']['main_manf'] %}
+									  		<a href="{{ manufacturer.href }}"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}"></a>
+									  	{% endfor %}
+									  </div>
+                                      {% elseif element['settype'] == 1 %}
+                                      	{{ element['content']['main_html'] }}
+                                      {% endif %}
+
+                                    </div>
+                                  </div>
+					{% endif %}
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                  
+    {% endif %} 
+  {% endfor %}

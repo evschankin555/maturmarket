@@ -1,0 +1,32 @@
+        <!-- Category :: Start-->
+        <div class="category">
+          <div class="container-fluid">
+		{% if (title) %} 
+            <div class="category__head">
+              <h2 class="category__heading">{{ title }}</h2>
+            </div>
+		{% endif %}
+		{% if not (view) %}
+            <div class="category__grid">
+              <div class="row">
+				{% for category in categories %} 
+                <div class="col-6 col-sm-6 col-lg-3 col-xl-3"><a class="category__item" href="{{ category['href'] }}">
+                    <figure class="category__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ category['thumb'] }}" alt="{{ category['name'] }}"></figure>
+                    <h3 class="category__item-title">{{ category['name'] }}</h3></a>
+				</div>
+				{% endfor %}
+              </div>
+            </div>
+		{% else %} 
+            <div class="category__slides js-slick-category">
+				{% for category in categories %}
+				<a class="category__item" href="{{ category['href'] }}">
+					<figure class="category__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ category['thumb'] }}" alt="{{ category['name'] }}"></figure>
+					<h3 class="category__item-title">{{ category['name'] }}</h3>
+				</a>
+				{% endfor %}
+			</div>
+		{% endif %}
+          </div>
+        </div>
+        <!-- Category :: End-->

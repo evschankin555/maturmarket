@@ -1,0 +1,18 @@
+{% if (articles) %} 
+				<div class="media-col is-hidden is-lg-visible">
+					<div class="media-col__head">
+						<h3 class="media-col__heading">
+							{{ heading_title }}
+						</h3>
+					</div>
+				{% for article in articles %}
+					<a class="other__item other__item--col" href="{{ article['href'] }}">
+						<figure class="other__item-image"><img src="{{ article['thumb'] }}" alt="{{ article['name'] }}"></figure>
+						<div class="other__item-desc">
+							<span class="other__item-title">{{ article['name'] }}</span>
+							<p style="max-height: 69px;overflow: hidden;padding: 0;">{{ article.description }}</p>
+						</div>
+					</a>
+					{% endfor %}			
+				</div>
+{% endif %}		

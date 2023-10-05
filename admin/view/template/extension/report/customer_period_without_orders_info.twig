@@ -1,0 +1,115 @@
+<div class="row">
+  <div id="filter-report" class="col-md-3 col-md-push-9 col-sm-12 hidden-sm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-filter"></i> {{ text_filter }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="control-label" for="input-customer_group">{{ entry_customer_group }}</label>
+          <select name="filter_customer_group_id" id="input-customer_group" class="form-control">
+          {% for customer_group in customer_groups %}
+          {% if customer_group.customer_group_id == filter_customer_group_id %}
+            <option value="{{ customer_group.customer_group_id }}" selected="selected">{{ customer_group.name }}</option>
+          {% else %}
+            <option value="{{ customer_group.customer_group_id }}">{{ customer_group.name }}</option>
+          {% endif %}
+          {% endfor %}
+          {% if not filter_customer_group_id %}
+            <option value="0" selected="selected">{{ text_all_groups }}</option>
+          {% else %}
+            <option value="0">{{ text_all_groups }}</option>
+          {% endif %}            
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="input-period_without_orders">{{ entry_period_without_orders }}</label>
+          <input type="text" name="filter_period_without_orders" value="{{ filter_period_without_orders }}" placeholder="{{ entry_period_without_orders }}" id="input-period_without_orders" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="input-orders_count">{{ entry_orders_count }}</label>
+          <input type="text" name="filter_orders_count" value="{{ filter_orders_count }}" placeholder="{{ entry_orders_count }}" id="input-orders_count" class="form-control" />
+        </div>
+        <div class="form-group text-right">
+          <button type="button" id="button-filter" class="btn btn-default"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9 col-md-pull-3 col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart"></i> {{ heading_title }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td class="text-left">{{ column_customer }}</td>
+                <td class="text-left">{{ column_phone }}</td>
+                <td class="text-left">{{ column_customer_group }}</td>
+                <td class="text-left">{{ column_status }}</td>
+                <td class="text-right">{{ column_last_order_date }}</td>
+                <td class="text-right">{{ column_orders }}</td>
+                <td class="text-right">{{ column_total }}</td>
+                <td class="text-right">{{ column_action }}</td>
+              </tr>
+            </thead>
+            <tbody>
+            
+            {% if customers %}
+            {% for customer in customers %}
+            <tr>
+              <td class="text-left">{{ customer.customer }} <a href="{{customer.customer_purchases}}">(покупки)</a></td>
+              <td class="text-left">{{ customer.phone }}</td>
+              <td class="text-left">{{ customer.customer_group }}</td>
+              <td class="text-left">{{ customer.status }}</td>
+              <td class="text-right">{{ customer.last_order_date }}</td>
+              <td class="text-right">{{ customer.orders }}</td>
+              <td class="text-right">{{ customer.total }}</td>
+              <td class="text-right"><a href="{{ customer.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+              <td class="text-center" colspan="8">{{ text_no_results }}</td>
+            </tr>
+            {% endif %}
+            </tbody>
+            
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	var url = '';
+
+    var filter_customer_group_id = $('select[name=\'filter_customer_group_id\']').val();
+	
+	if (filter_customer_group_id != 0) {
+		url += '&filter_customer_group_id=' + encodeURIComponent(filter_customer_group_id);
+	} 
+	
+	var filter_period_without_orders = $('input[name=\'filter_period_without_orders\']').val();
+	
+	if (filter_period_without_orders) {
+		url += '&filter_period_without_orders=' + encodeURIComponent(filter_period_without_orders);
+	}
+	
+	var filter_orders_count = $('input[name=\'filter_orders_count\']').val();
+	
+	if (filter_orders_count) {
+		url += '&filter_orders_count=' + encodeURIComponent(filter_orders_count);
+	}
+	
+	location = 'index.php?route=report/report&code=customer_period_without_orders&user_token={{ user_token }}' + url;
+});
+//--></script>

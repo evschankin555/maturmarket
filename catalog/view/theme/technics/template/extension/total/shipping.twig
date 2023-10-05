@@ -1,0 +1,68 @@
+							<li>
+							  <button class="tabs__btn" data-tabs-btn="tab_shipping">{{ text_technics_shipping }}</button>
+							</li>
+							
+						  <div class="tabs__content" data-tabs-content="tab_shipping">
+							<fieldset class="ui-fieldset">
+								<p class="ui-caption">{{ text_shipping }}</p>
+								
+
+									<div class="personal__group form-group">
+										<div class="row">
+											<div class="col-auto">
+												<label class="ui-label required">{{ entry_country }}</label>
+											</div>
+											<div class="col">
+												<div class="ui-field">
+													<select name="country_id" id="input-country" class="ui-select">
+													  <option value="">{{ text_select }}</option>
+													  {% for country in countries %}
+													  {% if country.country_id == country_id %}
+													  <option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+													  {% else %}
+													  <option value="{{ country.country_id }}">{{ country.name }}</option>
+													  {% endif %}
+													  {% endfor %}
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="personal__group form-group">
+										<div class="row">
+											<div class="col-auto">
+												<label class="ui-label required">{{ entry_zone }}</label>
+											</div>
+											<div class="col">
+												<div class="ui-field">
+													<select name="zone_id" id="input-zone" class="ui-select"></select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="personal__group form-group">
+										<div class="row">
+											<div class="col-auto">
+												<label class="ui-label required">{{ entry_postcode }}</label>
+											</div>
+											<div class="col">
+												<div class="ui-field">
+													<input type="text" name="postcode" value="{{ postcode }}" placeholder="{{ entry_postcode }}" id="input-postcode" class="ui-input">
+												</div>
+											</div>
+										</div>
+									</div>
+							</fieldset>
+							<div class="personal__action">
+								<button type="button" data-loading-text="{{ text_loading }}" id="button-quote" class="btn btn--transparent">{{ button_quote }}</button>
+							</div>
+		
+<input type="hidden" name="fix_text_shipping_method" value="{{ text_shipping_method }}">	
+<input type="hidden" name="fix_shipping_method" value="{{ shipping_method }}">	
+<input type="hidden" name="fix_text_select" value="{{ text_select }}">	
+<input type="hidden" name="fix_zone_id" value="{{ zone_id }}">	
+<input type="hidden" name="fix_button_shipping" value="{{ button_shipping }}">	
+<input type="hidden" name="fix_text_none" value="{{ text_none }}">	
+<input type="hidden" name="fix_text_technics_shipping" value="{{ text_technics_shipping }}">	
+<input type="hidden" name="fix_text_loading" value="{{ text_loading }}">	
+						  </div>

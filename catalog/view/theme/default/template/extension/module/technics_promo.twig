@@ -1,0 +1,28 @@
+        <!-- Promo :: Start-->
+        <div class="promo">
+          <div class="container-fluid">
+            <div class="row">
+              {% for banner in banners %}
+	              <div class="col-md-6 col-xl-{{ banner.column_width }}">
+	              	  {% for image in banner.images %}
+	              	  	<a class="promo__item" href="{{ image.link }}">
+	                      <figure class="promo__item-image"><img src="{{ image.image }}" alt="{{ image.title }}"></figure>
+		                  <div class="promo__item-desc {{ image.position }} {{ image.color }}">
+							{% if image.title %}
+		                    <h3 class="promo__item-title">{{ image.title }}</h3>
+							{% endif %}
+							{% if image.text_big %}
+		                    <p class="promo__item-price">{{ image.text_big }}</p>
+							{% endif %}
+							{% if image.text_small %}
+							<span class="btn btn--sm {% if image.color == 'promo__item-desc--white' %}btn--white{% else %}btn--blue{% endif %}">{{ image.text_small }}</span>
+							{% endif %}
+		                  </div>
+		                 </a>
+	                  {% endfor %}
+	              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- Promo :: End-->

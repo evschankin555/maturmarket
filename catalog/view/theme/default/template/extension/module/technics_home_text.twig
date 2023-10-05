@@ -1,0 +1,18 @@
+        <!-- Seo :: Start-->
+        <div class="seo">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-4 col-xl-3 offset-xl-1">
+                {% if (img) %}<div class="seo__logo"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ img }}" alt="{{ heading_title }}">{% endif %}
+                {% if (heading_title) %}<h1>{{ heading_title }}</h1>{% endif %}
+                </div>
+              </div>
+              <div class="col-md-8 col-xl-7">
+                <div class="sea__readmore js-readmore" data-more="Читать дальше" data-less="Скрыть">
+                  {{ html }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Seo :: End-->

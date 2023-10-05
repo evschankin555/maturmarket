@@ -1,0 +1,20 @@
+	{% if (newss is not empty) %}
+	<!-- Media :: Start-->
+        <div class="media">
+          <div class="container-fluid">
+            <div class="media__head">
+              <h2 class="media__heading">{{ heading_title }}</h2><a class="media__link" href="{{ news_href }}">{{ text_all_news }}</a>
+            </div>
+            <div class="media__slides js-slick-media">
+			{% for news in newss %}
+			<a class="news__item" href="{{ news['href'] }}">
+				<h2 class="news__item-title">{{ news['title'] }}</h2>
+				<p class="news__item-text">{{ news['description'] }}</p>
+				<span class="news__item-time">{{ news['date_added'] }}</span>
+			</a>
+			{% endfor %}
+			</div>
+          </div>
+        </div>
+     <!-- Media :: End-->
+    {% endif %}

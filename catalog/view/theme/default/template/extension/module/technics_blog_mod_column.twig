@@ -1,0 +1,19 @@
+	{% if (blogs is not empty) %}	
+	<!-- Media :: Start-->
+        <div class="media-col is-hidden is-lg-visible">
+            <div class="media-col__head">
+              <h3 class="media-col__heading">{{ heading_title }}</h3><a class="media-col__link" href="{{ blog_href }}">{{ text_all_blogs }}</a>
+            </div>
+			{% for blog in blogs %}
+			<a class="media__item" href="{{ blog['href'] }}" style="margin-bottom: -.1rem;">
+                <div class="media__item-in"><span class="media__item-date">{{ blog['date_added'] }}</span>
+                  <h3 class="media__item-title">
+                    <u>{{ blog['title'] }}</u>
+                  </h3>
+				  <p class="media__item-text">{{ blog['description'] }}</p>
+                </div>
+			</a>
+			{% endfor %}
+        </div>
+     <!-- Media :: End-->
+	{% endif %}

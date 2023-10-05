@@ -1,0 +1,47 @@
+{% if (reviews) %} 
+{% for review in reviews %} 
+                    <div class="comments__item">
+					<a id="review-{{ review['review_id'] }}" rel="nofollow"></a>
+                      <figure class="comments__item-image">
+                        <svg class="icon-photo">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-photo"></use>
+                        </svg>
+                      </figure>
+                      <p class="comments__item-rating">
+                        <svg class="icon-star">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+                        </svg>{{ review['rating'] }}/5
+                      </p>
+                      <p class="comments__item-author"><b>{{ review['author'] }}</b><small>{{ review['date_added'] }}</small></p>
+                      <div class="comments__item-message">
+                        <p>{{ review['text'] }}</p>
+						{% if (review['text_plus'] or review['text_minus']) %} 
+                        <dl>
+						  {% if (review['text_plus']) %}
+                          <dt>{{ text_review_plus }}</dt>
+                          <dd>{{ review['text_plus'] }}</dd>
+						  {% endif %}
+						  {% if (review['text_minus']) %}
+                          <dt>{{ text_review_minus }}</dt>
+                          <dd>{{ review['text_minus'] }}</dd>
+						  {% endif %}
+                        </dl>
+						{% endif %}
+                      </div>
+                      <div class="comments__item-action"><a class="btn btn--good" data-for="{{ review['review_id'] }}" href="#">
+                          <svg class="icon-good">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-good"></use>
+                          </svg><span>{{ review['count_good'] }}</span></a><a class="btn btn--bad" data-for="{{ review['review_id'] }}" href="#">
+                          <svg class="icon-bad">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-bad"></use>
+                          </svg><span>{{ review['count_bad'] }}</span></a></div>
+                    </div>
+{% endfor %} 
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+{% else %} 
+<p class="noreviews">{{ text_no_reviews }}</p>
+{% endif %}

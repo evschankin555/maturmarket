@@ -1,0 +1,734 @@
+      <!-- Footer :: Start-->
+<div id="popupprod" class="popup popup--1170"></div>
+    {% if (buy_click['status']) %} 
+      <div class="popup popup--570" style="display: none;" id="popup-buy-click">
+      <button class="popup__close" data-fancybox-close>
+        <svg class="icon-close">
+        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use>
+        </svg>
+      </button>
+      <div class="writeus"><span class="writeus__heading">{{ text_technics_buy_click }}</span>
+        <div class="writeus__form">
+        {{ buyclick_form }}
+        {{ captcha_fo }}
+          <div class="writeus__action">
+          <button type="button" class="btn btn--blue js-btn-add-cart-fast quickbuy-send">{{ button_fastorder_sendorder }}</button>
+          <input name="quantity" id="cat_qty" type="hidden"  value="2">
+          <input name="buy-click-type" id="buy-click-type" type="hidden"  value="product">
+          <input name="product_id" id="cat_prod_id" type="hidden"  value="">
+          <input name="redirect"  value="1" class="fast-redirect" type="hidden">
+          </div>
+          {% if (text_click_pdata) %} 
+          <div class="personal-data">{{ text_click_pdata }}</div>
+          {% endif %} 
+        </div>
+      </div>
+      </div>
+    {% endif %} 
+{% if (scroll_to_top) %} 
+	<a href="#" class="scroll-to-top js-stt" style="{{ scroll_to_top_pos }}: 0;"><svg class="icon-arrow-up"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-arrow-up"></use></svg></a>
+{% endif %} 
+
+{% if (messenger_status) %}		  
+	{% if (messenger_navs is defined) %} 
+              <div class="app-chats app-chats--{{ messenger_pos }}">
+                <button class="app-chats__toggle">
+                  <svg class="icon-chats-open">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-chats-open"></use>
+                  </svg>
+                  <svg class="icon-chats-close">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-chats-close"></use>
+                  </svg>
+                </button>
+                <div class="app-chats__dropdown" style="{{ messenger_pos }}: 0;">
+                  <ul class="app-chats__list">
+			 {% for key,messenger_nav in messenger_navs %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'whatsapp') %} 
+                    <li><a class="app-chats__item" target="_blank" rel="nofollow" href="https://wa.me/{{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-whatsapp.svg" alt=""></figure>
+                        <p class="app-chats__item-text">WhatsApp</p></a></li>
+				{% endif %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'viber') %} 
+                    <li><a class="app-chats__item app-chats__item--viber-mobile" target="_blank" href="viber://add?number={{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-viber.png" alt=""></figure>
+                        <p class="app-chats__item-text">Viber</p></a>
+						<a class="app-chats__item app-chats__item--viber-pc" target="_blank" href="viber://chat/?number={{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-viber.png" alt=""></figure>
+                        <p class="app-chats__item-text">Viber</p></a></li>
+				{% endif %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'telegram') %} 
+                    <li><a class="app-chats__item" target="_blank" rel="nofollow" href="https://t.me/{{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-telegram.svg" alt=""></figure>
+                        <p class="app-chats__item-text">Telegram</p></a></li>
+				{% endif %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'skype') %} 
+                    <li><a class="app-chats__item" target="_blank" rel="nofollow" href="skype:{{ messenger_nav['link'] }}?chat">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-skype.svg" alt=""></figure>
+                        <p class="app-chats__item-text">Skype</p></a></li>
+				{% endif %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'facebook-messenger') %} 
+                    <li><a class="app-chats__item" target="_blank" rel="nofollow" href="http://m.me/{{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-messenger.svg" alt=""></figure>
+                        <p class="app-chats__item-text">Messenger</p></a></li>
+				{% endif %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'email') %} 
+                    <li><a class="app-chats__item" target="_blank" href="mailto:{{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-email.svg" alt=""></figure>
+                        <p class="app-chats__item-text">Email</p></a></li>
+				{% endif %} 
+				{% if (messenger_links[messenger_nav['settype']] == 'vk') %} 
+                    <li><a class="app-chats__item" target="_blank" rel="nofollow" href="https://vk.me/{{ messenger_nav['link'] }}">
+                        <figure class="app-chats__item-image"><img src="catalog/view/theme/technics/images/icons/icon-chats-vk.svg" alt=""></figure>
+                        <p class="app-chats__item-text">VK</p></a></li>
+				{% endif %} 
+			{% endfor %} 
+                  </ul>
+                </div>
+              </div>
+	{% endif %} 
+{% endif %}
+{% if (text_technics_cookieagry_btn) %} 
+	{% if (not islogged and not cookieagry) %} 
+			<div class="cookieagry" style="display: block;">
+				<div class="cookieagry__text">
+					{{ text_technics_cookieagry_btn }} 
+					<button type="button" class="cookieagry__close close" id="cookieagry"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button>
+				</div>	
+			</div>
+	{% endif %} 
+{% endif %} 
+{% if (footer_type == 1) %} 
+      <!-- Footer v1 :: Start-->
+      <footer class="footer footer--v1">
+	    {% if (footer_navs is not empty) %}
+        <div class="footer__nav">
+          <div class="container-fluid">
+            <nav class="nav-categories nav-categories--flex{{ footer_categories ? ' js-slick-categories' : ''}}">
+			{% for key,footer_nav in footer_navs %}
+              <div class="nav-categories__group">
+				{% if (footer_nav['language'][language_id]['name']) %}
+					<h4 class="nav-categories__heading">{{ footer_nav['language'][language_id]['name'] }}</h4>
+				{% endif %}
+				{% if (footer_nav['settype']) %}
+				  {{ footer_nav['type'][footer_nav['settype']]['links']['html'] }}
+				{% else %}
+                <ul class="nav-categories__menu">
+				  {% for id,link in footer_nav['type'][footer_nav['settype']]['links'] %}
+                  <li><a class="nav-categories__link" href="{{ link }}" {% if (top_links[id]['target'] is defined) %}target="{{ top_links[id]['target'] }}" {% endif %}>{{ footer_nav['type'][footer_nav['settype']]['names'][id] is defined ? footer_nav['type'][footer_nav['settype']]['names'][id] : '' }}</a></li>
+				  {% endfor %}
+                </ul>
+				{% endif %}
+              </div>
+			{% endfor %}
+            </nav>
+          </div>
+        </div>
+		{% endif %}
+		{% if (subscribe_status) %}
+        <div class="footer__subsc">
+          <div class="container-fluid">
+            <div class="subsc">
+              <div class="subsc__caption">{{ subscribe_title }} <small>{{ subscribe_subtitle }} {% if (text_technics_pdata) %} {{ text_technics_pdata }} {% endif %} </small></div>
+              <div class="subsc__field"> 
+                <input class="subsc__input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+                <button type="button" class="subsc__btn js-subscribe-btn">{{ text_technics_subscribe_btn }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+		{% endif %}
+        <div class="footer__container">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+                <p class="footer__copyright">{{ footer_text }} {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}</p>
+              </div>
+			  {% if (technics_phones) %}
+              <div class="col-6 {% if (soc_stat and social_navs is not empty) %}push-6{% endif %} col-md-4 push-md-0 col-lg-3 push-lg-3 col-xl-2 push-xl-5">
+                <div class="footer__phone">
+				  {% for key, technics_phone in technics_phones %}
+				  <a class="footer__phone-number" rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>
+				  {% endfor %}
+				  {% if (callback_status) %}
+				  <a class="footer__phone-link js-fancy-popup" href="#callback-footer"><span>{{ text_header_callback }}</span></a>
+				  <div id="callback-footer" class="popup popup--570" style="display:none;">{{ callback }}</div>
+				  {% endif %}
+				</div>
+              </div>
+			  {% endif %}
+			  {% if (soc_stat) %}
+			  {% if (social_navs is not empty) %}
+              <div class="col-6 pull-6 col-md-4 pull-md-0 col-lg-3 pull-lg-3 col-xl-2 push-xl-1">
+                <div class="footer__social"><span class="footer__social-heading">{{ text_social_navs }}</span>
+                  <nav class="footer__social-nav">
+				  {% for key,social_nav in social_navs %}
+				    {% if (key + 1 < (social_navs)|length) %}
+				    <a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a> \ 
+					{% else %}
+					<a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a>
+					{% endif %}
+				  {% endfor %}
+                  </nav>
+                </div>
+              </div>
+			  {% endif %}
+			  {% endif %}
+              {% if (payment_icons is not empty) %}
+                <div class="col-12 col-md-8 col-lg-12 col-xl-3 {% if (soc_stat and social_navs is not empty) %}pull-xl-4{% endif %}">
+                  <div class="footer__pay"><span class="footer__pay-heading">{{ text_footer_pay }}</span>
+                    <div class="footer__pay-group">
+                      {% for key,payment_icon in payment_icons %}
+                        {% if (payment_icon.link[language_id]) %}
+                          <a class="footer__pay-item" href="{{ payment_icon.link[language_id] }}" target="{{ payment_icon.attr }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ payment_icon.thumb }}" alt=""></a>
+                        {% else %}
+                          <span class="footer__pay-item"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ payment_icon.thumb }}" alt=""></span>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </footer>
+	  <!-- Footer v1 :: End-->
+{% endif %} 
+{% if (footer_type == 2) %} 
+      <!-- Footer v2 :: Start-->
+      <footer class="footer footer--v2">
+	    {% if (footer_navs is not empty) %}
+        <div class="footer__nav">
+          <div class="container-fluid">
+            <nav class="nav-categories nav-categories--flex{{ footer_categories ? ' js-slick-categories' : ''}}">
+			{% for key,footer_nav in footer_navs %}
+              <div class="nav-categories__group">
+				{% if (footer_nav['language'][language_id]['name']) %}
+					<h4 class="nav-categories__heading">{{ footer_nav['language'][language_id]['name'] }}</h4>
+				{% endif %}
+				{% if (footer_nav['settype']) %}
+				  {{ footer_nav['type'][footer_nav['settype']]['links']['html'] }}
+				{% else %}
+                <ul class="nav-categories__menu">
+				  {% for id,link in footer_nav['type'][footer_nav['settype']]['links'] %}
+                  <li><a class="nav-categories__link" href="{{ link }}" {% if (top_links[id]['target'] is defined) %}target="{{ top_links[id]['target'] }}" {% endif %}>{{ footer_nav['type'][footer_nav['settype']]['names'][id] is defined ? footer_nav['type'][footer_nav['settype']]['names'][id] : '' }}</a></li>
+				  {% endfor %}
+                </ul>
+				{% endif %}
+              </div>
+			{% endfor %}
+                <div class="nav-categories__info">
+				  {% if (technics_phones) %}
+                  <div class="footer__phone">
+				  {% for key, technics_phone in technics_phones %}
+				    <a class="footer__phone-number" rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>
+				  {% endfor %}
+				  {% if (callback_status) %}
+				  <a class="footer__phone-link js-fancy-popup" href="#callback-footer"><span>{{ text_header_callback }}</span></a>
+				  <div id="callback-footer" class="popup popup--570" style="display:none;">{{ callback }}</div>
+				  {% endif %}
+				  </div>
+				  {% endif %}
+              {% if (payment_icons is not empty) %}
+                  <div class="footer__pay"><span class="footer__pay-heading">{{ text_footer_pay }}</span>
+                    <div class="footer__pay-group">
+                      {% for key,payment_icon in payment_icons %}
+                        {% if (payment_icon.link[language_id]) %}
+                          <a class="footer__pay-item" href="{{ payment_icon.link[language_id] }}" target="{{ payment_icon.attr }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}"></a>
+                        {% else %}
+                          <span class="footer__pay-item"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}"></span>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+              {% endif %}
+                </div>
+            </nav>
+          </div>
+        </div>
+		{% endif %}
+		{% if (subscribe_status) %}
+        <div class="footer__subsc">
+          <div class="container-fluid">
+            <div class="subsc">
+              <div class="subsc__caption">{{ subscribe_title }} <small>{{ subscribe_subtitle }} {% if (text_technics_pdata) %} {{ text_technics_pdata }} {% endif %} </small></div>
+              <div class="subsc__field"> 
+                <input class="subsc__input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+                <button type="button" class="subsc__btn js-subscribe-btn">{{ text_technics_subscribe_btn }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+		{% endif %}
+        <div class="footer__container">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 col-md-4 col-lg-6 col-xl-6">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+                <p class="footer__copyright">{{ footer_text }} {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}</p>
+              </div>
+              <div class="col-6 push-6 col-md-4 push-md-0 col-lg-3 push-lg-3 col-xl-3 push-xl-3">
+                  <div class="footer__questions">
+                    <div class="footer__questions-align">
+                      <svg class="icon-questions">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-questions"></use>
+                      </svg><span class="footer__questions-heading">{{ text_footer_questions }}</span><a class="footer__questions-link" href="{{ contact }}">{{ text_footer_link }}</a>
+                    </div>
+                  </div>
+              </div>
+			  {% if (soc_stat) %}
+			  {% if (social_navs is not empty) %}
+              <div class="col-6 pull-6 col-md-4 pull-md-0 col-lg-3 pull-lg-3 col-xl-3 pull-xl-3">
+                <div class="footer__social"><span class="footer__social-heading">{{ text_social_navs }}</span>
+                  <nav class="footer__social-nav">
+				  {% for key,social_nav in social_navs %}
+				    {% if (key + 1 < (social_navs)|length) %}
+				    <a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a> \ 
+					{% else %}
+					<a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a>
+					{% endif %}
+				  {% endfor %}
+                  </nav>
+                </div>
+              </div>
+			  {% endif %}
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+      </footer>
+	  <!-- Footer v2 :: End-->
+{% endif %} 
+{% if (footer_type == 3) %} 
+      <!-- Footer v3 :: Start-->
+      <footer class="footer footer--v3">
+        <div class="footer__container">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-12 col-md-4">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+                <p class="footer__copyright">{{ footer_text }} {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}</p>
+              </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="footer__questions">
+                    <div class="footer__questions-align">
+                      <svg class="icon-questions">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-questions"></use>
+                      </svg><span class="footer__questions-heading">{{ text_footer_questions }}</span><a class="footer__questions-link" href="{{ contact }}">{{ text_footer_link }}</a>
+                    </div>
+                  </div>
+                </div>
+			  {% if (subscribe_status) %}
+                <div class="col-sm-6 col-md-4">
+                  <div class="subsc-min">
+                      <label class="subsc-min__label">{{ subscribe_title }} <br> {{ subscribe_subtitle }} {% if (text_technics_pdata) %} {{ text_technics_pdata }} {% endif %}</label>
+                      <div class="subsc-min__field">
+                        <svg class="icon-subsc">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-subsc"></use>
+                        </svg>
+						<input class="subsc-min__input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+                        <button type="button" class="subsc-min__btn js-subscribe-btn">{{ text_technics_subscribe_btn }}</button>
+                      </div>
+                  </div>
+                </div>
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="footer__line">
+            <div class="container-fluid">
+              <div class="row align-items-center">
+			  {% if (technics_phones) %}
+              <div class="col-12 col-md-6">
+                <div class="footer__phone">
+				  {% for key, technics_phone in technics_phones %}
+				  <a class="footer__phone-number" rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>
+				  {% endfor %}
+				  {% if (callback_status) %}
+				  <a class="footer__phone-link js-fancy-popup" href="#callback-footer"><span>{{ text_header_callback }}</span></a>
+				  <div id="callback-footer" class="popup popup--570" style="display:none;">{{ callback }}</div>
+				  {% endif %}
+				</div>
+              </div>
+			  {% endif %}
+			  {% if (soc_stat) %}
+			  {% if (social_navs is not empty) %}
+              <div class="col-hidden col-md-visible col-md-6">
+                <div class="footer__social"><span class="footer__social-heading">{{ text_social_navs }}</span>
+                  <nav class="footer__social-nav">
+				  {% for key,social_nav in social_navs %}
+				    {% if (key + 1 < (social_navs)|length) %}
+				    <a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a> \ 
+					{% else %}
+					<a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a>
+					{% endif %}
+				  {% endfor %}
+				  </nav>
+                </div>
+              </div>
+			  {% endif %}
+			  {% endif %}
+              </div>
+            </div>
+        </div>
+      </footer>
+	  <!-- Footer v3 :: End-->
+{% endif %} 
+{% if (footer_type == 4) %} 
+      <!-- Footer v4 :: Start-->
+      <footer class="footer footer--v4">
+        <div class="footer__container">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-12 col-md-6 push-md-3 col-xl-6 push-xl-3">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+                <p class="footer__copyright">{{ footer_text }} {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}</p>
+			  {% if (soc_stat) %}
+			  {% if (social_navs is not empty) %}
+                  <div class="footer__social footer__social--icons">
+                    <nav class="footer__social-nav">
+					{% for social_nav in social_navs %}
+					  <a class="footer__social-link" href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow">
+                        <svg class="icon-social-{{ (social_links[social_nav['settype']])|lower }}">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-social-{{ (social_links[social_nav['settype']])|lower }}"></use>
+                        </svg>{{ social_nav['language'][language_id]['name'] }}</a>
+					{% endfor %}
+					</nav>
+                  </div>
+			  {% endif %}
+			  {% endif %}
+              </div>
+                <div class="col-6 col-md-3 pull-md-6 col-xl-3 pull-xl-6">
+                  <div class="footer__questions">
+                    <div class="footer__questions-align">
+                      <svg class="icon-questions">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-questions"></use>
+                      </svg><span class="footer__questions-heading">{{ text_footer_questions }}</span><a class="footer__questions-link" href="{{ contact }}">{{ text_footer_link }}</a>
+                    </div>
+                  </div>
+                </div>
+			  {% if (subscribe_status) %}
+                <div class="col-6 col-md-3 col-xl-3">
+                  <div class="subsc-min">
+                      <label class="subsc-min__label">{{ subscribe_title }} <br> {{ subscribe_subtitle }} {% if (text_technics_pdata) %} {{ text_technics_pdata }} {% endif %}</label>
+                      <div class="subsc-min__field">
+                        <svg class="icon-subsc">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-subsc"></use>
+                        </svg>
+						<input class="subsc-min__input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+                        <button type="button" class="subsc-min__btn js-subscribe-btn">{{ text_technics_subscribe_btn }}</button>
+                      </div>
+                  </div>
+                </div>
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+      </footer>
+	  <!-- Footer v4 :: End-->
+{% endif %} 
+{% if (footer_type == 5) %} 
+      <!-- Footer v5 :: Start-->
+      <footer class="footer footer--v5">
+        <div class="footer__container">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-12 col-md-6 push-md-3 col-xl-6 push-xl-3">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+                <p class="footer__copyright">{{ footer_text }} {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}</p>
+              </div>
+                <div class="col-5 col-md-3 pull-md-5 col-xl-3 pull-xl-5"> 
+                  <div class="footer__questions">
+                    <div class="footer__questions-align">
+                      <svg class="icon-questions">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-questions"></use>
+                      </svg><span class="footer__questions-heading">{{ text_footer_questions }}</span><a class="footer__questions-link" href="{{ contact }}">{{ text_footer_link }}</a>
+                    </div>
+                  </div>
+                </div>
+			  {% if (subscribe_status) %}
+                <div class="col-7 col-md-3 col-xl-3">
+                  <div class="subsc-min">
+                      <label class="subsc-min__label">{{ subscribe_title }} <br> {{ subscribe_subtitle }} {% if (text_technics_pdata) %} {{ text_technics_pdata }} {% endif %}</label>
+                      <div class="subsc-min__field">
+                        <svg class="icon-subsc">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-subsc"></use>
+                        </svg>
+						<input class="subsc-min__input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+                        <button type="button" class="subsc-min__btn js-subscribe-btn">{{ text_technics_subscribe_btn }}</button>
+                      </div>
+                  </div>
+                </div>
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="footer__container">
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-6 col-md-6 col-xl-6">
+                  <div class="footer__pay"><span class="footer__pay-heading">{{ text_footer_pay }}</span>
+                    <div class="footer__pay-group">
+                      {% for key,payment_icon in payment_icons %}
+                        {% if (payment_icon.link[language_id]) %}
+                          <a class="footer__pay-item" href="{{ payment_icon.link[language_id] }}" target="{{ payment_icon.attr }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ payment_icon.thumb }}" alt=""></a>
+                        {% else %}
+                          <span class="footer__pay-item"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ payment_icon.thumb }}" alt=""></span>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+			  {% if (soc_stat) %}
+			  {% if (social_navs is not empty) %}
+              <div class="col-6 col-md-6 col-xl-6">
+                <div class="footer__social"><span class="footer__social-heading">{{ text_social_navs }}</span>
+                  <nav class="footer__social-nav">
+				  {% for key,social_nav in social_navs %}
+				    {% if (key + 1 < (social_navs)|length) %}
+				    <a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a> \ 
+					{% else %}
+					<a href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow" class="footer__social-link">{{ social_nav['language'][language_id]['name'] }}</a>
+					{% endif %}
+				  {% endfor %}
+                </div>
+              </div>
+			  {% endif %}
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+      </footer>
+	  <!-- Footer v5 :: End-->
+{% endif %} 
+{% if (footer_type == 6) %} 
+      <!-- Footer v6 :: Start-->
+        <footer class="footer footer--v6">
+          <div class="footer__middle">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-12 col-md-6 col-xl-4">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+                <p class="footer__copyright">{{ footer_text }} {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}</p>
+			  {% if (soc_stat) %}
+			  {% if (social_navs is not empty) %}
+                  <div class="footer__social">
+                    <nav class="footer__social-nav">
+					{% for social_nav in social_navs %}
+					  <a class="footer__social-link" href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow">
+                        <svg class="icon-social-{{ (social_links[social_nav['settype']])|lower }}">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-social-{{ (social_links[social_nav['settype']])|lower }}"></use>
+                        </svg>{{ social_nav['language'][language_id]['name'] }}</a>
+					{% endfor %}
+					</nav>
+                  </div>
+			  {% endif %}
+			  {% endif %}
+                </div>
+                <div class="col-12 col-md-6 col-xl-8">
+                  <nav class="nav-categories nav-categories--flex{{ footer_categories ? ' js-slick-categories' : ''}}">
+					{% for key,footer_nav in footer_navs %}
+                        <div class="nav-categories__group">
+							{% if (footer_nav['language'][language_id]['name']) %}
+								<h4 class="nav-categories__heading">{{ footer_nav['language'][language_id]['name'] }}</h4>
+							{% endif %}
+							{% if (footer_nav['settype']) %}
+							  {{ footer_nav['type'][footer_nav['settype']]['links']['html'] }}
+							{% else %}
+							<ul class="nav-categories__menu">
+							  {% for id,link in footer_nav['type'][footer_nav['settype']]['links'] %}
+							  <li><a class="nav-categories__link" href="{{ link }}" {% if (top_links[id]['target'] is defined) %}target="{{ top_links[id]['target'] }}" {% endif %}>{{ footer_nav['type'][footer_nav['settype']]['names'][id] is defined ? footer_nav['type'][footer_nav['settype']]['names'][id] : '' }}</a></li>
+							  {% endfor %}
+							</ul>
+							{% endif %}
+                        </div>
+					{% endfor %}
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer__bottom">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+			  {% if (subscribe_status) %}
+                  <div class="subsc-min" style="max-width: inherit;">
+                      <label class="subsc-min__label">{{ subscribe_title }} <br> {{ subscribe_subtitle }}</label>
+					  {% if (text_technics_pdata) %} <p> {{ text_technics_pdata }} </p>{% endif %}
+                      <div class="subsc-min__field">
+                        <svg class="icon-subsc">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-subsc"></use>
+                        </svg>
+						<input class="subsc-min__input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+                        <button type="button" class="subsc-min__btn js-subscribe-btn">{{ text_technics_subscribe_btn }}</button>
+                      </div>
+                  </div>
+			  {% endif %}
+                </div>
+                <div class="col-auto">
+					{% if (technics_phones_main) %} 
+						<div class="phone js-toggle">
+					{% if (technics_phones|length > 1) %}
+	                  <button class="phone__btn js-toggle-btn">{{ technics_phones_main[language_id] }}</button>
+					{% else %}
+	                  <a class="phone__btn" rel="nofollow" href="tel:{{ technics_phones_main[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phones_main[language_id] }}</a>
+					{% endif %}
+							{% if (callback_status) %}<a class="phone__link js-fancy-popup" href="#callback-footer">{{ text_header_callback }}</a>
+								<div id="callback-footer" class="popup popup--570" style="display:none;">{{ callback }}</div>
+							{% endif %}	
+					{% if (technics_phones|length > 1) %}
+						<div class="phone__dropdown js-toggle-dropdown">
+						  <ul class="phone__menu">
+					  {% for key, technics_phone in technics_phones %}                 	                    
+								   <li><a class="phone__menu-link" rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a></li>
+					   {% endfor %} 
+						 </ul>  
+					   </div> 
+					{% endif %} 
+						</div>
+					{% endif %}	
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+	  <!-- Footer v6 :: End-->
+{% endif %} 
+{% if (footer_type == 'maintenance') %} 
+	  <!-- Footer maintenance :: End-->
+      <footer class="footer footer--service">
+        <div class="container-fluid">
+			    {% if (footer_t_logo or footer_logo) %}
+						{% if (footer_logo) %} 
+						<div class="footer__logo"><a {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a></div>
+						{% else %} 
+						<div class="footer__logo"><a class="footer__logo-text" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a></div>
+						{% endif %} 
+				{% endif %}
+          <ul class="footer__contacts">
+			{% if (technics_phones) %}
+            <li><b>{{ text_technics_maintenance_phone }}</b>
+			{% for key, technics_phone in technics_phones %}
+				{% if (key + 1 < (technics_phones)|length) %}
+				<a rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>,
+				{% else %}
+				<a rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>
+				{% endif %}
+			{% endfor %}
+			</li>
+			{% endif %}
+            <li><b>{{ text_technics_maintenance_email }}</b>
+			<a href="mailto:{{ shop_email }}">{{ shop_email }}</a>
+			</li>
+          </ul>
+        </div>
+      </footer>
+	  <!-- Footer maintenance :: End-->
+{% endif %} 
+      <!-- Footer :: End-->
+    </div>
+    <!-- Scripts :: Start-->
+{% if (js_footorhead == 2) %} 
+	<script src="catalog/view/javascript/technics/plugins.min.js{{ '?v'~version }}"></script>
+	{{ fontawesome == 1 ? '<script defer src="catalog/view/javascript/technics/fontawesome/js/all.min.js?v' ~ version ~ '"></script>' : '' }} 
+	<script src="catalog/view/javascript/technics/bootstrap/{{ bootstrap_ver ? '4.4.1' : '3.3.5' }}/bootstrap.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/technics/app.min.js{{ '?v'~version }}"></script>
+	{% for script in scripts %} 
+		<script src="{{ script }}"></script>
+	{% endfor %} 
+	{% if (custom_js) %} 
+		<script>{{ custom_js }}</script>
+	{% endif %} 
+{% endif %}
+    <!-- Scripts :: End-->
+
+    <script type="text/javascript">
+      function sendDataForEcommerceYandexMetrica(options) {
+        let id = options.id; // required
+        let event = options.event; // required
+        let id_type = (typeof(options.id_type) != 'undefined' ? options.id_type : 'product_id');
+        let quantity = (typeof(options.quantity) != 'undefined' ? options.quantity : 'null');
+        let async = (typeof(options.async) != 'undefined' ? options.async : true);
+
+        $.ajax({
+          url: 'index.php?route=product/product/getProductDataForYandexMetrica',
+          async: (typeof(async) != 'undefined' ? async : true),
+          type: 'post',
+          data: 'id=' + id + '&event=' + event + '&id_type=' + id_type + '&quantity=' + quantity,
+          dataType: 'json',
+          success: function(json) {
+            if (event == 'add') {
+              dataLayer.push({"ecommerce": {"currencyCode": json['currency_code'], "add": {"products": [json['product']]}}});
+            } else if (event == 'remove') {
+              dataLayer.push({"ecommerce": {"currencyCode": json['currency_code'], "remove": {"products": [json['product']]}}});
+            }
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+          }
+        });
+      }
+
+      cart['add_original'] = cart['add'];
+      cart['add'] = function(product_id, quantity) {
+        sendDataForEcommerceYandexMetrica({
+          id: product_id,
+          event: 'add',
+          id_type: 'product_id',
+          quantity: quantity
+        });
+        cart.add_original(product_id, quantity);
+      };
+
+      cart['remove_original'] = cart['remove'];
+      cart['remove'] = function(key) {
+        sendDataForEcommerceYandexMetrica({
+          id: key,
+          event: 'remove',
+          id_type: 'key',
+          async: false
+        });
+        setTimeout(function() {
+          cart.remove_original(key);
+        }, 500);
+      };
+    </script>
+{# </body></html> #}

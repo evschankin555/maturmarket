@@ -1,0 +1,46 @@
+		{% if route|slice(0, 9) == 'checkout/' %}
+              <label class="ui-label required">{{ text_captcha }}</label>
+              <div class="ui-field {{ error_captcha ? 'is-error' : ''}}">
+					<div class="basic-captcha">
+						<div class="basic-captcha__input">
+							<input type="text" name="captcha" class="input-captcha ui-input" placeholder="{{ entry_captcha }}">
+						</div>
+						<div class="basic-captcha__img">
+							<img src="index.php?route=extension/captcha/basic/captcha" alt="" />
+						</div>
+					</div>
+					{% if (error_captcha) %} 
+					<span class="error ui-error">{{ error_captcha }}</span>
+					{% endif %} 
+              </div>
+		{% elseif (route == 'information/contact' or route == 'product/product' ) %} 
+              <label class="ui-label required">{{ text_captcha }}</label>
+              <div class="ui-field {{ error_captcha ? 'is-error' : ''}}">
+					<div class="basic-captcha">
+						<div class="basic-captcha__input">
+							<input type="text" name="captcha" class="input-captcha ui-input" placeholder="{{ entry_captcha }}">
+						</div>
+						<div class="basic-captcha__img">
+							<img src="index.php?route=extension/captcha/basic/captcha" alt="" />
+						</div>
+					</div>
+					{% if (error_captcha) %} 
+					<span class="error ui-error">{{ error_captcha }}</span>
+					{% endif %} 
+              </div>
+		{% else %} 
+              <label class="ui-label required">{{ text_captcha }}</label>
+              <div class="ui-field {{ error_captcha ? 'is-error' : ''}}">
+					<div class="basic-captcha">
+						<div class="basic-captcha__input">
+							<input type="text" name="captcha" class="input-captcha ui-input" placeholder="{{ entry_captcha }}">
+						</div>
+						<div class="basic-captcha__img">
+							<img src="index.php?route=extension/captcha/basic/captcha" alt="" />
+						</div>
+					</div>
+					{% if (error_captcha) %} 
+					<span class="error ui-error">{{ error_captcha }}</span>
+					{% endif %} 
+              </div>
+		{% endif %}

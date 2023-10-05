@@ -1,0 +1,181 @@
+      <!-- Header v5 :: Start-->
+      <header class="header header--v5">
+          <div class="topline">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+				{% if (technics_phones_main) %} 
+	                <div class="phone js-toggle">
+					{% if (technics_phones|length > 1) %}
+	                  <button class="phone__btn js-toggle-btn">{{ technics_phones_main[language_id] }}</button>
+					{% else %}
+	                  <a class="phone__btn" rel="nofollow" href="tel:{{ technics_phones_main[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phones_main[language_id] }}</a>
+					{% endif %}
+						{% if (callback_status) %}<a class="phone__link js-fancy-popup" href="#inline">{{ text_header_callback }}</a>
+							<div id="inline" class="popup popup--570" style="display:none;">{{ callback }}</div>
+						{% endif %}	
+					{% if (technics_phones|length > 1) %}
+                    <div class="phone__dropdown js-toggle-dropdown">
+                      <ul class="phone__menu">
+                    {% for key, technics_phone in technics_phones %}                 	                    
+	            			   <li><a class="phone__menu-link" rel="nofollow" href="tel:{{ technics_phone[language_id] }}">{{ technics_phone[language_id] }}</a></li>
+                    {% endfor %} 
+                     </ul>  
+                   </div> 
+                {% endif %} 
+	                </div>
+				{% endif %}	
+                </div>
+                {% if (header_navs is not empty) %}
+                <div class="col-auto">
+                  <nav class="nav__topline is-hidden is-md-visible">
+                    <ul class="nav__topline-menu">
+	                  {% for key,header_nav in header_navs %} 
+
+	                      {% if (header_nav.view is defined) %} 
+	                        {{ header_nav.view }}
+	                      {% endif %}                  
+	 
+	                  {% endfor %}                  	
+                    </ul>
+                  </nav>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        <div class="topbar">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col col-lg-4 push-lg-4">
+                <div class="logo">
+					{% if (header_logo) %} 
+						<a {{ home == og_url ? '' : 'href="' ~ home ~'"'}}><img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+						{% else %} 
+						<a class="logo__text" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>{{ header_text_logo }}</a>
+					{% endif %} 
+				</div>
+              </div>
+              <div class="col-hidden col-md-visible col-lg-4 pull-lg-4 col-search">
+{{ search }}
+              </div>
+              <div class="col-hidden col-md-visible col-auto">
+                <div class="ctrl">
+				{% if (logged) %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+                      <svg class="icon-user">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-user"></use>
+                      </svg>{{ text_ls_logged }} <span id="wishcomptotall" class="acc__counter" {{ counTotall ? '' : ' style="display:none;" ' }} >{{ counTotall }}</span>
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+                        <li><a class="acc__link" href="{{ account }}">{{ text_account }}</a></li>
+                        <li id="wish">{{ wish_head }}</li>
+                        <li id="compare">{{ compare_head }}</li>
+                        <li><a class="acc__link" href="{{ order }}">{{ text_order }}</a></li>
+                        <li><a class="acc__link" href="{{ logout }}">{{ text_logout }}</a></li>
+                      </ul>
+                    </div>
+                  </div>
+				{% else %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+                      <svg class="icon-user">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-user"></use>
+                      </svg>{{ text_technics_account }} <span id="wishcomptotall" class="acc__counter" {{ counTotall ? '' : ' style="display:none;" ' }} >{{ counTotall }}</span>
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+                        <li><a class="acc__link js-fancy-popup" href="#signin">{{ text_account_title }} / {{ text_register }}</a></li>
+                        <li id="wish">{{ wish_head }}</li>
+                        <li id="compare">{{ compare_head }}</li>
+                      </ul>
+                    </div>
+                  </div>
+				{% endif %}
+{{ language }}
+{{ currency }}
+                </div>
+              </div>
+{{ cart }} 
+            </div>
+          </div>
+        </div>
+        <nav class="nav {{ fixed_header ? 'js-sticky' : ''}}">
+          <div class="container-fluid">
+            <div class="nav__mobile">
+              <ul class="nav__menu">
+                <li><a class="nav__link nav__link--arrow" href="#">
+                    <svg class="icon-toggle">
+                      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-toggle"></use>
+                    </svg>{{ text_technics_menu }}</a>
+                  <div class="nav__dropdown nav__dropdown--list">
+                    <div class="nav__list">
+                      <div class="nav__list-head">
+                        <button class="nav__list-close">
+                          <svg class="icon-back">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                          </svg>
+                        </button><b class="nav__list-heading">{{ text_header_category }}</b>
+                      </div>
+                      <div class="nav__list-body">
+                        <ul class="nav__list-menu"></ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="nav__priority">
+              <ul class="nav__menu js-priority" data-text-more="{{ text_nav_more }}">
+ 
+                <!-- MAIN NAV  -->
+				{% if (main_navs_v is not empty) %}
+                  <!-- MAIN NAV Vertical  -->
+                <li><a class="nav__link nav__link--arrow" {% if (main_navs_v.header.link) %}href="{{ main_navs_v.header.link }}"{% endif %}>
+                    <svg class="icon-toggle">
+                      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-toggle"></use>
+                    </svg>{% if (main_navs_v.header.name) %} {{ main_navs_v.header.name }} {% else %} {{ text_header_category }} {% endif %} </a>
+                  <div class="nav__dropdown">
+                    <div class="nav__list">
+                      <div class="nav__list-head">
+                        <button class="nav__list-close">
+                          <svg class="icon-back">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                          </svg>
+                        </button><b class="nav__list-heading">{{ text_header_category }}</b>
+                      </div>
+                      <div class="nav__list-body">
+                        <ul class="nav__list-menu">
+                  {% for key,main_nav in main_navs_v %}
+                        {% if (main_nav.view is defined) %} 
+                          {{ main_nav.view }}
+                        {% endif %}
+                   {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                  <!-- MAIN NAV Vertical  --> 
+				{% endif %}
+                  <!-- MAIN NAV Horizontal  -->
+                  {% for key,main_nav in main_navs %} 
+
+                      {% if (main_nav.view is defined) %} 
+                        {{ main_nav.view }}
+                      {% endif %}                  
+ 
+                  {% endfor %} 
+                  <!-- MAIN NAV Horizontal  -->                 
+                <!-- MAIN NAV  -->
+
+              </ul>
+            </div>
+{{ search }}
+            <div class="ctrl"></div>
+          </div>
+        </nav>
+      </header>
+      <!-- Header v5 :: End-->

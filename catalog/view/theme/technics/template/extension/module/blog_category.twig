@@ -1,0 +1,22 @@
+<div class="catalogue__categories">
+	<div class="nav-submenu nav-submenu--sidebar">
+		<ul class="nav-submenu__list">
+			{% for category in categories %} 
+			  {% if category.blog_category_id == blog_category_id %} 
+			<li class="nav-submenu__list-item"><a class="nav-submenu__link active" href="{{ category['href'] }}">{{ category['name'] }}</a></li>
+			{% if (category['children']) %} 
+			{% for child in category['children'] %} 
+			{% if child.blog_category_id == child_id %}
+			<li class="nav-submenu__list-item"><a class="nav-submenu__link active" href="{{ child['href'] }}">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a></li>
+			{% else %} 
+			<li class="nav-submenu__list-item"><a class="nav-submenu__link" href="{{ child['href'] }}">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a></li>
+			{% endif %} 
+			{% endfor %} 
+			{% endif %} 
+			{% else %} 
+			<li class="nav-submenu__list-item"><a class="nav-submenu__link" href="{{ category['href'] }}">{{ category['name'] }}</a></li>
+			{% endif %} 
+			{% endfor %} 
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<li>
+	{% if (header_type == '2' or header_type == '9') %}
+                      <a class="nav__topbar-link nav__topbar-link--arrow" {% if (header_navs[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{ header_navs[number]['type'][1]['language'][language_id]['href'] }}"{% endif %}>{{ header_navs[number]['type'][1]['language'][language_id]['name'] }}</a>
+                        <ul class="nav__topbar-submenu">
+                          {% for id,link in header_navs[number].type[1].links %}
+                            <li><a class="nav__topbar-sublink" href="{{ link }}">{{ header_navs[number].type[1].name[id] }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      
+    {% else %}
+		<a class="nav__topline-link nav__topline-link--arrow" {% if (header_navs[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{ header_navs[number]['type'][1]['language'][language_id]['href'] }}"{% endif %}>{{ header_navs[number]['type'][1]['language'][language_id]['name'] }}</a>
+                          <ul class="nav__topline-submenu">
+                          {% for id,link in header_navs[number].type[1].links %} 
+                              <li><a class="nav__topline-sublink" href="{{ link }}" {% if (header_navs[number].type[1].target[id]) %} {{ 'target="'~header_navs[number].type[1].target[id]~'"' }}{% endif %}>{{ header_navs[number].type[1].name[id] }}</a></li>
+                            {% endfor %} 
+                          </ul>
+    {% endif %}
+</li>

@@ -1,0 +1,564 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if attention %}
+	<div class="alert alert-info alert-dismissible fade show" role="alert">
+		{{ attention }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+	{% if success %}
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		{{ success }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		{{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Basket :: Start-->
+        <div class="basket">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }} {% if (weight) %} {{ ' (' ~ weight ~ ')' }} {% endif %}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+				<div class="basket__container">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="cartcontent">
+				  <table class="basket__table">
+				    {% for product in products %}
+					<tbody class="basket__table-item">
+					  <tr>
+						{% if (product['thumb']) %}
+						<td class="basket__table-image"><a href="{{ product['href'] }}"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}"></a></td>
+						{% else %}
+						<td class="basket__table-image"></td>
+						{% endif %}
+						<td class="basket__table-desc">
+						<span class="basket__table-id">{{ product['model'] }}</span>
+						<a class="basket__table-title" href="{{ product['href'] }}">{{ product['name'] }} {% if (not product['stock']) %}***{% endif %}</a>
+						</td>
+						<td class="basket__table-price">
+						  {{ text_technics_cart_price }}<b>{{ product['price'] }}</b>
+						</td>
+						<td class="basket__table-counter">
+						  <input class="ui-number ui-number--sm" type="number" name="quantity[{{ product['cart_id'] }}]" min="{{ product['minimum'] }}" max="9999" value="{{ product['quantity'] }}">
+						</td>
+						<td class="basket__table-cost">
+						  {{ column_total }}<b>{{ product['total'] }}</b>
+						</td>
+						<td class="basket__table-action">
+						  <a onclick="cart.remove('{{ product['cart_id'] }}');" title="{{ button_remove }}" class="basket__table-delete">
+							<svg class="icon-delete">
+							  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+							</svg>
+						  </a>
+						</td>
+					  </tr>
+					  {% if (product['option'] or product['reward'] or product['recurring']) %}
+					  <tr>
+						<td class="basket__table-details" colspan="6">
+						  <ul class="basket__table-details-list">
+							{% if (product['option']) %} 
+								{% for option in product['option'] %}					 
+									<li>{{ option['name'] }}<small>{{ option['value'] }}</small></li>
+								{% endfor %} 
+							{% endif %}
+							{% if (product['reward']) %} 
+								<li>{{ text_technics_reward }}<small>{{ product['reward_num'] }}</small></li>
+							{% endif %} 
+							{% if (product['recurring']) %} 
+								<li>{{ text_recurring_item }}<small>{{ product['recurring'] }}</small></li>
+							{% endif %}	
+						  </ul>
+						</td>
+					  </tr>
+					  {% else %}
+					  <tr><td class="basket__table-details" colspan="6"></td></tr>
+					  {% endif %}
+					</tbody>
+					{% endfor %}
+					{% for voucher in vouchers %}
+					<tbody class="basket__table-item">
+					  <tr>
+						<td class="basket__table-image"></td>
+						<td class="basket__table-desc"><span class="basket__table-title">{{ voucher['description'] }}</span></td>
+						<td class="basket__table-price">
+						   {{ text_technics_cart_price }}<b>{{ voucher['amount'] }}</b>
+						</td>
+						<td class="basket__table-counter">
+						  <input class="ui-number ui-number--sm" type="number" min="1" max="1" value="1" disabled>
+						</td>
+						<td class="basket__table-cost">{{ column_total }}<b>{{ voucher['amount'] }}</b></td>
+						<td class="basket__table-action">
+						  <a onclick="voucher.remove('{{ voucher.key }}');" class="basket__table-delete" title="{{ button_remove }}">
+							<svg class="icon-delete">
+							  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+							</svg>
+						  </a>
+						</td>
+					  </tr>
+					</tbody>
+					{% endfor %}
+				  </table>
+				</form>
+				  <div class="basket__panel">
+					<div class="row">
+					  <div class="col-md-6">
+					    {% if (modules) %}
+						<div class="tabs" data-tabs>
+						  <ul class="tabs__menu"></ul>
+						  <div class="js-cart-tabs-modules">
+							{% for module in modules %} 
+							{{ module }}
+							{% endfor %} 
+						  </div>	
+						</div>
+						{% endif %}
+					  </div>
+					  <div class="col-md-6">
+					    {% for i,total in totals %} 
+						{% if (i + 1 < (totals)|length) %}
+						<p class="basket__total">{{ total['title'] }} {{ total['text'] }}</p>
+						{% else %}
+						<p class="basket__total basket__total--last">{{ total['title'] }}<span>{{ total['text'] }}</span></p>
+						{% endif %}
+						{% endfor %}
+						<div class="basket__action">
+						  <div class="basket__action-continue"><a class="btn btn--link" href="{{ continue }}">{{ button_shopping }}</a></div>
+						  <div class="basket__action-buttons"><a class="btn btn--blue" href="{{ checkout }}">{{ button_checkout }}</a>
+						  {% if (buy_click['status']) %}
+						  <a href="#popup-buy-click-cc" data-typefrom="cart-popup" data-for="" class="btn btn--link js-fancy-popup-cart">{{ text_technics_fast_order }}</a>
+						  {% endif %}</div>
+						</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Basket :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+
+	  <script type="text/javascript">
+		let form = document.querySelector('.basket__container > form');
+		form.onsubmit = function(evt) {
+			evt.preventDefault();
+			let quantity_old;
+			let quantity_new;
+			let key;
+
+			$('.basket__container > form').find('input').each(function() {
+			quantity_new = $(this).val();
+			quantity_old = $(this).attr('value');
+			key = $(this).attr('name').match(/\d+/g)[0];
+
+			var difference_in_quantity = quantity_old - quantity_new;
+
+			if (difference_in_quantity < 0) {
+				sendDataForEcommerceYandexMetrica({
+					id: key,
+					event: 'add',
+					id_type: 'key',
+					quantity: Math.abs(difference_in_quantity),
+					async: false
+				});
+				setTimeout(function() {
+					form.submit();
+				}, 1000);
+			} else if (difference_in_quantity > 0) {
+				sendDataForEcommerceYandexMetrica({
+					id: key,
+					event: 'remove',
+					id_type: 'key',
+					quantity: Math.abs(difference_in_quantity),
+					async: false
+				});
+				setTimeout(function() {
+					form.submit();
+				}, 1000);
+			}
+			});
+		};
+		</script>
+{{ footer }}
+{% if (modules) %}
+<script>
+	// --------------------------------------------------------------------------
+	// Loading ocCartShipping
+	// --------------------------------------------------------------------------
+
+	function ocCartShipping() {
+		$('#button-quote').on('click', function() {
+			$.ajax({
+				url: 'index.php?route=extension/total/shipping/quote',
+				type: 'post',
+				data: 'country_id=' + $('select[name=\'country_id\']').val() + '&zone_id=' + $('select[name=\'zone_id\']').val() + '&postcode=' + encodeURIComponent($('input[name=\'postcode\']').val()),
+				dataType: 'json',
+				beforeSend: function() {
+					$('#button-quote').button('loading');
+				},
+				complete: function() {
+					$('#button-quote').button('reset');
+				},
+				success: function(json) {
+					$('.alert, .ui-error').remove();
+					$('.ui-field').removeClass('is-error');
+
+					if (json['error']) {
+						if (json['error']['warning']) {		
+							$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' + json['error']['warning'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+						}
+
+						if (json['error']['country']) {
+							$('select[name=\'country_id\']').parent().after('<span class="error ui-error">' + json['error']['country'] + '</span>').parent().addClass('is-error');
+						}
+
+						if (json['error']['zone']) {
+							$('select[name=\'zone_id\']').parent().after('<span class="error ui-error">' + json['error']['zone'] + '</span>').parent().addClass('is-error');
+						}
+
+						if (json['error']['postcode']) {
+							$('input[name=\'postcode\']').after('<span class="error ui-error">' + json['error']['postcode'] + '</span>').parent().addClass('is-error');
+						}
+					}
+
+					if (json['shipping_method']) {
+						$('#modal-shipping').remove();
+
+						html  = '<div class="popup popup--570" style="display: none;" id="modal-shipping">'; 
+						html += '  <div class="writeus">';
+						html += '        <span class="writeus__heading">'+ $('input[name=\'fix_text_technics_shipping\']').val() + '</span>';
+						html += '        <div class="writeus__form">';
+						html += '        <fieldset class="ui-fieldset">';
+						html += '        <p class="ui-caption">'+ $('input[name=\'fix_text_shipping_method\']').val() + '</p>';
+						for (i in json['shipping_method']) {
+							html += '        <div class="personal__group form-group">';
+							html += '        <div class="row">';
+							html += '<div class="col-auto" style="display: none;">';
+							html += '<label class="ui-label">' + json['shipping_method'][i]['title'] + '</label>';
+							html += '</div>';
+							html += '<div class="col">';
+							html += '<div class="ui-group">';
+
+							if (!json['shipping_method'][i]['error']) {
+								for (j in json['shipping_method'][i]['quote']) {
+									html += '<label class="ui-check">';
+									
+									if (json['shipping_method'][i]['quote'][j]['code'] == $('input[name=\'fix_shipping_method\']').val()) {
+										html += '<input type="radio" class="ui-check__input" name="shipping_method" value="' + json['shipping_method'][i]['quote'][j]['code'] + '" id="' + json['shipping_method'][i]['quote'][j]['code'] + '" checked="checked">';
+									} else {
+										html += '<input type="radio" class="ui-check__input" name="shipping_method" value="' + json['shipping_method'][i]['quote'][j]['code'] + '" id="' + json['shipping_method'][i]['quote'][j]['code'] + '">';
+									}
+									html += '<span class="ui-check__radio"></span>';
+									html += json['shipping_method'][i]['quote'][j]['title'] + ' - ' + json['shipping_method'][i]['quote'][j]['text'] + '</label>';
+								}
+							} else {
+								html += '<div class="alert alert-danger">' + json['shipping_method'][i]['error'] + '</div>';
+							}
+							html += '        </div>';
+							html += '        </div>';
+							html += '        </div>';
+							html += '        </div>';
+						}
+						html += '  </fieldset>';
+						html += '  <div class="personal__action">';
+						if ($('input[name=\'fix_shipping_method\']').val()) {
+						html += '        <button type="button" id="button-shipping" data-loading-text="'+ $('input[name=\'fix_text_loading\']').val() + '" class="btn btn--blue">'+ $('input[name=\'fix_button_shipping\']').val() + '</button>';
+						} else {
+						html += '        <button type="button" id="button-shipping" data-loading-text="'+ $('input[name=\'fix_text_loading\']').val() + '" class="btn btn--blue" disabled="disabled">'+ $('input[name=\'fix_button_shipping\']').val() + '</button>';
+						}
+						html += '  </div>';
+						html += '  </div>';
+						html += '  </div>';
+						html += '</div> ';
+
+						$('body').append(html);
+
+						$.fancybox.open([{
+							src  : '#modal-shipping',
+							opts : {
+								slideClass : 'popup--fancybox', 
+								btnTpl : {
+									smallBtn   : '<button class="popup__close" data-fancybox-close><svg class="icon-close"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use></svg></button>'
+								},
+								autoFocus : false,
+							}
+						}]);
+
+						$('input[name=\'shipping_method\']').on('change', function() {
+							$('#button-shipping').prop('disabled', false);
+						});
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+
+		$(document).delegate('#button-shipping', 'click', function() {
+			$.ajax({
+				url: 'index.php?route=extension/total/shipping/shipping',
+				type: 'post',
+				data: 'shipping_method=' + encodeURIComponent($('input[name=\'shipping_method\']:checked').val()),
+				dataType: 'json',
+				beforeSend: function() {
+					$('#button-shipping').button('loading');
+				},
+				complete: function() {
+					$('#button-shipping').button('reset');
+				},
+				success: function(json) {
+					$('.alert').remove();
+
+					if (json['error']) {
+						$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));	
+					}
+					setTimeout(function(){
+						$.fancybox.close();
+					}, 100)
+					
+					if (json['redirect']) {
+						location = json['redirect'];
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+
+
+		$('select[name=\'country_id\']').on('change', function() {
+			$.ajax({
+				url: 'index.php?route=extension/total/shipping/country&country_id=' + this.value,
+				dataType: 'json',
+				beforeSend: function() {
+					$('select[name=\'country_id\']').prop('disabled', true);
+				},
+				complete: function() {
+					$('select[name=\'country_id\']').prop('disabled', false).trigger('refresh');
+				},
+				success: function(json) {
+				
+					if (json['postcode_required'] == '1') {
+						$('input[name=\'postcode\']').parent().parent().parent().find('.ui-label').addClass('required');
+					} else {
+						$('input[name=\'postcode\']').parent().parent().parent().find('.ui-label').removeClass('required');
+					}
+
+					html = '<option value="">'+ $('input[name=\'fix_text_select\']').val() +'</option>';
+
+					if (json['zone'] && json['zone'] != '') {
+						for (i = 0; i < json['zone'].length; i++) {
+							html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+							if (json['zone'][i]['zone_id'] == $('input[name=\'fix_zone_id\']').val()) {
+								html += ' selected="selected"';
+							}
+
+							html += '>' + json['zone'][i]['name'] + '</option>';
+						}
+						
+					} else {
+						html += '<option value="0" selected="selected">'+ $('input[name=\'fix_text_none\']').val() +'</option>';
+					}
+
+					$('select[name=\'zone_id\']').html(html).trigger('refresh');
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+				
+			});
+
+		});
+
+		$('select[name=\'country_id\']').trigger('change');
+	}
+
+	// --------------------------------------------------------------------------
+	// Loading ocAddReward
+	// --------------------------------------------------------------------------
+	
+	function ocAddReward() {
+		$('#button-reward').on('click', function(e) {
+		e.preventDefault();
+			$.ajax({
+				url: 'index.php?route=extension/total/reward/reward',
+				type: 'post',
+				data: 'reward=' + encodeURIComponent($('input[name=\'reward\']').val()),
+				dataType: 'json',
+				beforeSend: function() {
+					$('input[name=\'reward\']').attr('disabled', 'disabled');
+				},
+				complete: function() {
+					$('input[name=\'reward\']').removeAttr('disabled');
+				},
+				success: function(json) {
+					$('.alert').remove();
+
+					if (json['error']) {
+						$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+					}
+
+					if (json['redirect']) {
+						location = json['redirect'];
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});	
+		$('input[name=\'reward\']').keypress(function(e){
+			if(e.which == 13){
+				$('#button-reward').trigger('click');
+			}
+		});
+	}
+
+	// --------------------------------------------------------------------------
+	// Loading ocAddCoupon
+	// --------------------------------------------------------------------------
+	
+	function ocAddCoupon() {
+		$('#button-coupon').on('click', function(e) {
+		e.preventDefault();
+			$.ajax({
+				url: 'index.php?route=extension/total/coupon/coupon',
+				type: 'post',
+				data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+				dataType: 'json',
+				beforeSend: function() {
+					$('input[name=\'coupon\']').attr('disabled', 'disabled');
+				},
+				complete: function() {
+					$('input[name=\'coupon\']').removeAttr('disabled');
+				},
+				success: function(json) {
+					$('.alert').remove();
+
+					if (json['error']) {
+						$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+					}
+
+					if (json['redirect']) {
+						location = json['redirect'];
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+		$('input[name=\'coupon\']').keypress(function(e){
+			if(e.which == 13){
+				$('#button-coupon').trigger('click');
+			}
+		});
+	}
+	
+	// --------------------------------------------------------------------------
+	// Loading ocAddVoucher
+	// --------------------------------------------------------------------------
+	
+	function ocAddVoucher() {
+		$('#button-voucher').on('click', function(e) {
+		e.preventDefault();
+			$.ajax({
+				url: 'index.php?route=extension/total/voucher/voucher',
+				type: 'post',
+				data: 'voucher=' + encodeURIComponent($('input[name=\'voucher\']').val()),
+				dataType: 'json',
+				beforeSend: function() {
+					$('input[name=\'voucher\']').attr('disabled', 'disabled');
+				},
+				complete: function() {
+					$('input[name=\'voucher\']').removeAttr('disabled');
+				},
+				success: function(json) {
+					$('.alert').remove();
+
+					if (json['error']) {
+						$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+					}
+
+					if (json['redirect']) {
+						location = json['redirect'];
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+		$('input[name=\'voucher\']').keypress(function(e){
+			if(e.which == 13){
+				$('#button-voucher').trigger('click');
+			}
+		});
+	}
+
+	// --------------------------------------------------------------------------
+	// Loading fixCartModules
+	// --------------------------------------------------------------------------
+	
+	function fixCartModules() {
+		if($('.js-cart-tabs-modules').length) {
+			$('.js-cart-tabs-modules > li').appendTo('.basket__panel .tabs__menu');
+			$('.basket__panel .tabs__menu li:eq(0) button').trigger('click');
+		}
+	}
+	
+$(document).on('ready', function() {
+	ocAddCoupon();
+	ocAddVoucher();
+	ocAddReward();
+	ocCartShipping();
+	fixCartModules();
+});
+</script>
+{% endif %}
+</body></html>

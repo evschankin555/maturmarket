@@ -1,0 +1,194 @@
+<section class="modal modal-ask">
+    <div class="modal-ask__inner">
+        <p class="modal-ask__text">Ваш город - <span class="modal-ask__city dev_modal_ask_city_name"></span>?</p>
+        <button class="modal-ask__button modal-ask__button_no" type="button">Нет, другой</button>
+        <button class="modal-ask__button modal-ask__button_yes" type="button">Да, верно</button>
+    </div>
+</section>
+
+<section class="modal modal-city">
+    <div class="modal-city__inner">
+        <button class="popup__close" data-fancybox-close="">
+          <svg class="icon-close">
+            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use>
+          </svg>
+        </button>
+        <div class="modal-city__form">
+            <label class="modal-city__label" for="find-city">Выбрать город</label>
+            {% for region in cities %} 
+            <div class="dev_available_cities available_cities">
+            {% for city in region %} 
+              <span city_id="{{city.city_id}}" class="dev_city_choose city_choose{% if (city.is_main_city) %} city_main{% endif %}">{{city.name}}</span>
+            {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <button class="modal-city__button" type="button"><span>Отмена<span></button>
+    </div>
+</section>
+
+      <!-- Header v4 :: Start-->
+      <header class="header header--v4">
+          <div class="topline">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+				          <div class="city-select-wrapper">
+                    <div class="dev_selected_city selected-city" city_id="{{city_id}}">{{city_name}}                    
+                    </div>
+                  </div>
+                </div>
+                {% if (header_navs is not empty) %}
+                <div class="col-auto">
+                  <nav class="nav__topline is-hidden is-md-visible">
+                    <ul class="nav__topline-menu">
+	                  {% for key,header_nav in header_navs %} 
+
+	                      {% if (header_nav.view is defined) %} 
+	                        {{ header_nav.view }}
+	                      {% endif %}                  
+	 
+	                  {% endfor %}                  	
+                    </ul>
+                  </nav>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        <div class="topbar">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col col-xl-2">
+                <div class="logo">
+					{% if (header_logo) %} 
+						<a {{ home == og_url ? '' : 'href="' ~ home ~'"'}}><img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+						{% else %} 
+						<a class="logo__text" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>{{ header_text_logo }}</a>
+					{% endif %} 
+				</div>
+              </div>
+
+              <div class="col-hidden col-md-visible col">
+{{ search }}
+              </div>
+              <div class="col-auto">
+                <div class="ctrl-v4">
+				<span id="compare">
+{{ compare_head }}
+				</span>
+				<span id="wish">
+{{ wish_head }}
+				</span>
+				<div class="ctrl{% if not (language or currency) %} ctrl-v4__btn{% endif %}">
+				{% if (logged) %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+                      <svg class="icon-user">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-user"></use>
+                      </svg>{{ text_ls_logged }}
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+                        <li><a class="acc__link" href="{{ account }}">{{ text_account }}</a></li>
+                        <li><a class="acc__link" href="{{ order }}">{{ text_order }}</a></li>
+                        <li><a class="acc__link" href="{{ logout }}">{{ text_logout }}</a></li>
+                      </ul>
+                    </div>
+                  </div>
+				{% else %} 
+                  <div class="acc js-toggle">
+                    <a class="acc__btn js-fancy-popup" href="#signin">
+                      <svg class="icon-user">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-user"></use>
+                      </svg>{{ text_technics_account }}
+                    </a>
+                  </div>
+				{% endif %}
+{{ language }}
+{{ currency }}
+                </div>
+                </div>
+              </div>
+{{ cart }} 
+            </div>
+          </div>
+        </div>
+        <nav class="nav {{ fixed_header ? 'js-sticky' : ''}}">
+          <div class="container-fluid">
+            <div class="nav__mobile">
+              <ul class="nav__menu">
+                <li><a class="nav__link nav__link--arrow" href="#">
+                    <svg class="icon-toggle">
+                      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-toggle"></use>
+                    </svg>{{ text_technics_menu }}</a>
+                  <div class="nav__dropdown nav__dropdown--list">
+                    <div class="nav__list">
+                      <div class="nav__list-head">
+                        <button class="nav__list-close">
+                          <svg class="icon-back">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                          </svg>
+                        </button><b class="nav__list-heading">{{ text_header_category }}</b>
+                      </div>
+                      <div class="nav__list-body">
+                        <ul class="nav__list-menu"></ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="nav__priority">
+              <ul class="nav__menu js-priority" data-text-more="{{ text_nav_more }}">
+ 
+                <!-- MAIN NAV  -->
+				{% if (main_navs_v is not empty) %}
+                  <!-- MAIN NAV Vertical  -->
+                <li><a class="nav__link nav__link--arrow" {% if (main_navs_v.header.link) %}href="{{ main_navs_v.header.link }}"{% endif %}>
+                    <svg class="icon-toggle">
+                      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-toggle"></use>
+                    </svg>{% if (main_navs_v.header.name) %} {{ main_navs_v.header.name }} {% else %} {{ text_header_category }} {% endif %} </a>
+                  <div class="nav__dropdown">
+                    <div class="nav__list">
+                      <div class="nav__list-head">
+                        <button class="nav__list-close">
+                          <svg class="icon-back">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                          </svg>
+                        </button><b class="nav__list-heading">{{ text_header_category }}</b>
+                      </div>
+                      <div class="nav__list-body">
+                        <ul class="nav__list-menu">
+                  {% for key,main_nav in main_navs_v %}
+                        {% if (main_nav.view is defined) %} 
+                          {{ main_nav.view }}
+                        {% endif %}
+                   {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                  <!-- MAIN NAV Vertical  --> 
+				{% endif %}
+                  <!-- MAIN NAV Horizontal  -->
+                  {% for key,main_nav in main_navs %} 
+
+                      {% if (main_nav.view is defined) %} 
+                        {{ main_nav.view }}
+                      {% endif %}                  
+ 
+                  {% endfor %} 
+                  <!-- MAIN NAV Horizontal  -->                 
+                <!-- MAIN NAV  -->
+
+              </ul>
+            </div>
+{{ search }}
+            <div class="ctrl"></div>
+          </div>
+        </nav>
+      </header>
+      <!-- Header v4 :: End--> 
+<script src="catalog/view/javascript/city.js{{ '?v1.3.2' }}"></script>      

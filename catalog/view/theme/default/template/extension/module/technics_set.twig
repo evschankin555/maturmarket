@@ -1,0 +1,148 @@
+ {% if (sets) %} 
+ <!-- Set :: Start-->
+        <div class="set">
+          <div class="container-fluid">
+            <div class="set__head">
+              <h2 class="set__heading">{{ heading_title }}</h2>
+            </div>
+			{% for setid,set in sets %}
+            <div class="set__body js-set-container" data-for="{{ setid }}">
+              <div class="row">
+                <div class="{% if 3 < set['products']|length %}col-12{% else %}col-xl-{{ set['products']|length * 3 }}{% endif %}">
+                  <div class="set__slides {% if 3 < set['products']|length %}js-slick-set{% else %}js-slick-set-x{{ set['products']|length }}{% endif %}">
+					{% for product in set['products'] %}
+                        <div class="products__item js-products-in-set" data-for="{{ product['product_id'] }}">
+                          <div class="products__item-in">
+						{% if (category_time and product['special'] and product['special_date_end']) %}
+							{% if (product['special'] and product['sales']) %}
+								<mark class="products__item-discount">{{ '<small>' ~ labelsinfo['sale']['name'][language_id] ~ '</small>' ~ product['discount'] }}</mark>
+							{% endif %}
+						{% endif %}
+						{% if (product['countvariants'] > 1) %}
+                        <a href="#popup-set-click" data-for="{{ product['product_id'] }}" class="products__item-replace js-set-chng-btn js-fancy-popup">
+                          <svg class="icon-replace">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-replace"></use>
+                          </svg>{{ text_technics_products_replace }}
+                        </a>
+						{% else %}
+                        <a href="#popup-set-click" data-for="{{ product['product_id'] }}" class="products__item-replace js-set-chng-btn js-fancy-popup" style="display: none;">
+                          <svg class="icon-replace">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-replace"></use>
+                          </svg>{{ text_technics_products_replace }}
+                        </a>
+						{% endif %}
+						  <div class="products__item-stickers {{ category_time and product['special'] and product['special_date_end'] ? 'products__item-stickers--top' : ''}}">
+						  {% if (product['rating'] != constant('false')) %}
+							<div class="products__item-rating">
+								<svg class="icon-star">
+									<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+								</svg>{{ product['rating'] }}/5
+							</div>
+							{% endif %}
+							{% if (product['isnewest']) %} 
+								<mark class="products__item-mark products__item-mark--new">{{ labelsinfo['new']['name'][language_id] }}</mark>
+							{% endif %} 
+							{% if ((product['special'] and product['sales']) and not (category_time and product['special_date_end'])) %} 
+								<mark class="products__item-mark products__item-mark--sale">{{ labelsinfo['sale']['name'][language_id] ~ ' ' ~ product['discount'] }}</mark>
+							{% endif %} 
+							{% if (product['popular']) %} 
+								<mark class="products__item-mark products__item-mark--popular">{{ product['popular'] }}</mark>
+							{% endif %} 
+							{% if (product['hit']) %} 
+								<mark class="products__item-mark products__item-mark--hit">{{ product['hit'] }}</mark>
+							{% endif %} 
+							{% if (product['catch']) %} 
+								{% if (product['nocatch']) %} 
+									<mark class="products__item-mark products__item-mark--nocatch">{{ product['catch'] }}</mark>
+								{% else %} 
+									<mark class="products__item-mark products__item-mark--catch">{{ product['catch'] }}</mark>
+								{% endif %} 
+							{% endif %} 
+							{% if (product['reward']) %} 
+								<mark class="products__item-mark products__item-mark--reward">{{ text_reward }} {{ product['reward'] }}</mark>
+							{% endif %} 
+						  </div>
+						  {% if (not product['images']) %}
+						  	<div class="products__item-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+							  <div class="products__item-images js-slick-products">
+								<a href="{{ product['href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" alt="{{ product['name'] }}"></a>
+								{% for imageX in product['images'] %} 
+
+									<a href="{{ product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" alt="{{ product['name'] }}"></a>
+							  {% endfor %} 
+							  </div>
+						  {% endif %}
+						  <div class="products__item-desc">
+						  {% if (product['manufacturer']) %} 
+						  <span class="products__item-category">{{ product['brand_name'] ?: product['manufacturer'] }}</span>
+						  {% endif %}
+						  <a href="{{ product['href'] }}" class="products__item-title">{{ product['name'] }}</a>
+						  <span class="products__item-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} {% if (product['quantity'] > 1) %} <span> x {{ product['quantity'] }} {{ text_quantity }}</span>{% endif %} 
+								{% else %} 
+									{{ product['price'] }} {% if (product['quantity'] > 1) %} <span> x {{ product['quantity'] }} {{ text_quantity }}</span>{% endif %} 
+								{% endif %}
+							{% endif %} 
+							{% if (product['isProductHasPriceForMasters']) %}
+								<span class="products__item-master-price"><b>%</b> для мастера</span>
+							{% endif %}
+						  </span>	
+							  {% if (category_time and product['special'] and product['special_date_end']) %}
+							  <div class="products__item-countdown">
+								<div class="countdown">
+								  <p class="countdown__text">{{ time_text_1 }} <small>{{ time_text_2 }}</small></p>
+								  <time class="countdown__time js-countdown-time" data-text-countdown="{{ text_countdown }}">{{ product['special_date_end'] }}</time>
+								</div>
+							  </div>
+							  {% endif %}
+							<div class="products__item-action">
+								<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ product.product_id }}');" {{ product['buy_btn'] ? 'disabled' : ''}}>{{ button_cart }}
+								<svg class="icon-cart">
+								  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+								</svg></button>
+								<a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview" href="#popupprod">
+                                <svg class="icon-preview">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                </svg></a>
+							</div>
+						  </div>
+                          </div>
+                        </div>
+					{% endfor %}	
+                  </div>
+                </div>
+                <div class="{% if 3 < set['products']|length %}col-xl-12 set--x4{% else %}col-xl-3{% endif %}">
+                  <div class="products__set">
+				  <form class="setdata setdata-{{ setid }}">
+                    <div class="products__set-in">
+					{% if (set['discount'] > 0) %}
+                      <p class="products__set-price"><span class="js-set-total">{{ set['total'] }}</span><small class="js-set-discount">{{ text_sale }} {{ set['discount'] }}</small></p>
+					{% endif %}
+					  <a class="btn btn--cart js-btn-add-set2cart" href="#">{{ button_cart }}
+                        <svg class="icon-cart">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+                        </svg></a>
+					<input type="hidden" class="set_product_data" name="setid" value="{{ setid }}" >
+					<input type="hidden" class="set_product_data" name="mode" value="{{ set['mode'] }}" >
+					{% for product in set['products'] %} 
+						<input type="hidden" class="set_product_data" data-for="{{ product['product_id'] }}" name="setproducts[{{ product['product_id'] }}]" value="{{ product['quantity'] }}" >
+					{% endfor %} 
+                    </div>
+				  </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+			{% endfor %}
+          </div>
+        </div>
+        <!-- Set :: End-->
+		
+		<div id="popup-set-click" class="popup popup--1170" style="display:none;">
+			<div id="popup-set-click-content" class="popup-package__inner">
+			</div>
+		</div>
+{% endif %}

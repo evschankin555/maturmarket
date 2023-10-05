@@ -1,0 +1,151 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+       <!-- Catalog :: Start-->
+        <div class="catalog catalog--manufacturer">
+          <div class="container-fluid">
+            <h1 class="catalog__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			{% if (description) %}
+				<div class="manufacturer-page">
+					<div class="row">
+						{% if (thumb) %} 
+							<div class="col-sm-2"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" style="width: 100%;"></div>
+						{% endif %} 
+						{% if (description) %} 
+						<div class="col-sm-10">
+							<div class="editor">
+								{{ description }} 
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+				{% endif %}
+
+		{% if (products) %} 
+				<!-- Options :: Start-->
+				<div class="options options--desktop">
+				{% if (category_sorts) %}
+				  <div class="options__type js-options">
+					<button class="options__link options__link--arrow js-options-btn">{{ text_sort }} {{ sort_title }}</button>
+					<ul class="options__dropdown">
+					{% for sortData in sorts %}
+					{% if (sortData['value'] == sort ~ '-' ~ order) %}
+					  <li class="js-options-item is-active" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+					  {% else %} 
+					  <li class="js-options-item" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+					  {% endif %}
+					{% endfor %}
+					</ul>
+				  </div>
+				  {% endif %} 
+				  {% if (category_limits) %} 
+				  <div class="options__display js-options">
+					<button class="options__btn options__btn--arrow js-options-btn">{{ text_limit }} {{ limit }}</button>
+					<ul class="options__dropdown">
+					{% for limits in limits %} 
+					{% if (limits['value'] == limit) %} 
+						<li class="js-options-item is-active" data-href="{{ limits['href'] }}">{{ text_limit }} {{ limits['text'] }}</li>
+					{% else %} 
+						<li class="js-options-item" data-href="{{ limits['href'] }}">{{ text_limit }} {{ limits['text'] }}</li>
+					{% endif %} 
+					{% endfor %} 
+					</ul>
+				  </div>
+				  {% endif %}
+				  <div class="options__view js-options">
+					<button class="options__btn js-options-btn"><span class="icon-view-{{ view }}"></span></button>
+					<ul class="options__dropdown">
+					  {% if ('grid' in viewLayer) %}
+					  	<li class="js-options-item is-active" data-option="{{ viewLayer }}"><span class="icon-view-grid"></span></li>
+					  {% else %}
+					  	<li class="js-options-item" data-option="grid_{{ viewSub }}"><span class="icon-view-grid"></span></li>
+					  {% endif %}
+					  
+					  <li class="js-options-item {% if (viewLayer == 'inline') %} is-active {% endif %}" data-option="inline"><span class="icon-view-inline"></span></li>
+					  <li class="js-options-item {% if (viewLayer == 'micro') %} is-active {% endif %}" data-option="micro"><span class="icon-view-micro"></span></li>
+					</ul>
+				  </div>
+				</div>
+				<div class="options options--mobile">
+				  <div class="row">
+					<div class="col-sm-6">
+					  <div class="options__type js-options">
+						<button class="options__btn options__btn--arrow js-options-btn">{{ text_sort }} {{ sort_title }}</button>
+						<ul class="options__dropdown">
+						{% for sortData in sorts %}
+						{% if (sortData['value'] == sort ~ '-' ~ order) %}
+						  <li class="js-options-item is-active" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+						  {% else %} 
+						  <li class="js-options-item" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+						  {% endif %}
+						{% endfor %}
+						</ul>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				<!-- Options :: End-->
+			
+				<div id="mainContainer">
+					{{ productsview }}
+				</div>
+				
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+			{% endif %}
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+          {
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+			{% for i,breadcrumb in breadcrumbs %}
+			{
+              "@type": "ListItem",
+              "position": {{ i + 1 }},
+              "item": {
+                "@id": "{{ breadcrumb['href'] }}",
+                "name": "{{ breadcrumb['text'] }}"
+              }
+            }{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+			{% endfor %}
+			]
+          }
+</script>
+ <!-- Schema Org :: End-->
+{% endif %}
+</body></html>

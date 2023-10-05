@@ -1,0 +1,282 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+        <!-- Page :: Start-->
+        <div class="page">
+		  {{ content_top }}
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			
+		{% if thumb or images %}
+          <ul class="thumbnails">
+            {% if thumb %}
+            <li><a class="thumbnail" href="{{ popup }}" title="{{ heading_title }}"><img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+            {% endif %}
+            {% if images %}
+            {% for image in images %}
+            <li class="image-additional"><a class="thumbnail" href="{{ image.popup }}" title="{{ heading_title }}"> <img src="{{ image.thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+            {% endfor %}
+            {% endif %}
+          </ul>
+          {% endif %}
+		  
+		  <div class="editor">{{ description }}</div>
+		  
+			{% if review_status %}
+          <div class="rating">
+							<div class="products__item-rating" style="position: initial;">
+								<svg class="icon-star">
+									<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+								</svg>{{ rating }}/5
+							</div>
+			  <a href="" onclick="gotoReview(); return false;">{{ reviews }}</a> / <a href="" onclick="gotoReviewWrite(); return false;">{{ text_write }}</a></p>
+          </div>
+            {% endif %}
+		  
+		  {% if download_status %}
+			<div class="blog-info">
+			{% if downloads %}
+			<br />
+			{% for download in downloads %}
+			<a href="{{ download.href }}" title=""><i class="fa fa-floppy-o"></i> {{ download.name }} {{ download.size }}</a><br>
+			{% endfor %}
+			<br />
+			{% endif %} 
+			</div>
+		  {% endif %} 
+		  
+		  
+		{% if (products) %}
+        <!-- Products :: Start-->
+        <div class="products products--recomended">
+          <div class="container-fluid">
+            <h2 class="products__heading">{{ text_related_product }}</h2>
+            <div class="products__slides js-slick-recomended">
+			  {% for product in products %}
+                        <div class="products__item">
+                          <div class="products__item-in">
+							  <div class="products__item-buttons">
+							  <a class="btn btn--blog" title="{{ button_compare }}" onclick="compare.add('{{ product['product_id'] }}');">
+								  <svg class="icon-blog">
+									 <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-blog"></use>
+								  </svg></a>
+							  <a class="btn btn--like" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product['product_id'] }}');">
+								  <svg class="icon-like">
+									<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-like"></use>
+								  </svg></a>
+							  </div>
+						  {% if (product['thumb']) %} 
+						  <div class="products__item-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% endif %}
+						  <div class="products__item-desc">
+						  <a href="{{ product['href'] }}" class="products__item-title">{{ product['name'] }}</a>
+						  <span class="products__item-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+							{% if (product['isProductHasPriceForMasters']) %}
+								<span class="products__item-master-price"><b>%</b> для мастера</span>
+							{% endif %}
+						  </span>	
+							<div class="products__item-action">
+								<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ product['product_id'] }}', '{{ product['minimum'] }}');" {{ product['buy_btn'] ? 'disabled' : ''}}>{{ button_cart }}
+								<svg class="icon-cart">
+								  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+								</svg></button>
+							</div>
+						  </div>
+                          </div>
+                        </div>
+			  {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- Products :: End-->
+		 {% endif %} 
+		  
+			{% if (articles) %} 
+            <div class="article__other">
+              <h2 class="article__other-heading">{{ text_related }} </h2>
+				<div class="article__other-slides js-slick-article">
+				{% for article in articles %} 
+				<a class="blog__item" href="{{ article['href'] }}">
+                  <figure class="blog__item-image"><img src="{{ article['thumb'] }}" alt="{{ article['name'] }}"></figure>
+                  <h3 class="blog__item-title">{{ article['name'] }}</h3>
+                  <p class="blog__item-text">{{ article['description'] }}</p>
+				</a>
+				{% endfor %} 
+				</div>
+            </div>
+			{% endif %} 
+			
+			
+			
+		{% if (review_status) %}
+        <!-- Comments :: Start-->
+        <div class="comments">
+          <div class="container-fluid">
+            <h2 class="comments__heading">{{ text_write }}</h2>
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="comments__container">
+                  <div class="comments__container-in">
+					<div id="review"></div>
+					 
+                    <div class="comments__form">
+                      <form id="form-review">
+					  {% if (review_guest) %}
+                        <h5>{{ text_write }}</h5>
+						<input class="ui-input" type="text" name="name" value="{{ customer_name }}" placeholder="{{ entry_name }}">
+                        <textarea class="ui-textarea" name="text" placeholder="{{ entry_review }}"></textarea>
+						{{ captcha }}
+                        <div class="comments__form-action">
+                          <div class="ui-rating">
+                            <p class="ui-rating__text">{{ entry_rating }}</p>
+                            <div class="ui-rating__stars">
+							{% set i=5 %}{% for i in i..1 %}
+                              <input class="ui-rating__input" type="radio" name="rating" value="{{ i }}" id="star_{{ i }}">
+                              <label class="ui-rating__label" for="star_{{ i }}">
+                                <svg class="icon-star">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+                                </svg>
+                              </label>
+							{% endfor %}
+                            </div>
+                          </div>
+                          <button class="btn btn--blue"  data-loading-text="{{ text_loading }}" id="button-review">{{ button_continue }}</button>
+                        </div>
+					{% else %} 
+					{{ text_login }} 
+					{% endif %} 
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% if tags %}
+		<div class="container-fluid">
+			<p class="comments__tags">{{ text_tags }}
+			{% for i in 0..tags|length %}
+			{% if i < (tags|length - 1) %} <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,
+			{% else %} <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a> {% endif %}
+			{% endfor %} </p>
+		</div>
+        {% endif %}
+        </div>
+        <!-- comments :: End-->
+		{% endif %}
+		
+		
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+		  {{ content_bottom }}
+        </div>
+        <!-- Page :: End-->
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+<script type="text/javascript"><!--
+$('#review').delegate('.pagination a', 'click', function(e) {
+    e.preventDefault();
+
+    $('#review').fadeOut('slow');
+
+    $('#review').load(this.href);
+
+    $('#review').fadeIn('slow');
+});
+
+$('#review').load('index.php?route=blog/article/review&article_id={{ article_id }}');
+
+$('#button-review').on('click', function() {
+		$.ajax({
+			url: 'index.php?route=blog/article/write&article_id={{ article_id }}',
+			type: 'post',
+			dataType: 'json',
+			data: $("#form-review").serialize(),
+			beforeSend: function() {
+				$('#button-review').attr('disabled', 'disabled');
+			},
+			complete: function() {
+				$('#button-review').removeAttr('disabled');
+			},
+	      success: function(json) {
+	        $('.alert-dismissible').remove();
+			
+	        if (json['error']) {
+	          $('#form-review').before('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 2rem;"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>');
+			  
+	        }
+	        if (json['success']) {
+	          $('#form-review').before('<div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-bottom: 2rem;"> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>');
+			  
+	          $('input[name=\'name\']').val('');
+	          $('textarea[name=\'text\']').val('');
+	          $('input[name=\'rating\']:checked').prop('checked', false);
+
+	        }
+	      }
+		});
+});
+
+$(document).ready(function() {
+	$('.thumbnails').magnificPopup({
+		type:'image',
+		delegate: 'a',
+		gallery: {
+			enabled: true
+		}
+	});
+});
+//--></script> 
+<script type="text/javascript"><!--
+$(document).ready(function() {
+  $('#description').find('a>img').each(function(){
+    $(this).parent().addClass('gallery');
+  });
+  $('#description').magnificPopup({
+    delegate: 'a.gallery',
+    type: 'image',
+    gallery: {
+        enabled: true
+    }
+  });
+
+  gotoReview = function() {
+    offset = $('#form-review').offset();
+    $('html, body').animate({ scrollTop: offset.top-20 }, 'slow');
+  }
+  gotoReviewWrite = function() {
+    offset = $('#form-review h2').offset();
+    $('html, body').animate({ scrollTop: offset.top-20 }, 'slow');
+  }
+  
+});
+--></script>
+</body></html>

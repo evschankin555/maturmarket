@@ -1,0 +1,60 @@
+<!--- ADDITIONAL ELEMENT --->
+            <div>Добавочный элемент</div>
+                  <div class="well-table main_rec_table" style="position: relative;">
+                          {% for language in languages %} 
+                             <div class="input-group">
+                               <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}"></span><input type="text" name="theme_technics_{{type}}[{{ main_nav_row }}][addelem][name][{{ language.language_id }}]" value="{{ main_nav.addelem.name[language.language_id] }}" placeholder="Название допэлемента" class="form-control">
+                             </div>
+                          {% endfor %}
+                          <select name="theme_technics_{{type}}[{{ main_nav_row }}][addelem][settype]" for="{{ main_nav_row }}" class="form-control main_rec_select_type"> 
+                            <option value=""> --- Не выбрано --- </option> 
+                            {% for key,main_rec_type in main_rec_types %} 
+                              {% if (key|trim is same as(main_nav.addelem.settype)) %} 
+                                 <option value="{{ key }}" selected="selected">{{ main_rec_type }}</option>
+                              {% else %} 
+                                 <option value="{{ key }}" >{{ main_rec_type }}</option>
+                              {% endif %} 
+                            {% endfor %} 
+                          </select>
+                         <div  class="main_rec-type-0 main_rec-{{ main_nav_row }}" style="display:{% if (main_nav.addelem.settype is same as('0')) %}block{% else %}none{% endif %}"> 
+                          <div style="position: relative;">
+                            <input type="text" name="main_nav[{{ main_nav_row }}][addelem][type][0][linksmain]" for="{{ main_nav_row }}-0" value="" data-for="{{type}}" placeholder="Ссылки" class="form-control main_rec_prods" autocomplete="off">
+                            <div  class="well well-sm" style="overflow: auto;"> 
+                           {% if (main_nav.addelem.type[0].links is defined) %} 
+                            {% for id,link in main_nav.addelem.type[0].links %} 
+                              
+                                <div id="main_rec-{{ main_nav_row }}-links-{{ id }}"><i class="fa fa-minus-circle"></i>{{ link }} 
+                                  <input type="hidden" name="theme_technics_{{type}}[{{ main_nav_row }}][addelem][type][0][links][{{ id }}]" value="{{ link }}">
+                                </div> 
+                              
+                            {% endfor %} 
+                           {% endif %} 
+                            </div>
+                          </div>
+                         </div>
+
+                         <div class="main_rec-type-2 main_rec-{{ main_nav_row }}" style="display:{% if (main_nav.addelem.settype == 2) %}block{% else %}none{% endif %}">  
+                          <div style="position: relative;">
+                            <input type="text" name="main_rec[{{ main_nav_row }}][type][0][linksmain]" for="{{ main_nav_row }}-0" value="" placeholder="Магазины" class="form-control main_rec_manf" data-for="{{type}}" autocomplete="off">
+                            <div  class="well well-sm" style="overflow: auto;">
+                           {% if (main_nav.addelem.type[0].manf is defined) %} 
+                            {% for id,link in main_nav.addelem.type[0].manf %} 
+                              
+                                <div id="main_rec-{{ main_nav_row }}-manf-{{ id }}"><i class="fa fa-minus-circle"></i>{{ link }} 
+                                  <input type="hidden" name="theme_technics_{{type}}[{{ main_nav_row }}][addelem][type][0][manf][{{ id }}]" value="{{ link }}">
+                                </div> 
+                              
+                            {% endfor %} 
+                           {% endif %} 
+                            </div>
+                          </div>
+                         </div>
+
+                         <div class="main_rec-type-1 main_rec-{{ main_nav_row }}" style="display:{% if (main_nav.addelem.settype == 1) %}block{% else %}none{% endif %}">  
+                            <div class="input-group"><span class="input-group-addon"><i data-toggle="tooltip" data-original-title="Можно использовать html" class="fa fa-code"></i></span>
+                              <textarea name="theme_technics_{{type}}[{{ main_nav_row }}][addelem][type][1][html]" rows="5" placeholder="html контент"
+                               class="form-control code">{{ main_nav.addelem.type[1].html }}</textarea>
+                            </div>  
+                         </div>                       
+                </div>
+<!--- ADDITIONAL ELEMENT --->

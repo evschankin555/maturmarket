@@ -1,0 +1,21 @@
+<li><a class="nav__link nav__link--arrow" {% if (main_navs[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{main_navs[number]['type'][1]['language'][language_id]['href'] }}"{% endif %}>{{ main_navs[number]['type'][1]['language'][language_id]['name'] }}</a>
+                  <div class="nav__dropdown">
+                    <div class="nav__list">
+                      <div class="nav__list-head">
+                        <button class="nav__list-close">
+                          <svg class="icon-back">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                          </svg>
+                        </button><b class="nav__list-heading">Категории</b>
+                      </div>
+                      <div class="nav__list-body">
+                        <ul class="nav__list-menu">
+                          {% for id,link in main_navs[number].type[1].links %} 
+                              <li><a class="nav__list-link" href="{{ link }}" {% if (main_navs[number].type[1].target[id]) %} {{ 'target="'~main_navs[number].type[1].target[id]~'"' }}{% endif %}>{{ main_navs[number].type[1].name[id] }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+</li>
+

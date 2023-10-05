@@ -1,0 +1,160 @@
+                <div class="products__grid">
+				{% for product in products %}
+                  <div class="products__line">
+						  {% if (not product['images']) %} 
+						  <div class="products__line-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+						  <div class="products__line-images js-slick-products">
+							<a href="{{ product['href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+							{% for imageX in product['images'] %} 
+								<a href="{{ product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+						  {% endfor %} 
+						  </div>
+						  {% endif %}
+						  <div class="products__item-stickers">
+							{% if (product['isnewest']) %} 
+								<mark class="products__item-mark products__item-mark--new">{{ labelsinfo['new']['name'][language_id] }}</mark>
+							{% endif %} 
+							{% if (product['special'] and product['sales']) %} 
+								<mark class="products__item-mark products__item-mark--sale">{{ labelsinfo['sale']['name'][language_id] ~ ' ' ~ product['discount'] }}</mark>
+							{% endif %} 
+							{% if (product['popular']) %} 
+								<mark class="products__item-mark products__item-mark--popular">{{ product['popular'] }}</mark>
+							{% endif %} 
+							{% if (product['hit']) %} 
+								<mark class="products__item-mark products__item-mark--hit">{{ product['hit'] }}</mark>
+							{% endif %} 
+							{% if (product['catch']) %} 
+								{% if (product['nocatch']) %} 
+									<mark class="products__item-mark products__item-mark--nocatch">{{ product['catch'] }}</mark>
+								{% else %} 
+									<mark class="products__item-mark products__item-mark--catch">{{ product['catch'] }}</mark>
+								{% endif %} 
+							{% endif %} 
+							{% if (product['reward']) %} 
+								<mark class="products__item-mark products__item-mark--reward">{{ text_reward }} {{ product['reward'] }}</mark>
+							{% endif %} 
+						  </div>
+                    <div class="products__line-desc">
+                      <div class="row align-items-center">
+                        <div class="col">
+						  {% if (product['manufacturer']) %} 
+						  <span class="products__item-category">{{ product['brand_name'] ?: product['manufacturer'] }}</span>
+						  {% endif %}
+						<a href="{{ product['href'] }}" class="products__line-title">{{ product['name'] }}
+						{% if (product['rating'] != constant('false')) %}
+						<span class="products__line-rating">
+                              <svg class="icon-star">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+                              </svg>{{ product['rating'] }}/5
+						</span>
+						{% endif %}
+						</a>
+						  <span class="products__line-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+						  </span>	
+                          <div class="products__status">
+						    {% if (product['quantity'] > 0) %}
+                            <p class="products__status-success">
+                              <svg class="icon-success">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-success"></use>
+                              </svg>
+							  {{ product['stock'] }}
+                            </p>
+							{% else %}
+                            <p class="products__status-error">
+                              <svg class="icon-error">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use>
+                              </svg>
+							  {{ product['stock'] }}
+                            </p>
+							{% endif %}
+							<br>
+							<!--<a class="products__status-link" href="#">Сообщить о поступлении</a>-->
+                          </div>
+                        </div>
+                        <div class="col-auto">
+                          <div class="products__line-action">
+                            <input class="ui-number" type="number" name="quantity" min="{{ product['minimum'] }}" max="9999" value="{{ product['minimum'] }}">
+								<button type="button" class="btn btn--cart" title="{{ button_cart }}" data-for="{{ product['product_id'] }}" {{ product['buy_btn'] ? 'disabled' : ''}}>{{ button_cart }}
+								<svg class="icon-cart">
+								  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+								</svg></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="products__line-details">
+                        <div class="products__line-buttons">
+						  <a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                            <svg class="icon-preview">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                            </svg>
+						  </a>
+						  <a class="btn btn--blog" title="{{ button_compare }}" onclick="compare.add('{{ product['product_id'] }}');">
+							  <svg class="icon-blog">
+								 <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-blog"></use>
+							  </svg></a>
+						  <a class="btn btn--like" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product['product_id'] }}');">
+							  <svg class="icon-like">
+								<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-like"></use>
+							  </svg></a>
+						</div>
+                        <div class="products__tabs js-tabs">
+                          <nav class="products__tabs-nav">
+                          {% if (product['attribute_groups']) %}
+                            <button class="products__tabs-btn js-tabs-btn">{{ text_attributes }}
+                              <svg class="icon-arrow-down">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-arrow-down"></use>
+                              </svg>
+                            </button>
+                          {% endif %}
+                          {% if (product['description']) %}
+                            <button class="products__tabs-btn js-tabs-btn">{{ text_description }}
+                              <svg class="icon-arrow-down">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-arrow-down"></use>
+                              </svg>
+                            </button>
+                          {% endif %}
+                          </nav>
+                          <div class="products__tabs-container">
+                           {% if (product['attribute_groups']) %}
+                            <div class="products__tabs-content js-tabs-content">
+                              <div class="products__info">
+                                <div class="row">
+                                  <div class="col-12 col-md-4">
+                                    <h4 class="products__info-heading">{{ text_attributes }}</h4>
+                                  </div>
+                                  {% for attributeColumn in product['attribute_groups'] %}
+                                    <div class="col-6 col-md-4">
+                                      <dl class="products__info-dl">
+                                      {% for attribute in attributeColumn %}
+                                        <dt>{{ attribute['name'] }}</dt>
+                                        <dd>{{ attribute['text'] }}</dd>
+                                      {% endfor %}                                      
+                                      </dl>
+                                    </div>
+                                  {% endfor %} 
+                                </div>
+                              </div>
+                            </div>
+                           {% endif %}
+							             {% if (product['description']) %}
+                            <div class="products__tabs-content js-tabs-content">
+                              <div class="products__info">
+                                <p>{{ product['description'] }}</p>
+                              </div>
+                            </div>
+							             {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+				  {% endfor %}
+                </div>

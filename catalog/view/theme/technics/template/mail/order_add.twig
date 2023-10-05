@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style=" box-sizing: border-box;">
+  <head style=" box-sizing: border-box;">
+    <meta name="viewport" content="width=device-width" style=" box-sizing: border-box;">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" style=" box-sizing: border-box;">
+    <meta charset="utf-8" style=" box-sizing: border-box;">
+    <title style=" box-sizing: border-box;">{{ title }}</title>
+  </head>
+  <body style="-ms-text-size-adjust: 100%;  -webkit-text-size-adjust: 100%; background-color: #fff; box-sizing: border-box; height: 100%; margin: 0; padding: 0; width: 100% !important;">
+    <table class="email-wrapper" border="0" cellpadding="0" cellspacing="0" style=" background: #fff; border-collapse: collapse; border-spacing: 0; box-sizing: border-box; color: #343434; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; width: 100%;">
+      <tr style=" box-sizing: border-box;">
+        <td style=" box-sizing: border-box; width: 100%;">
+          <!-- Header :: Start-->
+          <table class="email-header" border="0" cellpadding="0" cellspacing="0" style=" background: #{% if theme_color %}{{ theme_color_2 }}{% else %}3660BC{% endif %}; border-collapse: collapse; border-spacing: 0; box-sizing: border-box; color: #fff; width: 100%;">
+            <tr style=" box-sizing: border-box;">
+              <td style=" box-sizing: border-box; padding: 14px 20px; vertical-align: middle;">
+                <table class="email-header__center" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; margin: 0 auto; max-width: 600px; width: 100%;">
+                  <tr style=" box-sizing: border-box;">
+                    <td style=" box-sizing: border-box;">
+                      <!-- Logo :: Start-->
+                      <div class="email-logo" style=" box-sizing: border-box; height: 20px; line-height: 20px; margin: 0 0 15px;"><a href="{{ store_url }}" style=" box-sizing: border-box; text-decoration: none !important;">{% if (logo) %}<img src="{{ logo }}" alt="{{ store_name }}" style=" border: 0; box-sizing: border-box; display: inline-block; height: auto; line-height: 100%; max-width: 100%; outline: none; text-decoration: none; vertical-align: middle;">{% else %}<span style="box-sizing: border-box;display: block;font-family: 'Roboto', Arial, sans-serif;font-size: 22px;font-weight: 700;line-height: 22px;margin: 0 0 5px;text-transform: uppercase;color: #fff;">{{ store_name }}</span>{% endif %}</a></div>
+                      <!-- Logo :: End-->
+					  {% if (social_navs is not empty) %} 
+                      <!-- Social :: Start-->
+                      <table class="email-social" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; width: auto;">
+                        <tr style=" box-sizing: border-box;">
+						{% for social_nav in social_navs %}
+                          <td style=" box-sizing: border-box; padding: 0 10px; padding-left: 0;"><a href="{{ social_nav['link'] }}" target="_blank" style=" box-sizing: border-box; display: block; text-decoration: none !important;"><img src="{{ social_nav['icone'] }}" width="40" height="38" alt="{{ social_nav['language'][language_id]['name'] }}" style=" border: 0; box-sizing: border-box; height: auto; line-height: 100%; max-width: 100%; outline: none; text-decoration: none;"></a></td>
+						{% endfor %}
+                        </tr>
+                      </table>
+                      <!-- Social :: End-->
+					  {% endif %}
+                    </td>
+                    <td style=" box-sizing: border-box;">
+                      <!-- Contacts :: Start-->
+                      <table class="email-contacts" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; text-align: right; width: 100%;">
+					  {% if (technics_phones) %}
+					    {% for key, technics_phone in technics_phones %}
+                        <tr style=" box-sizing: border-box;">
+                          <td style=" box-sizing: border-box; padding: 5px 0;"><a href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}" style=" box-sizing: border-box; color: #fff; display: inline-block; font-family: 'Roboto', Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 20px; text-decoration: none !important; vertical-align: top;"><span style=" box-sizing: border-box; color: inherit; font-family: inherit; font-size: inherit; font-weight: inherit; line-height: inherit;">{{ technics_phone[language_id] }}</span></a></td>
+                        </tr>
+						{% endfor %}
+					  {% endif %}
+					  {% if (config_email) %}
+                        <tr style=" box-sizing: border-box;">
+                          <td style=" box-sizing: border-box; padding: 5px 0;"><a href="mailro:{{ config_email }}" style=" box-sizing: border-box; color: #fff; display: inline-block; font-family: 'Roboto', Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 20px; text-decoration: none !important; vertical-align: top;"><span style=" box-sizing: border-box; color: inherit; font-family: inherit; font-size: inherit; font-weight: inherit; line-height: inherit;">{{ config_email }}</span></a></td>
+                        </tr>
+					  {% endif %}
+                      </table>
+                      <!-- Contacts :: End-->
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!-- Header :: End-->
+          <!-- Main :: Start-->
+          <table class="email-main" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; width: 100%;">
+            <!-- Order :: Start-->
+            <tr class="email-order" style=" box-sizing: border-box;">
+              <td style=" border: none; border-bottom: 70px solid #fff; border-left: 10px solid #fff; border-right: 10px solid #fff; border-top: 70px solid #fff; box-sizing: border-box; padding: 0; text-align: left;">
+                <table class="email-order__data" border="0" cellpadding="0" cellspacing="0" style=" border: 1px solid #E8E8E8; border-collapse: collapse; border-spacing: 0; box-sizing: border-box; margin: 0 auto; max-width: 600px; width: 100%;">
+                  <thead style=" box-sizing: border-box;">
+                    <tr style=" box-sizing: border-box;">
+                      <th colspan="2" style=" box-sizing: border-box; padding: 12px 20px; padding-top: 40px;"><span class="email-order__title" style=" box-sizing: border-box; color: #343434; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 20px; font-weight: 500; line-height: 1; margin: 0 0 10px; text-transform: uppercase;">{{ text_order_id }} {{ order_id }}</span></th>
+                    </tr>
+                  </thead>
+                  <tbody style=" box-sizing: border-box;">
+                    <tr style=" box-sizing: border-box;">
+                      <td style=" box-sizing: border-box; padding: 12px 20px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_date_added }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ date_added }}</span></span></td>
+					  {% if (payment_method != 'fast_order') %} 
+                      <td style=" box-sizing: border-box; padding: 12px 20px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_payment_method }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ payment_method }}</span></span></td>
+					  {% endif %}
+                    </tr>
+                    <tr style=" box-sizing: border-box;">
+					{% if (shipping_method and shipping_method != 'fast_order') %} 
+                      <td style=" box-sizing: border-box; padding: 12px 20px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_shipping_method }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ shipping_method }}</span></span></td>
+                    {% endif %}
+					  <td {% if not shipping_method %}colspan="2"{% endif %} style=" box-sizing: border-box; padding: 12px 20px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_payment_address }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ payment_address|replace({'<br />': ', '}) }}</span></span></td>
+                    </tr>
+                    <tr style=" box-sizing: border-box;">
+					{% if (not theme_technics_checkout_st3) %}
+					  {% if (shipping_address) %}
+                      <td style=" box-sizing: border-box; padding: 12px 20px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_shipping_address }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ shipping_address|replace({'<br />': ', '}) }}</span></span></td>
+                      {% endif %}
+					{% endif %}
+					{% if (email != 'no_email@noemail.ru') %}
+					  <td {% if not shipping_address %}colspan="2"{% endif %} style=" box-sizing: border-box; padding: 12px 20px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_email }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ email }}</span></span></td>
+                    </tr>
+					{% endif %}
+                    <tr style=" box-sizing: border-box;">
+                      <td colspan="2" style=" box-sizing: border-box; padding: 12px 20px; padding-bottom: 40px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_telephone }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ telephone }}</span></span></td>
+                    </tr>
+                    <tr style=" box-sizing: border-box;">
+                      <td style=" box-sizing: border-box; padding: 12px 20px; padding-bottom: 40px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_ip }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ ip }}</span></span></td>
+                      <td style=" box-sizing: border-box; padding: 12px 20px; padding-bottom: 40px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_order_status }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ order_status }}</span></span></td>
+                    </tr>
+					{% if (comment) %}
+                    <tr style=" box-sizing: border-box;">
+                      <td colspan="2" style=" box-sizing: border-box; padding: 12px 20px; padding-bottom: 40px;"><span class="email-order__item" style=" box-sizing: border-box; display: block;"><span class="email-order__item-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0 0 5px; text-transform: uppercase;">{{ text_instruction }}</span><span class="email-order__item-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ comment }}</span></span></td>
+                    </tr>
+					{% endif %}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <!-- Order :: End-->
+            <!-- Products :: Start-->
+            <tr class="email-products" style=" box-sizing: border-box;">
+              <td style=" border: none; border-bottom: 30px solid #fff; border-left: 10px solid #fff; border-right: 10px solid #fff; box-sizing: border-box; padding: 0; text-align: left;">
+                <table class="email-products__data" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; margin: 0 auto; max-width: 600px; position: relative; width: 100%;">
+                  <thead style=" box-sizing: border-box;">
+                    <tr style=" box-sizing: border-box;">
+                      <th colspan="2" style=" box-sizing: border-box; padding: 20px 10px; padding-left: 15px; text-align: left; white-space: nowrap;">{{ text_product }}</th>
+                      <th style=" box-sizing: border-box; padding: 20px 10px; text-align: left; white-space: nowrap;">{{ text_price }}</th>
+                      <th style=" box-sizing: border-box; padding: 20px 10px; text-align: left; white-space: nowrap;">{{ text_quantity }}</th>
+                      <th style=" box-sizing: border-box; padding: 20px 10px; padding-right: 15px; text-align: left; white-space: nowrap;">{{ text_total }}</th>
+                    </tr>
+                  </thead>
+                  <tbody style=" box-sizing: border-box;">
+				    {% for product in products %}
+                    <tr style=" box-sizing: border-box;">
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-left: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; padding-left: 15px; vertical-align: middle;"><a class="email-products__image" href="{{ product['href'] }}" style=" box-sizing: border-box; display: block; height: 50px; line-height: 50px; margin: 0; text-align: center; text-decoration: none !important; width: 50px;"><img src="{{ product['image'] }}" alt="{{ product['name'] }}" style=" border: 0; box-sizing: border-box; display: inline-block; height: auto; line-height: 100%; max-width: 100%; outline: none; text-decoration: none; vertical-align: middle;"></a></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; vertical-align: middle;"><span class="email-products__id" style=" box-sizing: border-box; color: #cacaca; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 20px;">{{ product['model'] }}</span><span class="email-products__title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px;"><a href="{{ product['href'] }}" style=" box-sizing: border-box; color: #{% if theme_color %}{{ theme_color_2 }}{% else %}3660BC{% endif %}; display: inline-block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; text-decoration: none !important; vertical-align: top;">{{ product['name'] }}</a></span></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; vertical-align: middle;"><span class="email-products__price" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 18px; font-weight: 500; line-height: 20px; white-space: nowrap;">{{ product['price'] }}</span></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; vertical-align: middle;"><span class="email-products__count" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 16px; font-weight: 700; line-height: 20px; white-space: nowrap;">{{ product['quantity'] }}</span></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-right: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; padding-right: 15px; vertical-align: middle;"><span class="email-products__price" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 18px; font-weight: 500; line-height: 20px; white-space: nowrap;">{{ product['total'] }}</span></td>
+                    </tr>
+					{% if (product['option'] is not empty) %}
+                    <tr style=" box-sizing: border-box;">
+                      <td colspan="5" style=" border-bottom: 1px solid #E8E8E8; border-left: 1px solid #E8E8E8; border-right: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; padding-left: 15px; padding-right: 15px; vertical-align: middle;">
+                        <table class="email-products__info" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; white-space: nowrap; width: 100%;">
+						{% for options in product['option']|batch(5) %}
+                          <tr style=" box-sizing: border-box;">
+							{% for i,option in options %}
+                            <td {% if not (i + 1 < product['option']|length) %}colspan="{{ 6 - options|length }}"{% endif %} style=" box-sizing: border-box; padding: 0 15px; padding-left: 0;"><span class="email-products__info-title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; margin: 0;">{{ option['name'] }}</span><span class="email-products__info-text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 13px; font-weight: 400; line-height: 20px;">{{ option['value'] }}</span></td>
+							{% endfor %}
+                          </tr>
+						{% endfor %}
+                        </table>
+                      </td>
+                    </tr>
+					{% endif %}
+					{% endfor %}
+					{% for voucher in vouchers %}
+                    <tr style=" box-sizing: border-box;">
+                      <td colspan="2" style=" border-bottom: 1px solid #E8E8E8; border-left: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; vertical-align: middle;"><span class="email-products__title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px;"><span style=" box-sizing: border-box; color: #{% if theme_color %}{{ theme_color_2 }}{% else %}3660BC{% endif %}; display: inline-block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; text-decoration: none !important; vertical-align: top;">{{ voucher['description'] }}</span></span></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; vertical-align: middle;"><span class="email-products__price" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 18px; font-weight: 500; line-height: 20px; white-space: nowrap;">{{ voucher['amount'] }}</span></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; vertical-align: middle;"><span class="email-products__count" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 16px; font-weight: 700; line-height: 20px; white-space: nowrap;">1</span></td>
+                      <td style=" border-bottom: 1px solid #E8E8E8; border-right: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; box-sizing: border-box; padding: 20px 10px; padding-right: 15px; vertical-align: middle;"><span class="email-products__price" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 18px; font-weight: 500; line-height: 20px; white-space: nowrap;">{{ voucher['amount'] }}</span></td>
+                    </tr>
+					{% endfor %}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <!-- Products :: End-->
+            <!-- Total :: Start-->
+            <tr class="email-total" style=" box-sizing: border-box;">
+              <td style=" border: none; border-bottom: 70px solid #fff; border-left: 10px solid #fff; border-right: 10px solid #fff; box-sizing: border-box; padding: 0; text-align: left;">
+                <table class="email-total__data" border="0" cellpadding="0" cellspacing="0" style=" background: #{% if theme_color %}{{ theme_color_2 }}{% else %}3660BC{% endif %}; border: 0; border-collapse: collapse; border-spacing: 0; box-sizing: border-box; color: #fff; margin: 0 auto; max-width: 600px; width: 100%;">
+				{% for row in totals|batch(3) %}
+                  <tr style=" box-sizing: border-box;">
+				  {% for i,total in row %}
+				    {% if (i + 1 < totals|length) %}
+                      <td style=" border-bottom: 1px solid #{% if theme_color %}{{ theme_color_3 }}{% else %}7097EC{% endif %}; box-sizing: border-box; padding: 20px; vertical-align: top;"><span class="email-total__text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 20px; font-weight: 500; line-height: 20px; white-space: nowrap;"><small style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; white-space: normal;">{{ total['title'] }}</small>{{ total['text'] }}</span></td>
+					  {% else %}
+                      <td colspan="{{ 4 - row|length }}" style=" border-bottom: 1px solid #{% if theme_color %}{{ theme_color_3 }}{% else %}7097EC{% endif %};{% if (row|length != 1) %}border-left: 1px solid #{% if theme_color %}{{ theme_color_3 }}{% else %}7097EC{% endif %};{% endif %} box-sizing: border-box; padding: 20px; vertical-align: top;"><span class="email-total__text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 20px; font-weight: 500; line-height: 20px; white-space: nowrap;"><small style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; white-space: normal;">{{ total['title'] }}</small><b style=" box-sizing: border-box; font-size: 25px; font-weight: 700; line-height: 1;">{{ total['text'] }}</b></span></td>
+					{% endif %}
+				  {% endfor %}
+                  </tr>
+				{% endfor %}
+                </table>
+              </td>
+            </tr>
+            <!-- Total :: End-->
+			{% if technics_mail_text %}
+            <!-- About :: Start-->
+            <tr class="email-about" style=" box-sizing: border-box;">
+              <td style=" border: none; border-bottom: 70px solid #fff; border-left: 10px solid #fff; border-right: 10px solid #fff; box-sizing: border-box; padding: 0; text-align: left;">
+                <table class="email-about__data" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; margin: 0 auto; max-width: 600px; width: 100%;">
+                  <tr style=" box-sizing: border-box;">
+                    <td style=" box-sizing: border-box;"><span class="email-about__title" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 18px; font-weight: 500; line-height: 20px; margin: 0 0 10px; text-transform: uppercase;">{{ technics_mail_about }}</span><span class="email-about__text" style=" box-sizing: border-box; display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px;">{{ technics_mail_text }}</span></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <!-- About :: End-->
+			{% endif %}
+            <!-- Adv :: Start-->
+            <tr class="email-adv" style=" box-sizing: border-box;">
+              <td style=" border: none; box-sizing: border-box; padding: 0; text-align: left; border-bottom: 1px solid #E8E8E8;">
+              </td>
+            </tr>
+            <!-- Adv :: End-->
+          </table>
+          <!-- Main :: End-->
+          <!-- Footer :: Start-->
+          <table class="email-footer" border="0" cellpadding="0" cellspacing="0" style=" border-collapse: collapse; border-spacing: 0; box-sizing: border-box; width: 100%; background: #{% if theme_fc_color %}{{ theme_fc_color_2 }}{% else %}292A30{% endif %};">
+            <tr style=" box-sizing: border-box;">
+              <td style=" border-bottom: 50px solid #{% if theme_fc_color %}{{ theme_fc_color_2 }}{% else %}292A30{% endif %}; border-left: 10px solid #{% if theme_fc_color %}{{ theme_fc_color_2 }}{% else %}292A30{% endif %}; border-right: 10px solid #{% if theme_fc_color %}{{ theme_fc_color_2 }}{% else %}292A30{% endif %}; border-top: 50px solid #{% if theme_fc_color %}{{ theme_fc_color_2 }}{% else %}292A30{% endif %}; box-sizing: border-box; text-align: center;">
+                <!-- Logo :: Start-->
+                <div class="email-logo" style=" box-sizing: border-box; height: 20px; line-height: 20px;"><a href="#" style=" box-sizing: border-box; text-decoration: none !important;">{% if (logo) %}<img src="{{ logo }}" alt="{{ store_name }}" style=" border: 0; box-sizing: border-box; display: inline-block; height: auto; line-height: 100%; max-width: 100%; outline: none; text-decoration: none; vertical-align: middle;">{% else %}<span style="box-sizing: border-box;display: block;font-family: 'Roboto', Arial, sans-serif;font-size: 22px;font-weight: 700;line-height: 22px;margin: 0 0 5px;text-transform: uppercase;color: #fff;">{{ store_name }}</span>{% endif %}</a></div>
+                <!-- Logo :: End-->
+              </td>
+            </tr>
+          </table>
+          <!-- Footer :: End-->
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+				
+
+						<div class="nav-submenu nav-submenu--min">
+							<ul class="nav-submenu__list">
+								{% if (breadLists is defined) %} 
+						{% for breadlist in breadLists %} 
+							<li class="nav-submenu__list-item"><a href="{{ breadlist['href'] }}" class="nav-submenu__link">{{ breadlist['name'] }}</a></li>
+						{% endfor %} 
+								{% endif %} 
+							</ul>
+						</div>

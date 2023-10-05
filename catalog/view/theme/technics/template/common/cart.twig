@@ -1,0 +1,128 @@
+              <div class="col-auto">
+                <div class="cart js-toggle{{ cart_call ? ' js-cart-call' : ''}}" id="cart">
+                  <button class="cart__btn js-toggle-btn">
+                    <svg class="icon-cart">
+                      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+                    </svg>
+					<span id="cart-total">
+					{% if (text_items > 0) %}
+                    <mark class="cart__counter">
+					{{ text_items }}
+					</mark>
+					{% endif %}
+					</span>
+					{{ text_shopping_cart }}
+                  </button>
+			  <div class="cart__dropdown js-toggle-dropdown">
+                    <div class="cart__head">
+                      <button class="cart__back js-toggle-close">
+                        <svg class="icon-back">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                        </svg>
+                      </button><span class="cart__heading">{{ text_technics_cart_title }}</span>
+                      <button class="cart__clear" onclick="cart.clear();" {% if not (products or vouchers) %}style="display: none;"{% endif %}>
+                        <svg class="icon-clear">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-clear"></use>
+                        </svg>{{ text_technics_clear }}
+                      </button>
+                    </div>
+                    <div class="cart__body">
+                      <div class="cart__scroll">
+					  {% if (products or vouchers) %}
+                        <ul class="cart__list">
+						{% for product in products %}
+                          <li>
+                            <div class="cart__item">
+                              <button onclick="cart.remove('{{ product['cart_id'] }}');" title="{{ button_remove }}" class="cart__item-delete">
+                                <svg class="icon-delete">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+                                </svg>
+                              </button>
+                              <figure class="cart__item-image"><a href="{{ product['href'] }}"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></figure>
+                              <div class="cart__item-desc">
+							    <span class="cart__item-id">{{ product['model'] }}</span>
+							    <span class="cart__item-title"><a href="{{ product['href'] }}">{{ product['name'] }}</a></span>
+							    {% if (product['option']) %}
+							      {% for option in product['option'] %}
+							      <span class="cart__item-option">{{ option['name'] }} {{ option['value'] }}</span>
+							      {% endfor %}
+							    {% endif %}
+							  </div>
+                              <div class="cart__item-action">
+                                <p class="cart__item-price">
+                                  <b>{{ product['total'] }}</b>
+                                </p>
+                                <input class="ui-number ui-number--sm" type="number" min="{{ product['minimum'] }}" max="9999" name="quantity[{{ product['cart_id'] }}]" value="{{ product['quantity'] }}">
+                              </div>
+                            </div>
+                          </li>
+						{% endfor %}
+						{% for voucher in vouchers %}
+                          <li>
+                            <div class="cart__item">
+                              <button onclick="voucher.remove('{{ voucher['key'] }}');" title="{{ button_remove }}" class="cart__item-delete">
+                                <svg class="icon-delete">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+                                </svg>
+                              </button>
+                              <div class="cart__item-desc"><span class="cart__item-title">{{ voucher['description'] }}</span></div>
+                              <div class="cart__item-action">
+                                <p class="cart__item-price"><b>{{ voucher['amount'] }}</b></p>
+                                <input class="ui-number ui-number--sm" type="number" min="1" max="1" value="1" disabled>
+                              </div>
+                            </div>
+                          </li>
+						{% endfor %}
+                        </ul>
+						<div class="cart__total">
+						{% for i,total in totals %}
+						  {% if (i + 1 < (totals)|length) %}
+						    <p class="cart__total-item">{{ total['title'] }} {{ total['text'] }}</p>
+						  {% else %}
+						    <p class="cart__total-item cart__total-item--last">{{ total['title'] }} <span>{{ total['text'] }}</span></p>
+						  {% endif %}
+						{% endfor %}
+						</div>
+					  {% else %}
+					  <ul class="cart__list">
+					    <li><div class="cart__item"><p>{{ text_empty }}</p></div></li>
+					  </ul>
+					  {% endif %}
+                      </div>
+                    </div>
+                    <div class="cart__foot" {% if not (products or vouchers) %}style="display: none;"{% endif %}>
+                      <div class="row">
+                        <div class="col-5"><a class="btn btn--link" href="{{ cart }}">{{ text_cart }}</a></div>
+                        <div class="col-7"><a class="btn btn--blue" href="{{ checkout }}">{{ text_technics_order }}</a>
+						{% if (buy_click['status'] is defined and buy_click['status']) %}
+						<a class="btn btn--link js-fancy-popup-cart" href="#popup-buy-click-cc" data-typefrom="cart-popup" data-for="">{{ text_technics_fast_order }}</a>
+						{% endif %}
+						</div>
+                      </div>
+                    </div>
+                  </div>
+				  
+		{% if (buy_click['status'] is defined and buy_click['status']) %} 
+		  <div class="popup popup--570" style="display: none;" id="popup-buy-click-cc">
+			<button class="popup__close" data-fancybox-close>
+			  <svg class="icon-close">
+				<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use>
+			  </svg>
+			</button>
+			<div class="writeus"><span class="writeus__heading">{{ text_technics_fast_order }}</span>
+			  <div class="writeus__form">
+				{{ buyclick_form }}
+				{{ captcha_fo }}
+				  <div class="writeus__action">
+					<button type="button" class="btn btn--blue js-btn-add-cart-fast-custom quickbuy-send" onclick="cart.add2cartFast($('#popup-buy-click-cc input,#popup-buy-click-cc textarea'));">{{ button_fastorder_sendorder }}</button>
+					<input name="redirect"  value="1" class="fast-redirect" type="hidden">
+				  </div>
+					{% if (text_technics_pdata) %} 
+					<div class="personal-data">{{ text_technics_pdata }}</div>
+					{% endif %} 
+			  </div>
+			</div>
+		  </div>
+		{% endif %}
+                </div>
+              </div>

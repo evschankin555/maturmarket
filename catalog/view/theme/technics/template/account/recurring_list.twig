@@ -1,0 +1,74 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			  {% if recurrings %}
+			  <div class="table-responsive">
+				<table class="table table-bordered table-hover">
+				  <thead>
+					<tr>
+					  <td class="text-right">{{ column_order_recurring_id }}</td>
+					  <td class="text-left">{{ column_product }}</td>
+					  <td class="text-left">{{ column_status }}</td>
+					  <td class="text-left">{{ column_date_added }}</td>
+					  <td class="text-right"></td>
+					</tr>
+				  </thead>
+				  <tbody>
+				  
+				  {% for recurring in recurrings %}
+				  <tr>
+					<td class="text-right">#{{ recurring.order_recurring_id }}</td>
+					<td class="text-left">{{ recurring.product }}</td>
+					<td class="text-left">{{ recurring.status }}</td>
+					<td class="text-left">{{ recurring.date_added }}</td>
+					<td class="text-right"><a href="{{ recurring.view }}" title="" class="btn btn--blue btn--sm">{{ button_view }}</a></td>
+				  </tr>
+				  {% endfor %}
+				  
+				  </tbody>
+				</table>
+			  </div>
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+			  {% else %}
+			  <p>{{ text_empty }}</p>
+			  {% endif %}
+				<div class="personal__action">
+					<a href="{{ continue }}" class="btn btn--transparent">{{ button_continue }}</a>
+				</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

@@ -1,0 +1,28 @@
+<!-- Brands :: Start-->
+<div class="info brands-slide">
+          <div class="container-fluid">
+		  {% if (title) %}
+            <div class="media__head">
+              <h2 class="media__heading">{{ title }}</h2>
+            </div>
+		  {% endif %} 
+            <div class="row">
+              <div class="col-xl-12">
+                  <div class="js-slider-brands" data-slick='{"slidesToShow": 2,"autoplay": {{ autoplay ? "true" : "false"}},"autoplaySpeed": {{ autoplay*1000 }},"speed": {{ speed*100 }},"responsive": [{"breakpoint": 480,"settings": {"slidesToShow": 2}}, {"breakpoint": 991,"settings": {"slidesToShow": 3}}, {"breakpoint": 1199,"settings": {"slidesToShow": {{ slidestoshow }} }}] }'>
+		    {% for banner1 in banners %} 
+				{% for banner in banner1 %} 
+                    <div class="brands-slide__item">
+						{% if (banner['link']) %} 
+						<a href="{{ banner['link'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}" style="max-width: {{ width }}rem;"></a>
+						{% else %} 
+						<img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}" style="max-width: {{ width }}rem;">
+						{% endif %} 
+                    </div>
+				{% endfor %} 
+  		    {% endfor %} 
+                  </div>
+              </div>
+            </div>
+          </div>
+</div>
+<!-- Brands :: Start-->

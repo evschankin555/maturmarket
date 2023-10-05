@@ -1,0 +1,30 @@
+        <!-- Category :: Start-->
+        <div class="category">
+          <div class="container-fluid">
+		  {% if title %}
+            <div class="category__head">
+              <h2 class="category__heading">{{ title }}</h2>
+            </div>
+			{% endif %}
+            <div class="category__grid">
+              <div class="row">
+				{% for banner1 in banners %}
+					{% for banner in banner1 %} 
+                <div class="col-12 col-sm-6 col-lg-{{ banner['full'] ? column*2 : column}} col-xl-{{ banner['full'] ? column*2 : column}}">
+				{% if (banner['link']) %}
+				<a class="category__item" href="{{ banner['link'] }}">
+                    <figure class="category__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}"></figure>
+                    <h3 class="category__item-title">{{ banner['title'] }}</h3>
+				</a>
+				{% else %}
+                    <figure class="category__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}"></figure>
+                    <h3 class="category__item-title">{{ banner['title'] }}</h3>
+				{% endif %}
+				</div>
+					{% endfor %} 
+				{% endfor %} 
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Category :: End-->

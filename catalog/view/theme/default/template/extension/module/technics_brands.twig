@@ -1,0 +1,23 @@
+<!-- Brands :: Start-->
+<div class="info">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-xl-12">
+                  <div class="js-slider-brands">
+		    {% for banner1 in banners %} 
+				{% for banner in banner1 %} 
+                    <div class="info__item">
+						{% if (banner['link']) %} 
+						<a href="{{ banner['link'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}"></a>
+						{% else %} 
+						<img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}">
+						{% endif %} 
+                    </div>
+				{% endfor %} 
+  		    {% endfor %} 
+                  </div>
+              </div>
+            </div>
+          </div>
+</div>
+<!-- Brands :: Start-->

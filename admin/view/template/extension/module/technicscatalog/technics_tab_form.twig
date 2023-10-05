@@ -1,0 +1,288 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-set" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-set" class="form-horizontal">
+
+          <div class="tab-content">
+
+                  
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-description1"><span data-toggle="tooltip" title="" data-original-title="{{ help_product_tabs_main }}">{{ text_tabs_shablon }}</span></label>
+                      <div class="col-sm-10">
+                        <select name="view" class="form-control view-mode">
+                            <option value="tab" {{ view == "tab" ? 'selected="selected"' : '' }}>{{ text_tabs_tab }}</option>
+                            <option value="popup" {{ view == "popup" ? 'selected="selected"' : '' }}>{{ text_tabs_popup }}</option>
+                            <option value="video" {{ view == "video" ? 'selected="selected"' : '' }}>{{ text_tabs_video }}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-description1">{{ entry_status }}</label>
+                      <div class="col-sm-10">
+                        <select name="status"  class="form-control">
+                            <option value="1" {{ status == 1 ? 'selected="selected"' : '' }}>{{ text_enabled }}</option>
+                            <option value="0" {{ status == 0 ? 'selected="selected"' : '' }}>{{ text_disabled }}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-description1">{{ text_tabs_links }}</label>
+                      <div class="col-sm-10">
+                        <select name="mode"  class="form-control cust_tabs_mode">
+                            <option value="products" {{ mode == "products" ? 'selected="selected"' : '' }}>{{ text_tabs_to_products }}</option>
+                            <option value="categories" {{ mode == "categories" ? 'selected="selected"' : '' }}>{{ text_tabs_tab_to_categories }}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    
+                    <div class="form-group tabsmode" id="customtab-products" style="display: {{ mode == "products" ? 'block' : 'none' }};">
+                      <label class="col-sm-2 control-label" for="input-product"><span data-toggle="tooltip" title="" data-original-title="{{ help_product_tabs_select }}">{{ text_products }}</span></label>
+                      <div class="col-sm-10 required">
+                        <input type="text" name="product"  value="" placeholder="{{ text_products }}"  class="form-control tab-products">
+                          {% if (error_instanses) %} 
+                          <div class="text-danger">{{ error_instanses }}</div>
+                          {% endif %} 
+                        <div class="well well-sm" id="cust_tabs-products" style="height: 150px; overflow: auto;">
+                          {% if (mode == "products") %} 
+                            {% for instanse in instanses %} 
+                            <div id="product{{ instanse['id'] }}"><i class="fa fa-minus-circle"></i>{{ instanse['name'] }}<input type="hidden" name="instanses[products][]" value="{{ instanse['id'] }}">
+                            </div>
+                            {% endfor %} 
+                          {% endif %} 
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group tabsmode" id="customtab-categories" style="display: {{ mode == "categories" ? 'block' : 'none' }};">
+                      <label class="col-sm-2 control-label" for="input-categories"><span data-toggle="tooltip" title="" data-original-title="{{ help_product_tabs_cat_select }}">{{ text_categories }}</span></label>
+                      <div class="col-sm-10">
+                        <input type="text" name="category"  value="" placeholder="{{ text_categories }}"  class="form-control tab-categories">
+                        <div class="well well-sm" id="cust_tabs-categories" style="height: 150px; overflow: auto;">
+                          {% if (mode == "categories") %} 
+                            {% for instanse in instanses %} 
+                            <div id="category{{ instanse['id'] }}"><i class="fa fa-minus-circle"></i>{{ instanse['name'] }}<input type="hidden" name="instanses[categories][]" value="{{ instanse['id'] }}">
+                            </div>
+                            {% endfor %}                          
+                        {% endif %} 
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="">{{ text_sort_order }}</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="sort_order" value="{{ sort_order }}" placeholder="{{ text_sort_order }}" class="form-control">
+                      </div>
+                    </div>
+                    
+                    
+                    <ul class="nav nav-tabs" id="language_tab">
+                    {% for language in languages %} 
+                      <li ><a href="#language_tab-{{ language['language_id'] }}" data-toggle="tab" aria-expanded="true"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}"> {{ language['name'] }}</a></li>
+                    {% endfor %} 
+                    </ul>
+
+                    <div class="tab-content">
+                    {% for language in languages %} 
+                      <div class="tab-pane " id="language_tab-{{ language['language_id'] }}">
+
+                         <div class="view view_video" style="display: {{ view == "video" ? 'block' : 'none' }};">
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label">{{ text_name }}</label>
+                            <div class="col-sm-10">
+                            <input type="text" {{ view == "video" ? '' : 'disabled' }} name="title[{{ language['language_id'] }}]" value="{{ title[language['language_id']] is defined ? title[language['language_id']] : '' }}" placeholder="{{ text_name }}"  class="form-control" />
+                            {% if (error_title[language['language_id']] is defined) %} 
+                            <div class="text-danger">{{ error_title[language['language_id']] }}</div>
+                            {% endif %} 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" ><span data-toggle="tooltip" title="" data-original-title="{{ text_video_help }}">{{ text_video }}</span></label>
+                            <div class="col-sm-10">
+
+                            <input type="text" {{ view == "video" ? '' : 'disabled' }} name="description[{{ language['language_id'] }}]" value="{{ description[language['language_id']] is defined ? description[language['language_id']] : '' }}" placeholder="{{ text_video }}"  class="form-control" />
+                            {% if (error_title[language['language_id']] is defined) %} 
+                            <div class="text-danger">{{ error_title[language['language_id']] }}</div>
+                            {% endif %} 
+                              </div>
+                          </div>
+                         </div>
+
+                         <div class="view view_other" style="display: {{ view != "video" ? 'block' : 'none' }};">
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="input-name1">{{ text_name }}</label>
+                            <div class="col-sm-10">
+                            <input type="text" {{ view != "video" ? '' : 'disabled' }} name="title[{{ language['language_id'] }}]" value="{{ title[language['language_id']] is defined ? title[language['language_id']] : '' }}" placeholder="{{ text_name }}"  class="form-control" />
+                            {% if (error_title[language['language_id']] is defined) %} 
+                            <div class="text-danger">{{ error_title[language['language_id']] }}</div>
+                            {% endif %} 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-description1">{{ text_description }}</label>
+                            <div class="col-sm-10">
+                            <textarea {{ view != "video" ? '' : 'disabled' }} name="description[{{ language['language_id'] }}]" id="tabdescription-{{ language['language_id'] }}" placeholder="{{ text_description }}"  data-lang="{{ language['code'] }}" class="form-control" data-toggle="summernote" data-lang="{{ summernote }}">{{ description[language['language_id']] is defined ? description[language['language_id']] : '' }}</textarea>
+                            </div>
+                          </div>
+                         </div>
+
+                      </div>
+                    {% endfor %} 
+                    </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_store }}</label>
+                <div class="col-sm-10">
+                  <div class="well well-sm" style="height: 150px; overflow: auto;">
+                    <div class="checkbox">
+                      <label>
+						{% if 0 in tab_store %} 
+                        <input type="checkbox" name="stories[]" value="0" checked="checked" />
+                        {{ text_default }} 
+                        {% else %} 
+                        <input type="checkbox" name="stories[]" value="0" />
+                        {{ text_default }} 
+                        {% endif %} 
+                      </label>
+                    </div>
+                    {% for store in stores %} 
+                    <div class="checkbox">
+                      <label>
+						{% if store['store_id'] in tab_store %} 
+                        <input type="checkbox" name="stories[]" value="{{ store['store_id'] }}" checked="checked" />
+                        {{ store['name'] }} 
+                        {% else %} 
+                        <input type="checkbox" name="stories[]" value="{{ store['store_id'] }}" />
+                        {{ store['name'] }} 
+                        {% endif %} 
+                      </label>
+                    </div>
+                    {% endfor %} 
+                  </div>
+                </div>
+              </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+  {% if (ckeditor) %} 
+    {% for language in languages %} 
+        ckeditorInit('tabdescription-{{ language['language_id'] }}', getURLVar('user_token'));
+    {% endfor %} 
+  {% endif %} 
+$('#language_tab a:first').tab('show');
+$('.date').datetimepicker({
+	pickTime: false
+});
+
+$('.tab-products').autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return {
+            label: item['name'],
+            value: item['product_id']
+          }
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    $('.tab-products').val('');
+
+    $('#cust_tabs-product-' + item['value']).remove();
+
+    $('#cust_tabs-products').append('<div id="cust_tabs-product-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="instanses[products][]" value="' + item['value'] + '" /></div>');
+  }
+});
+
+$('.tab-categories').autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return {
+            label: item['name'],
+            value: item['category_id']
+          }
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    var row = $(this).attr('data-for');
+    $('.tab-categories').val('');
+
+    $('#cust_tabs-categories-' + item['value']).remove();
+
+    $('#cust_tabs-categories').append('<div id="cust_tabs-category-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="instanses[categories][]" value="' + item['value'] + '" /></div>');
+  }
+});
+
+$('#product-related').delegate('.fa-minus-circle', 'click', function() {
+  $(this).parent().remove();
+});
+
+$('#form-set').on('change','.cust_tabs_mode', function() {
+  $('.tabsmode').hide();
+  var sel = $(this).val();
+  $('#customtab-'+sel).show();
+});
+
+$('#form-set').on('change','.view-mode', function() {
+  $('.view').hide();
+  $('.view input,.view_other textarea').attr("disabled", 'true');
+  var sel = $(this).val();
+  if (sel == 'video'){
+    $('.view_video').show();
+    $('.view_video input,.view_video textarea').removeAttr("disabled");
+  }else{
+    $('.view_other').show();  
+    $('.view_other input,.view_other textarea').removeAttr("disabled");  
+  }
+
+});
+
+
+$(document).ready(function() {
+
+  $(document).on('click', '.well-sm .fa-minus-circle', function() {
+    $(this).parent().remove();
+  });
+})
+//--></script>
+</div>
+{{ footer }} 

@@ -1,0 +1,581 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		{{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="personal__data">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<fieldset class="ui-fieldset">
+				<legend class="ui-legend">{{ text_my_affiliate }}</legend>
+				<p class="ui-caption"></p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-company">{{ entry_company }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="company" placeholder="{{ entry_company }}" value="{{ company }}" id="input-company">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-website">{{ entry_website }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="website" placeholder="{{ entry_website }}" value="{{ website }}" id="input-website">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-tax">{{ entry_tax }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="tax" placeholder="{{ entry_tax }}" value="{{ tax }}" id="input-tax">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ entry_payment }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									{% if payment == 'cheque' %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="payment" type="radio" value="cheque" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_cheque }}
+									</label>
+									{% else %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="payment" type="radio" value="cheque">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_cheque }}
+									</label>
+									{% endif %}
+									{% if payment == 'paypal' %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="payment" type="radio" value="paypal" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_paypal }}
+									</label>
+									{% else %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="payment" type="radio" value="paypal">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_paypal }}
+									</label>
+									{% endif %}
+									{% if payment == 'bank' %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="payment" type="radio" value="bank" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_bank }}
+									</label>
+									{% else %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="payment" type="radio" value="bank">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_bank }}
+									</label>
+									{% endif %}
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group payment" id="payment-cheque">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-cheque">{{ entry_cheque }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_cheque %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="cheque" placeholder="{{ entry_cheque }}" value="{{ cheque }}" id="input-cheque">
+									{% if error_cheque %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_cheque }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group payment" id="payment-paypal">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-paypal">{{ entry_paypal }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_paypal %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="paypal" placeholder="{{ entry_paypal }}" value="{{ paypal }}" id="input-paypal">
+									{% if error_paypal %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_paypal }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="payment" id="payment-bank">
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-bank-name">{{ entry_bank_name }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="bank_name" placeholder="{{ entry_bank_name }}" value="{{ bank_name }}" id="input-bank-name">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-bank-branch-number">{{ entry_bank_branch_number }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="bank_branch_number" placeholder="{{ entry_bank_branch_number }}" value="{{ bank_branch_number }}" id="input-bank-branch-number">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-bank-swift-code">{{ entry_bank_swift_code }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="bank_swift_code" placeholder="{{ entry_bank_swift_code }}" value="{{ bank_swift_code }}" id="input-bank-swift-code">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-bank-account-name">{{ entry_bank_account_name }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_bank_account_name %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="bank_account_name" placeholder="{{ entry_bank_account_name }}" value="{{ bank_account_name }}" id="input-bank-account-name">
+									{% if error_bank_account_name %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_bank_account_name }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-bank-account-number">{{ entry_bank_account_number }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_bank_account_number %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="bank_account_number" placeholder="{{ entry_bank_account_number }}" value="{{ bank_account_number }}" id="input-bank-account-number">
+									{% if error_bank_account_number %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_bank_account_number }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					</div>	
+					{% for custom_field in custom_fields %} 
+					{% if (custom_field['location'] == 'affiliate') %} 
+					{% if (custom_field['type'] == 'select') %} 
+					<div class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" id="input-custom-field{{ custom_field['custom_field_id'] }}" class="ui-select">
+										<option value="">{{ text_select }}</option>
+										{% for custom_field_value in custom_field['custom_field_value'] %} 
+										{% if (affiliate_custom_field[custom_field['custom_field_id']] is defined and custom_field_value['custom_field_value_id'] == affiliate_custom_field[custom_field['custom_field_id']]) %} 
+										<option value="{{ custom_field_value['custom_field_value_id'] }}" selected="selected">{{ custom_field_value['name'] }}</option>
+										{% else %} 
+										<option value="{{ custom_field_value['custom_field_value_id'] }}">{{ custom_field_value['name'] }}</option>
+										{% endif %} 
+										{% endfor %}						
+									</select>
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+										<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'radio') %} 
+					<div class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+							<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-group{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+								{% for custom_field_value in custom_field['custom_field_value'] %} 
+									{% if (affiliate_custom_field[custom_field['custom_field_id']] is defined and custom_field_value['custom_field_value_id'] == affiliate_custom_field[custom_field['custom_field_id']]) %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" type="radio" value="{{ custom_field_value['custom_field_value_id'] }}" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>
+									{% else %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" type="radio" value="{{ custom_field_value['custom_field_value_id'] }}">
+										<span class="ui-check__radio">
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>								
+									{% endif %} 
+								{% endfor %} 
+								{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+								<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+								{% endif %}	
+								</div>
+							</div>
+						</div>							
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'checkbox') %} 
+					<div class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-group{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+								{% for custom_field_value in custom_field['custom_field_value'] %} 
+									{% if (affiliate_custom_field[custom_field['custom_field_id']] is defined and custom_field_value['custom_field_value_id'] == affiliate_custom_field[custom_field['custom_field_id']]) %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" type="checkbox" value="{{ custom_field_value['custom_field_value_id'] }}" checked="checked">
+										<span class="ui-check__checkbox">
+										  <svg class="icon-check">
+											<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+										  </svg>
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>
+									{% else %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" type="checkbox" value="{{ custom_field_value['custom_field_value_id'] }}">
+										<span class="ui-check__checkbox">
+										  <svg class="icon-check">
+											<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+										  </svg>
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>								
+									{% endif %} 
+								{% endfor %} 
+								{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+								<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+								{% endif %}		
+								</div>
+							</div>
+						</div>							
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'text') %} 
+					<div class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ affiliate_custom_field[custom_field['custom_field_id']] is defined ? affiliate_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'textarea') %} 
+					<div class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label {{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<textarea class="ui-textarea" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" class=" {{ error_custom_field[custom_field['custom_field_id']] is defined ? 'error' : ''}}">{{ affiliate_custom_field[custom_field['custom_field_id']] is defined ? affiliate_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}</textarea>
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'file') %} 
+					<div class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<button type="button" id="button-custom-field{{ custom_field['custom_field_id'] }}" data-loading-text="{{ text_loading }}" class="btn">{{ button_upload }}</button>
+									<input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ affiliate_custom_field[custom_field['custom_field_id']] is defined ? affiliate_custom_field[custom_field['custom_field_id']] : '' }}" />
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'date') %} 
+					<div class="personal__group form-group custom-field " data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input date" type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ affiliate_custom_field[custom_field['custom_field_id']] is defined ? affiliate_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" data-date-format="{{ date_format }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" data-toggle="datetimepicker" data-target=".date">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'time') %} 
+					<div class="personal__group form-group custom-field " data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input time" type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ affiliate_custom_field[custom_field['custom_field_id']] is defined ? affiliate_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" data-date-format="{{ time_format }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" data-toggle="datetimepicker" data-target=".time">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'datetime') %} 
+					<div class="personal__group form-group custom-field " data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label{{ custom_field['required'] ? ' required' : '' }}">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input datetime" type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ affiliate_custom_field[custom_field['custom_field_id']] is defined ? affiliate_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" data-date-format="{{ datetime_format }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" data-toggle="datetimepicker" data-target=".datetime">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% endif %} 
+					{% endfor %}
+			</fieldset>
+			 {% if text_agree %}
+				<div class="personal__action">
+                      <label class="ui-check">
+                        <input class="ui-check__input" value="1" type="checkbox" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+						<span class="ui-check__checkbox">
+                          <svg class="icon-check">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                          </svg></span>{{ text_agree }}
+                      </label>
+				</div>
+			{% endif %}
+				<div class="personal__action">
+					<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+				</div>
+			</form>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+<script>
+$('input[name=\'payment\']').on('change', function() {
+    $('.payment').hide();
+
+    $('#payment-' + this.value).show();
+});
+
+$('input[name=\'payment\']:checked').trigger('change');
+
+// Sort the custom fields
+$('.form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('.form-group').length) {
+		$('.form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('.form-group').length) {
+		$('.form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') == $('.form-group').length) {
+		$('.form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('.form-group').length) {
+		$('.form-group:first').before(this);
+	}
+});
+
+$('button[id^=\'button-custom-field\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$(node).parent().find('.ui-error').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<span class="error ui-error">' + json['error'] + '</span>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(node).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+$('.date').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'L',
+	icons: {
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+$('.datetime').datetimepicker({
+	locale: '{{ datepicker }}',
+	icons: {
+		time: 'icon-datepicker icon-datepickerclock',
+		date: 'icon-datepicker icon-datepickercalendar',
+		up: 'icon-datepicker icon-datepickerchevron-small-up',
+		down: 'icon-datepicker icon-datepickerchevron-small-down',
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+$('.time').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'LT',
+	icons: {
+		up: 'icon-datepicker icon-datepickerchevron-small-up',
+		down: 'icon-datepicker icon-datepickerchevron-small-down'
+	}
+});
+</script> 
+</body></html>

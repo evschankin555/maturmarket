@@ -1,0 +1,86 @@
+                <!-- Filter :: Start-->
+				<div class="options options--mobile">
+				  <div class="row">
+					<div class="col-sm-12">
+					  <div class="options__trigger">
+						<button class="options__btn js-filter-open">{{ text_technics_filter }}</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				  
+                <div class="filter">
+				
+				<input type="hidden" name="min_price_init" value="{{ priceLimits['min_price'] }}" id="min_price_init">
+				<input type="hidden" name="max_price_init" value="{{ priceLimits['max_price'] }}" id="max_price_init">
+				<input type="hidden" name="min_price_current" value="{{ min_price }}" id="min_price_current">
+				<input type="hidden" name="max_price_current" value="{{ max_price }}" id="max_price_current">
+				<input type="hidden" name="filter_category_id" value="{{ category_id }}" id="filter_category_id">
+				
+                  <form>
+                    <div class="filter__head">
+                      <button class="filter__back js-filter-close">
+                        <svg class="icon-back">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-back"></use>
+                        </svg>
+                      </button><span class="filter__heading">{{ text_technics_filter }}</span>
+                      <button class="filter__clear" type="reset">
+                        <svg class="icon-clear">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-clear"></use>
+                        </svg>{{ text_technics_reset }}
+                      </button>
+                    </div>
+                    <div class="filter__body">
+                      <fieldset class="filter__fieldset" id="filterblock">
+                        <div class="ui-range">
+                          <label class="filter__legend">{{ text_technics_filter_price }}</label>
+                          <input class="ui-range__slider" type="range" data-min="{{ priceLimits['min_price'] }}" data-max="{{ priceLimits['max_price'] }}" data-wallet="{{ currencySymbol }}">
+                          <div class="row">
+                            <div class="col-6">
+                              <input class="ui-range__input ui-range__from" type="text" value="{{ text_technics_from }} {{ min_price_format }}" data-prefix="{{ text_technics_from }}" disabled>
+                            </div>
+                            <div class="col-6">
+                              <input class="ui-range__input ui-range__to" type="text" value="{{ text_technics_to }} {{ max_price_format }}" data-prefix="{{ text_technics_to }}" disabled>
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+					  {% for filter_group in filter_groups %}
+                      <fieldset class="filter__fieldset">
+                        <legend class="filter__legend">{{ filter_group['name'] }}</legend>
+                        <div class="ui-group" id="filter-group{{ filter_group['filter_group_id'] }}">
+						{% for i,filter in filter_group['filter'] %}
+						{% if filter['filter_id'] in filter_category %}
+                          <label class="ui-check">
+                            <input class="ui-check__input" type="checkbox" id="filter-{{ filter['filter_id'] }}-{{ i }}" value="{{ filter['filter_id'] }}" name="filter[]" checked="checked">
+							<span class="ui-check__checkbox">
+                              <svg class="icon-check">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                              </svg>
+							</span>{{ filter['name'] }}
+                          </label>
+						{% else %}
+                          <label class="ui-check">
+                            <input class="ui-check__input" type="checkbox" id="filter-{{ filter['filter_id'] }}-{{ i }}" value="{{ filter['filter_id'] }}" name="filter[]" {{ not filter['isactive'] ? 'disabled' : ''}}>
+							<span class="ui-check__checkbox">
+                              <svg class="icon-check">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                              </svg>
+							</span>{{ filter['name'] }}
+                          </label>
+						{% endif %}
+						{% endfor %}
+                        </div>
+                      </fieldset>
+					  {% endfor %} 
+					  <button type="button" id="button-filter" class="btn btn--blue btn--filter">{{ text_technics_show }}</button>
+                      <button class="filter__clear" type="reset">
+                        <svg class="icon-clear">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-clear"></use>
+                        </svg>{{ text_technics_reset }}
+                      </button>
+                    </div>
+				  <input type="hidden" name="fix_filter_action" value="{{ action }}">
+                  </form>
+                </div>
+                <!-- Filter :: End-->

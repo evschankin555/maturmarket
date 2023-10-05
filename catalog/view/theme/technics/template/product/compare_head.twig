@@ -1,0 +1,12 @@
+{% if (header_type == 4 or header_type == 6) %}
+					<a class="ctrl-v{{ header_type }}__btn" href="{{ text_compare_href }}">
+						<svg class="icon-compare">
+							<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-compare"></use>
+						</svg><span>{{ text_technics_comp_head }}</span>
+						{% if (countcomp) %}
+							<mark class="ctrl-v{{ header_type }}__btn-counter">{{ countcomp }}</mark>
+						{% endif %}
+					</a>
+{% else %}
+<a class="acc__link" href="{{ text_compare_href }}">{{ text_technics_comp_head }} {{ '('~countcomp~')' }}</a>
+{% endif %}

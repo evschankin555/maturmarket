@@ -1,0 +1,38 @@
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>{{ column_id }}</th>
+        <th>{{ column_supplier }}</th>
+        <th>{{ column_filename }}</th>
+        <th>{{ column_username }}</th>
+        <th>{{ column_date_added }}</th>
+        <th>{{ column_status }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    
+    {% if histories %}
+    {% for history in histories %}
+    <tr>
+      <td>{{ history.import_history_id }}</td>
+      <td>{{ history.supplier }}</td>
+      <td>{{ history.filename }}</td>
+      <td>{{ history.username }}</td>
+      <td>{{ history.date_added }}</td>
+      <td>{{ history.status }}</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+      <td colspan="3" class="text-center">{{ text_no_results }}</td>
+    </tr>
+    {% endif %}
+    </tbody>
+    
+  </table>
+</div>
+<div class="row">
+  <div class="col-sm-6 text-left">{{ pagination }}</div>
+  <div class="col-sm-6 text-right">{{ results }}</div>
+</div>

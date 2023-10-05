@@ -1,0 +1,41 @@
+{% if (customer_info is defined) %} 
+	<label class="ui-label{{ buy_click['firstname']['required'] ? ' required' : '' }}" {{ buy_click['firstname']['status'] and customer_info['firstname'] ? '' : 'style="display:none;"' }}> {{ buy_click['firstname']['name'][language_id] ? buy_click['firstname']['name'][language_id] : entry_firstname }}</label>
+	<div class="ui-field" {{ buy_click['firstname']['status'] and customer_info['firstname'] ? '' : 'style="display:none;"' }}>
+		<input class="ui-input" type="text" placeholder="{{ buy_click['firstname']['name'][language_id] ? buy_click['firstname']['name'][language_id] : entry_firstname }}" value="{{ customer_info['firstname'] ? customer_info['firstname'] : 'Noname' }}" {{ customer_info['firstname'] is defined ? 'disabled' : '' }}   name="name">
+	</div>
+
+	<label class="ui-label{{ buy_click['telephone']['required'] ? ' required' : '' }}" {{ buy_click['telephone']['status'] and customer_info['telephone'] ? '' : 'style="display:none;"' }}>{{ buy_click['telephone']['name'][language_id] ? buy_click['telephone']['name'][language_id] : entry_telephone }}</label>
+	<div class="ui-field" {{ buy_click['telephone']['status'] and customer_info['telephone'] ? '' : 'style="display:none;"' }}>
+		<input class="ui-input" type="text" placeholder="{{ buy_click['telephone']['name'][language_id] ? buy_click['telephone']['name'][language_id] : entry_telephone }}" value="{{ customer_info['telephone'] ? customer_info['telephone'] : '9999999' }}" {{ customer_info['telephone'] is defined ? 'disabled' : '' }} name="phone">
+	</div>
+
+	<label class="ui-label{{ buy_click['email']['required'] ? ' required' : '' }}" {{ buy_click['email']['status'] ? '' : 'style="display:none;"' }}>{{ buy_click['email']['name'][language_id] ? buy_click['email']['name'][language_id] : entry_email }}</label>
+	<div class="ui-field" {{ buy_click['email']['status'] ? '' : 'style="display:none;"' }}>
+		<input class="ui-input" type="text" placeholder="{{ buy_click['email']['name'][language_id] ? buy_click['email']['name'][language_id] : entry_email }}" value="{{ customer_info['email'] is defined ? customer_info['email'] : '' }}" {{ customer_info['email'] is defined ? 'disabled' : '' }} name="email">
+	</div>
+	
+	<label class="ui-label{{ buy_click['comment']['required'] ? ' required' : '' }}" {{ buy_click['comment']['status'] ? '' : 'style="display:none;"' }}>{{ buy_click['comment']['name'][language_id] ? buy_click['comment']['name'][language_id] : entry_comment }}</label>
+	<div class="ui-field" {{ buy_click['comment']['status'] ? '' : 'style="display:none;"' }}>
+		<textarea class="ui-textarea" rows="5" placeholder="{{ buy_click['comment']['name'][language_id] ? buy_click['comment']['name'][language_id] : entry_comment }}" name="comment"></textarea>
+	</div>
+{% else %} 
+	<label class="ui-label{{ buy_click['firstname']['required'] ? ' required' : '' }}" {{ buy_click['firstname']['status'] ? '' : 'style="display:none;"' }}>{{ buy_click['firstname']['name'][language_id] ? buy_click['firstname']['name'][language_id] : entry_firstname }}</label>
+	<div class="ui-field" {{ buy_click['firstname']['status'] ? '' : 'style="display:none;"' }}>
+		<input class="ui-input" type="text" placeholder="{{ buy_click['firstname']['name'][language_id] ? buy_click['firstname']['name'][language_id] : entry_firstname }}" value="{{ customer_info['firstname'] is defined ? customer_info['firstname'] : '' }}" {{ customer_info['firstname'] is defined ? 'disabled' : '' }}   name="name">
+	</div>
+
+	<label class="ui-label{{ buy_click['telephone']['required'] ? ' required' : '' }}" {{ buy_click['telephone']['status'] ? '' : 'style="display:none;"' }}>{{ buy_click['telephone']['name'][language_id] ? buy_click['telephone']['name'][language_id] : entry_telephone }}</label>
+	<div class="ui-field" {{ buy_click['telephone']['status'] ? '' : 'style="display:none;"' }}>
+		<input class="ui-input" type="text" placeholder="{{ buy_click['telephone']['name'][language_id] ? buy_click['telephone']['name'][language_id] : entry_telephone }}" value="{{ customer_info['telephone'] is defined ? customer_info['telephone'] : '' }}" {{ customer_info['telephone'] is defined ? 'disabled' : '' }} name="phone">
+	</div>
+
+	<label class="ui-label{{ buy_click['email']['required'] ? ' required' : '' }}" {{ buy_click['email']['status'] ? '' : 'style="display:none;"' }}>{{ buy_click['email']['name'][language_id] is defined and buy_click['email']['name'][language_id] ? buy_click['email']['name'][language_id] : entry_email }}</label>
+	<div class="ui-field" {{ buy_click['email']['status'] ? '' : 'style="display:none;"' }}>
+		<input class="ui-input" type="text" placeholder="{{ buy_click['email']['required'] ? '*' : '' }} {{ buy_click['email']['name'][language_id] is defined and buy_click['email']['name'][language_id] ? buy_click['email']['name'][language_id] : entry_email }}" value="{{ customer_info['email'] is defined ? customer_info['email'] : '' }}" {{ customer_info['email'] is defined ? 'disabled' : '' }} name="email">
+	</div>
+
+	<label class="ui-label{{ buy_click['comment']['required'] ? ' required' : '' }}" {{ buy_click['comment']['status'] ? '' : 'style="display:none;"' }}>{{ buy_click['comment']['name'][language_id] is defined and buy_click['comment']['name'][language_id] ? buy_click['comment']['name'][language_id] : entry_comment }}</label>
+	<div class="ui-field" {{ buy_click['comment']['status'] ? '' : 'style="display:none;"' }}>
+		<textarea class="ui-textarea" rows="5" placeholder="{{ buy_click['comment']['name'][language_id] is defined and buy_click['comment']['name'][language_id] ? buy_click['comment']['name'][language_id] : entry_comment }}" name="comment"></textarea>
+	</div>
+{% endif %}

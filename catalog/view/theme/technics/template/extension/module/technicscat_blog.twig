@@ -1,0 +1,13 @@
+{% if (blogcategories is not empty) %} 
+                <!-- Blog Nav :: Start-->
+                <nav class="blog__nav">
+                  <h3 class="blog__nav-heading">{{ heading_title }}</h3>
+                  <ul class="blog__nav-menu">
+				  {% for category in blogcategories %}
+                    <li><a class="blog__nav-link" href="{{ category['href'] }}">{{ category['name'] }}
+                        <mark class="blog__nav-counter">{{ category['count'] }}</mark></a></li>
+				  {% endfor %}
+                  </ul>
+                </nav>
+                <!-- Blog Nav :: End-->
+{% endif %} 

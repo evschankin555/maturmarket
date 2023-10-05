@@ -1,0 +1,12 @@
+{% if (header_type == 4 or header_type == 6) %}
+					<a class="ctrl-v{{ header_type }}__btn" href="{{ text_wish_href }}">
+						<svg class="icon-bookmarks">
+							<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-bookmarks"></use>
+						</svg><span>{{ text_technics_wish_head }}</span>
+						{% if (count) %}
+							<mark class="ctrl-v{{ header_type }}__btn-counter">{{ count }}</mark>
+						{% endif %}
+					</a>
+{% else %}
+<a class="acc__link" href="{{ text_wish_href }}">{{ text_technics_wish_head }} {{ '('~count~')' }}</a>
+{% endif %}

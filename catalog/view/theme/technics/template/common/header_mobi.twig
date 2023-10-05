@@ -1,0 +1,81 @@
+{% for orientType,template in orientTypes %}
+  {% for main_nav in _context[orientType] %}
+    {% if (main_nav.settype == 0 or main_nav.settype == 3) %}
+      {% for key,link in main_nav.type[0].links if categories['categoriesls'][key|slice(1)] is defined %} 
+        {% set cat_id = key|slice(1) %}      
+          {% if (not categories['categoriesls'][cat_id]['childrencount']) %}
+            <li><a class="nav__list-link" href="{{ categories['categoriesls'][cat_id]['href'] }}">{{ categories['categoriesls'][cat_id]['name'] }}</a></li>
+          {% else %} 
+            <li><a class="nav__list-link nav__list-link--arrow" href="{{ categories['categoriesls'][cat_id]['href'] }}">{{ categories['categoriesls'][cat_id]['name'] }}</a>
+                        <div class="nav__list-dropdown"><b class="nav__list-back">{{ categories['categoriesls'][cat_id]['name'] }}</b>
+                              <ul class="nav__list-menu">
+                                {% for category in categories['categoriesls'][cat_id]['children'] %} 
+                                  {% if (category['children']) %} 
+                                    <li><a class="nav__list-link nav__list-link--arrow" href="{{ category['href'] }}">{{ category['name'] }}</a>
+                                      <div class="nav__list-dropdown"><b class="nav__list-back">{{ category['name'] }}</b>
+                                        <ul class="nav__list-menu">
+                                          {% for category3 in category['children'] %}
+                                            {% if (category3['children']) %}
+                                              <li><a class="nav__list-link nav__list-link--arrow" href="{{ category3['href'] }}">{{ category3['name'] }}</a>
+                                                <div class="nav__list-dropdown"><b class="nav__list-back">{{ category['name'] }}</b>
+                                                  <ul class="nav__list-menu">
+                                                    {% for category4 in category3['children'] %}
+                                                      <li><a class="nav__list-link" href="{{ category4['href'] }}">{{ category4['name'] }}</a></li>
+                                                    {% endfor %}
+													<li><a class="nav__list-link nav__list-link--more" href="{{ category3['href'] }}">{{ text_show_more }}</a></li>
+                                                  </ul>
+                                                </div>
+                                              </li>
+                                            {% else %}
+                                            <li><a class="nav__list-link" href="{{ category3['href'] }}">{{ category3['name'] }}</a></li>
+                                            {% endif %}
+                                          {% endfor %}
+										  <li><a class="nav__list-link nav__list-link--more" href="{{ category['href'] }}">{{ text_show_more }}</a></li>
+                                        </ul>
+                                      </div>
+                                    </li>
+                                  {% else %} 
+                                    <li><a class="nav__list-link" href="{{ category['href'] }}">{{ category['name'] }}</a></li>
+                                  {% endif %}
+                                {% endfor %}
+								<li><a class="nav__list-link nav__list-link--more" href="{{ categories['categoriesls'][cat_id]['href'] }}">{{ text_show_more }}</a></li>
+                              </ul>                                       
+                        </div>
+            </li>
+        {% endif %} 
+      {% endfor %}
+    {% elseif (main_nav.settype == 1) %}
+            <li><a class="nav__list-link nav__list-link--arrow" href="{{main_nav.type[main_nav.settype].language[language_id].href }}">{{ main_nav.type[main_nav.settype].language[language_id].name }}</a>
+                <div class="nav__list-dropdown"><b class="nav__list-back">{{ main_nav.type[main_nav.settype].language[language_id].name }}</b>
+                  <ul class="nav__list-menu">
+                            {% for id,link in main_nav.type[main_nav.settype].links %} 
+                                <li><a class="nav__list-link" href="{{ link }}" {% if (main_nav.type[main_nav.settype].target[id]) %} {{ 'target="'~main_nav.type[main_nav.settype].target[id]~'"' }}{% endif %}>{{ main_nav.type[main_nav.settype].name[id] }}</a></li>
+                            {% endfor %}
+                  </ul>
+                </div>
+            </li>
+    {% elseif (main_nav.settype == 2) %} 
+                            {% for id,link in main_nav.type[main_nav.settype].links if main_nav.type[main_nav.settype].name[id] %} 
+                                <li><a class="nav__list-link" href="{{ link }}">{{  main_nav.type[main_nav.settype].name[id] }}</a></li>
+                            {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+	
+
+        {% if (technics_phones) %}
+            <li><a class="nav__list-link nav__list-link--arrow" href="tel:{{technics_phones_main[1]|replace({' ': '', '-': '', '(': '', ')': ''})}}" rel="nofollow">{{technics_phones_main[1]}}</a>
+                <div class="nav__list-dropdown"><b class="nav__list-back">{{ text_technics_back }}</b>
+                  <ul class="nav__list-menu">
+                      {% for phone in technics_phones %}
+                       <li><a class="nav__list-link" href="tel:{{phone[1]|replace({' ': '', '-': '', '(': '', ')': ''})}}" rel="nofollow">{{phone[1]}}</a></li>
+                      {% endfor %}
+					  {% if (callback_status) %}
+                       <li><a class="nav__list-link js-fancy-popup" href="#inline" rel="nofollow">{{ text_header_callback }}</a></li>
+					  {% endif %}
+                  </ul>
+                </div>
+            </li>
+        {% endif %}
+	

@@ -1,0 +1,73 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		{{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="personal__data">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<fieldset class="ui-fieldset">
+					<p class="ui-caption">{{ text_email }}</p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-email">{{ entry_email }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="email" name="email" placeholder="{{ entry_email }}" value="{{ email }}" id="input-email">
+								</div>
+							</div>
+						</div>	
+					</div>			
+			</fieldset>
+				<div class="personal__action">
+					<a href="{{ back }}" class="btn btn--transparent">{{ button_back }}</a>
+					<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+				</div>
+			</form>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

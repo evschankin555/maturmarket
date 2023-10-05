@@ -1,0 +1,25 @@
+        <div class="writeus"><span class="writeus__heading">{{ sendthis }}</span>
+          <div class="writeus__form">
+			<form class="data-callback">
+              <label class="ui-label required">{{ namew }}</label>
+              <div class="ui-field">
+                <input class="ui-input" type="text" value="" name="name" placeholder="{{ namew }}">
+              </div>
+              <label class="ui-label required">{{ phonew }}</label>
+              <div class="ui-field">
+                <input class="ui-input" type="text" value="" name="phone" placeholder="{{ phonew }}">
+              </div>
+              <label class="ui-label">{{ comment }}</label>
+              <div class="ui-field">
+                <textarea class="ui-textarea" name="comment" cols="30" rows="10" placeholder="{{ comment }}"></textarea>
+              </div>
+			  {{ captcha }}
+              <div class="writeus__action">
+                <button type="button" class="btn btn--blue contact-send">{{ sendw }}</button>
+              </div>
+				{% if (text_technics_pdata) %} 
+					<div class="personal-data">{{ text_technics_pdata }}</div>
+				{% endif %} 
+            </form>
+          </div>
+        </div>

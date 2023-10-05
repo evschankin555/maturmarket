@@ -1,0 +1,54 @@
+@font-face {
+  font-family: 'datepicker';
+  src:  url('fonts/datepicker.eot?gu667x');
+  src:  url('fonts/datepicker.eot?gu667x#iefix') format('embedded-opentype'),
+    url('fonts/datepicker.ttf?gu667x') format('truetype'),
+    url('fonts/datepicker.woff?gu667x') format('woff'),
+    url('fonts/datepicker.svg?gu667x#datepicker') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-datepicker"], [class*=" icon-datepicker"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'datepicker' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  font-size: 16px;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-datepickerchevron-small-down:before {
+  content: "\e900";
+}
+.icon-datepickerchevron-small-left:before {
+  content: "\e901";
+}
+.icon-datepickerchevron-small-right:before {
+  content: "\e902";
+}
+.icon-datepickerchevron-small-up:before {
+  content: "\e903";
+}
+.icon-datepickercalendar:before {
+  content: "\e904";
+}
+.icon-datepickercheck:before {
+  content: "\e905";
+}
+.icon-datepickerclock:before {
+  content: "\e906";
+}
+.icon-datepickercross:before {
+  content: "\e907";
+}
+.icon-datepickercup:before {
+  content: "\e908";
+}

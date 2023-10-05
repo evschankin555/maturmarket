@@ -1,0 +1,108 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if success %}
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		{{ success }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="category__head">
+              <h2 class="category__heading">{{ text_my_account }}</h2>
+            </div>
+			<div class="category__grid" style="margin-bottom: 5.0rem;">
+              <div class="row">
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ edit }}">
+						<h3 class="category__item-title">{{ text_edit }}</h3>
+					</a>
+				</div>
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ password }}">
+						<h3 class="category__item-title">{{ text_password }}</h3>
+					</a>
+				</div>
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ address }}">
+						<h3 class="category__item-title">{{ text_address }}</h3>
+					</a>
+				</div>
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ wishlist }}">
+						<h3 class="category__item-title">{{ text_wishlist }}</h3>
+					</a>
+				</div>
+				{% if (credit_cards) %} 
+				{% for credit_card in credit_cards %}
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ credit_card['href'] }}">
+						<h3 class="category__item-title">{{ credit_card['name'] }}</h3>
+					</a>
+				</div>
+				{% endfor %} 
+				{% endif %}
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ order }}">
+						<h3 class="category__item-title">{{ text_order }}</h3>
+					</a>
+				</div>
+				{% if (reward) %}
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ reward }}">
+						<h3 class="category__item-title">{{ text_reward }}</h3>
+					</a>
+				</div>
+				{% endif %}
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ return }}">
+						<h3 class="category__item-title">{{ text_return }}</h3>
+					</a>
+				</div>
+                <div class="col-12 col-sm-6 col-lg-6 col-xl-6">
+					<a class="category__item category__item--account" href="{{ newsletter }}">
+						<h3 class="category__item-title">{{ text_newsletter }}</h3>
+					</a>
+				</div>
+              </div>
+            </div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

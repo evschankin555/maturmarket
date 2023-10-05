@@ -1,0 +1,15 @@
+                <!-- Catalog Nav :: Start-->
+                <div class="catalog__nav is-hidden is-lg-visible">
+					<h2 class="catalog__nav-heading">{{ heading_title }}</h2>
+					<p style="padding: 1.8rem 2.0rem;margin: 0;border-top: .1rem solid #F6F6F6;">{{ text_store }}</p>
+					<ul class="catalog__nav-menu">
+						{% for store in stores %}
+						{% if (store.store_id == store_id) %}
+						<li class="is-active"><a class="catalog__nav-link" href="{{ store.url }}">{{ store.name }}</a></li> 
+						{% else %} 
+						<li><a class="catalog__nav-link" href="{{ store.url }}">{{ store.name }}</a></li>
+						{% endif %} 
+						{% endfor %} 
+					</ul>
+                </div>
+                <!-- Catalog Nav :: End-->

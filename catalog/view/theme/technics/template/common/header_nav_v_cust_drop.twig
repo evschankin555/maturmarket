@@ -1,0 +1,12 @@
+<li><a class="nav__list-link nav__list-link--arrow" {% if (main_navs_v[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{ main_navs_v[number]['type'][1]['language'][language_id]['href'] }}"{% endif %}>{{ main_navs_v[number]['type'][1]['language'][language_id]['name'] }}</a>
+                            <div class="nav__list-dropdown"><b class="nav__list-back">{{ main_navs_v[number]['type'][1]['language'][language_id]['name'] }}</b>
+                              <ul class="nav__list-menu">
+                                {% for id,link in main_navs_v[number].type[1].links %} 
+                                    <li><a class="nav__list-link" href="{{ link }}" {% if (main_navs_v[number].type[1].target[id]) %} {{ 'target="'~main_navs_v[number].type[1].target[id]~'"' }}{% endif %}>{{ main_navs_v[number].type[1].name[id] }}</a></li>
+
+                                {% endfor %}
+                              </ul>
+                            </div>
+
+</li>
+

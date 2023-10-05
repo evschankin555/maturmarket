@@ -1,0 +1,27 @@
+{% if (reviews) %} 
+{% for review in reviews %} 
+                    <div class="comments__item">
+                      <figure class="comments__item-image">
+                        <svg class="icon-photo">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-photo"></use>
+                        </svg>
+                      </figure>
+                      <p class="comments__item-rating">
+                        <svg class="icon-star">
+                          <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+                        </svg>{{ review['rating'] }}/5
+                      </p>
+                      <p class="comments__item-author"><b>{{ review['author'] }}</b><small>{{ review['date_added'] }}</small></p>
+                      <div class="comments__item-message">
+                        <p>{{ review['text'] }}</p>
+                      </div>
+                    </div>
+{% endfor %} 
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+{% else %} 
+<p class="noreviews">{{ text_no_reviews }}</p>
+{% endif %}

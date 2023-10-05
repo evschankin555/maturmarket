@@ -1,0 +1,528 @@
+<div id="account" class="row">
+	<h3 class="checkout__data-heading col-lg-12">{{ text_your_details }}
+		<span class="heading_login_text"><button type="button" class="btn login-method-check" id="account-login" data-fancybox data-src="#checkout-login">Авторизуйтесь</button>, если уже покупали на <nobr>Matur Market</nobr></span>
+	</h3>
+		
+		<div class="ui-group form-group" style="display: {{ (customer_groups)|length > 1 ? 'inline-block' : 'none' }};">
+							<label class="ui-label ui-label--uppercase required">{{ entry_customer_group }}</label>
+								<div class="ui-group">
+								{% for customer_group in customer_groups %}
+									{% if customer_group.customer_group_id == customer_group_id %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="customer_group_id" type="radio" value="{{ customer_group.customer_group_id }}" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										 {{ customer_group.name }}
+									</label>
+									{% else %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="customer_group_id" type="radio" value="{{ customer_group.customer_group_id }}">
+										<span class="ui-check__radio">
+										</span>
+										 {{ customer_group.name }}
+									</label>								
+									{% endif %} 
+								{% endfor %} 
+								</div>		
+		</div>
+
+		{% for fieldName in allCustomFields %} 
+			{% set fieldNameT = "entry_" ~ fieldName  ~ '_show' %}
+			{% set fieldNameR = "entry_" ~ fieldName  ~ '_required' %}
+			{% set fieldNameN = "entry_" ~ fieldName  %}
+			{% set fieldNameE = "error_" ~ fieldName  %}
+			{% set fieldNameV = fieldName  %}
+			<div {{ not attribute(_context, fieldNameT)  ? 'style="display:none"' : '' }} class="ui-group form-group col-lg-6">
+				<label class="ui-label ui-label--uppercase {{ attribute(_context, fieldNameR)  ? 'required' : ''  }}">{{ attribute(_context, fieldNameN) }}</label>
+				<div class="ui-field">
+				{% if (fieldName == 'country') %} 
+						<select name="country_id" id="input-payment-country" class="ui-select" data-placeholder="{{ entry_country }}">
+							<option value="">{{ text_select }}</option>
+							{% for country in countries %} 
+							{% if (country['country_id'] == country_id) %} 
+							<option value="{{ country['country_id'] }}" selected="selected">{{ country['name'] }}</option>
+							{% else %} 
+							<option value="{{ country['country_id'] }}">{{ country['name'] }}</option>
+							{% endif %} 
+							{% endfor %} 
+						</select>
+				{% elseif (fieldName == 'zone') %}	
+							<select name="zone_id" id="input-payment-zone" class="ui-select" data-placeholder="{{ entry_zone }}"></select>
+				{% elseif (fieldName == 'city') %}	
+							<select name="city_id" id="input-city" class="ui-select">
+								<option value="">{{ text_select }}</option>
+								{% for city in cities %}
+								{% if city.city_id == address.city_id %}
+								<option value="{{ city.city_id }}" selected="selected">{{ city.name }}</option>
+								{% else %}
+								<option value="{{ city.city_id }}">{{ city.name }}</option>
+								{% endif %}
+								{% endfor %}
+							</select>
+							<span class="city-warning"></span>
+				{% else %}				
+					<input class="ui-input" type="text" name="{{ fieldName }}" value="{{ attribute(_context, fieldNameV) }}" placeholder="{{ attribute(_context, fieldNameN) }}" id="input-payment-{{ (fieldName)|replace({'_': '-'}) }}">
+				{% endif %} 
+					{% if attribute(_context, fieldNameE) %}
+							<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ attribute(_context, fieldNameE) }}</span>
+					{% endif %} 
+				</div>		
+			</div>		
+		{% endfor %} 
+
+		<input type="hidden" name="city_id" value="{{city.city_id}}">
+
+		{% for custom_field in custom_fields %} 
+		{% if (custom_field['location'] == 'account') %} 
+		{% if (custom_field['type'] == 'select') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div class="ui-field">
+					<select name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-select" data-placeholder="{{ text_select }}">
+						<option value="">{{ text_select }}</option>
+						{% for custom_field_value in custom_field['custom_field_value'] %} 
+						<option value="{{ custom_field_value['custom_field_value_id'] }}">{{ custom_field_value['name'] }}</option>
+						{% endfor %}		
+					</select>
+				</div>	
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'radio') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div id="input-payment-custom-field{{ custom_field['custom_field_id'] }}">
+				{% for custom_field_value in custom_field['custom_field_value'] %} 
+					<label class="ui-check">
+						<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="custom_field[{{ custom_field['custom_field_id'] }}]-{{ custom_field_value['custom_field_value_id'] }}" type="radio" value="{{ custom_field_value['custom_field_value_id'] }}">
+						<span class="ui-check__radio"></span>
+						{{ custom_field_value['name'] }}
+					</label>
+				{% endfor %}	
+				</div>
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'checkbox') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div id="input-payment-custom-field{{ custom_field['custom_field_id'] }}">
+				{% for custom_field_value in custom_field['custom_field_value'] %} 
+					<label class="ui-check">
+						<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}][]" id="custom_field[{{ custom_field['custom_field_id'] }}]-{{ custom_field_value['custom_field_value_id'] }}" type="checkbox" value="{{ custom_field_value['custom_field_value_id'] }}">
+						<span class="ui-check__checkbox">
+							  <svg class="icon-check">
+								<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+							  </svg>
+						</span>
+						{{ custom_field_value['name'] }}
+					</label>
+				{% endfor %} 
+				</div>
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'text') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div class="ui-field">
+					<input class="ui-input" type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" >
+				</div>
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'textarea') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<textarea class="ui-textarea" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" >{{ custom_field['value'] }}</textarea>
+			</div>
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'file') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<button type="button" id="button-payment-custom-field{{ custom_field['custom_field_id'] }}" data-loading-text="{{ text_loading }}" class="btn">{{ button_upload }}</button>
+				<input type="hidden" class="ui-input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'date') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field " data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" data-date-format="{{ date_format }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-input date" data-toggle="datetimepicker" data-target=".date">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'time') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field " data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" data-date-format="{{ time_format }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-input time" data-toggle="datetimepicker" data-target=".time">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'datetime') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field " data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" data-date-format="{{ datetime_format }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-input datetime" data-toggle="datetimepicker" data-target=".datetime">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% endif %} 
+		{% endfor %}	
+</div>
+<div class="help-text">Проверьте, что вы указали верный номер телефона и адрес. <br>Иначе могут возникнуть проблемы с доставкой заказа.</div>		
+<div class="row" style="display: none;">
+	<h3 class="checkout__data-heading col-lg-12">{{ text_your_password }}</h3>				
+		<div class="ui-group form-group col-lg-6">
+			<label class="ui-label ui-label--uppercase required">{{ entry_password }}</label>
+			<div class="ui-field">
+				<input class="ui-input" type="password" name="password" value="{{generated_password}}" placeholder="{{ entry_password }}" id="input-payment-password">
+			</div>
+		</div>
+		<div class="ui-group form-group col-lg-6">
+			<label class="ui-label ui-label--uppercase required">{{ entry_confirm }}</label>
+			<div class="ui-field">
+				<input class="ui-input" type="password" name="confirm" value="{{generated_password}}" placeholder="{{ entry_confirm }}" id="input-payment-confirm">
+			</div>					
+		</div>					
+</div>				
+<div id="address" class="row">	
+		<div class="form-group">
+		</div>	
+		{% for custom_field in custom_fields %} 
+		{% if (custom_field['location'] == 'address') %} 
+		{% if (custom_field['type'] == 'select') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div class="ui-field">
+					<select name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-select" data-placeholder="{{ text_select }}">
+						<option value="">{{ text_select }}</option>
+						{% for custom_field_value in custom_field['custom_field_value'] %} 
+						<option value="{{ custom_field_value['custom_field_value_id'] }}">{{ custom_field_value['name'] }}</option>
+						{% endfor %}		
+					</select>
+				</div>	
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'radio') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group">
+				{% for custom_field_value in custom_field['custom_field_value'] %} 
+					<label class="ui-check">
+						<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="custom_field[{{ custom_field['custom_field_id'] }}]-{{ custom_field_value['custom_field_value_id'] }}" type="radio" value="{{ custom_field_value['custom_field_value_id'] }}">
+						<span class="ui-check__radio"></span>
+						{{ custom_field_value['name'] }}
+					</label>
+				{% endfor %}	
+				</div>
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'checkbox') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group">
+				{% for custom_field_value in custom_field['custom_field_value'] %} 
+					<label class="ui-check">
+						<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}][]" id="custom_field[{{ custom_field['custom_field_id'] }}]-{{ custom_field_value['custom_field_value_id'] }}" type="checkbox" value="{{ custom_field_value['custom_field_value_id'] }}">
+						<span class="ui-check__checkbox">
+							  <svg class="icon-check">
+								<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+							  </svg>
+						</span>
+						{{ custom_field_value['name'] }}
+					</label>
+				{% endfor %} 
+				</div>
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'text') %} 
+			<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+				<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+				<div class="ui-field">
+					<input class="ui-input" type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" >
+				</div>	
+			</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'textarea') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<textarea class="ui-textarea" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" >{{ custom_field['value'] }}</textarea>
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'file') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field" data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<button type="button" id="button-payment-custom-field{{ custom_field['custom_field_id'] }}" class="btn">{{ button_upload }}</button>
+				<input type="hidden" class="ui-input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'date') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field " data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" data-date-format="{{ date_format }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-input date" data-toggle="datetimepicker" data-target=".date">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'time') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field " data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" data-date-format="{{ time_format }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-input time" data-toggle="datetimepicker" data-target=".time">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% if (custom_field['type'] == 'datetime') %} 
+		<div id="payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-group form-group col-lg-6 custom-field " data-sort="{{ custom_field['sort_order'] }}">
+			<label class="ui-label ui-label--uppercase">{{ custom_field['name'] }}</label>
+			<div class="ui-field">
+				<input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" data-date-format="{{ datetime_format }}" placeholder="{{ custom_field['name'] }}" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="ui-input datetime" data-toggle="datetimepicker" data-target=".datetime">
+			</div>	
+		</div>	
+		{% endif %} 
+		{% endif %} 
+		{% endfor %}	
+</div>	
+
+	{{ captcha }} 
+	<div class="ui-group">
+		<label class="ui-check" for="newsletter">
+			<input class="ui-check__input" value="1" type="checkbox" name="newsletter" id="newsletter">
+			<span class="ui-check__checkbox"><svg class="icon-check"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use></svg></span>
+			{{ entry_newsletter }}
+		</label>	
+	{% if (shipping_required) %} 
+		<label class="ui-check" {{ checkout_st3_sa ? 'style="display: none;"' : '' }}>
+			<input class="ui-check__input" value="1" type="checkbox" name="shipping_address" checked="checked">
+			<span class="ui-check__checkbox"><svg class="icon-check"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use></svg></span>
+			{{ entry_shipping }}
+		</label>
+	{% endif %} 
+	{% if text_agree %}
+		<label class="ui-check">
+			<input class="ui-check__input" value="1" type="checkbox" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+			<span class="ui-check__checkbox"><svg class="icon-check"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use></svg></span>
+			{{ text_agree }}
+		</label>
+	{% endif %}
+	</div>		
+	<div class="personal__action  finish-check">
+		<a href="#" class="btn--transparent" id="button-register-b" style="display: none;">{{ button_back }}</a>
+		<button type="button" class="btn btn--blue" data-loading-text="{{ text_loading }}" id="button-register">{{ button_continue }}</button>
+	</div>
+<script>
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+$('.date').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'L',
+	icons: {
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+$('.datetime').datetimepicker({
+	locale: '{{ datepicker }}',
+	icons: {
+		time: 'icon-datepicker icon-datepickerclock',
+		date: 'icon-datepicker icon-datepickercalendar',
+		up: 'icon-datepicker icon-datepickerchevron-small-up',
+		down: 'icon-datepicker icon-datepickerchevron-small-down',
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+$('.time').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'LT',
+	icons: {
+		up: 'icon-datepicker icon-datepickerchevron-small-up',
+		down: 'icon-datepicker icon-datepickerchevron-small-down'
+	}
+});
+
+// Sort the custom fields
+$('#account .form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#account .form-group').length) {
+		$('#account .form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('#account .form-group').length) {
+		$('#account .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') == $('#account .form-group').length) {
+		$('#account .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('#account .form-group').length) {
+		$('#account .form-group:first').before(this);
+	}
+});
+
+$('#address .form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#address .form-group').length) {
+		$('#address .form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('#address .form-group').length) {
+		$('#address .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') == $('#address .form-group').length) {
+		$('#address .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('#address .form-group').length) {
+		$('#address .form-group:first').before(this);
+	}
+});
+
+$('#collapse-payment-address input[name=\'customer_group_id\']').on('change', function() {
+	$.ajax({
+		url: 'index.php?route=checkout/checkout/customfield&customer_group_id=' + this.value,
+		dataType: 'json',
+		success: function(json) {
+			$('#collapse-payment-address .custom-field').hide();
+			$('#collapse-payment-address .custom-field .ui-label').removeClass('required');
+
+			for (i = 0; i < json.length; i++) {
+				custom_field = json[i];
+
+				$('#payment-custom-field' + custom_field['custom_field_id']).show();
+
+				if (custom_field['required']) {
+					$('#payment-custom-field' + custom_field['custom_field_id'] + ' .ui-label').addClass('required');
+				}
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('#collapse-payment-address input[name=\'customer_group_id\']:checked').trigger('change');
+
+
+$('#collapse-payment-address button[id^=\'button-payment-custom-field\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$(node).parent().find('.ui-error').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input[name^=\'custom_field\']').after('<span class="error ui-error">' + json['error'] + '</span>');
+					}
+
+
+					if (json['success']) {						
+						$('.alerts').append($('<div class="alert alert-success alert-dismissible fade show" role="alert"> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+						
+						$(node).parent().find('input[name^=\'custom_field\']').val(json['code']);
+					}
+				},
+				
+				
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+
+
+$('#collapse-payment-address select[name=\'country_id\']').on('change', function() {
+	$.ajax({
+		url: 'index.php?route=checkout/checkout/country&country_id=' + this.value,
+		dataType: 'json',
+		beforeSend: function() {
+			$('#collapse-payment-address select[name=\'zone_id\']').prop('disabled', true);
+		},
+		complete: function() {
+			$('#collapse-payment-address select[name=\'zone_id\']').prop('disabled', false).trigger('refresh');
+		},
+		success: function(json) {
+			if (json['postcode_required'] == '1') {
+				$('#collapse-payment-address input[name=\'postcode\']').parent().parent().addClass('required');
+			} else {
+				$('#collapse-payment-address input[name=\'postcode\']').parent().parent().removeClass('required');
+			}
+
+			html = '<option value="">{{ text_select }}</option>';
+
+			if (json['zone'] && json['zone'] != '') {
+				for (i = 0; i < json['zone'].length; i++) {
+					html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+					if (json['zone'][i]['zone_id'] == '{{ zone_id }}') {
+						html += ' selected="selected"';
+					}
+
+					html += '>' + json['zone'][i]['name'] + '</option>';
+				}
+			} else {
+				html += '<option value="0" selected="selected">{{ text_none }}</option>';
+			}
+
+			$('#collapse-payment-address select[name=\'zone_id\']').html(html).trigger('refresh');
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('#collapse-payment-address select[name=\'country_id\']').trigger('change');
+
+$('#input-payment-city').on('change', function(){
+	const citiesWithWarning = new Map([
+				['Бугульма', 'Бугульминская улица'],
+				['Альметьевск', 'Альметевская'],
+				['Лениногорск', 'Ленина']
+				]);
+	if (citiesWithWarning.get($(this).val())){
+		$('.city-warning').html('Внимание! В город ' + $(this).val() + ' доставка осуществляется в течение 3 календарных дней. Доступна только онлайн предоплата.');
+	} else {
+		$('.city-warning').html('');
+	}
+});
+</script>

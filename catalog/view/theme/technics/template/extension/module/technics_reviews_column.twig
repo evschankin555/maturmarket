@@ -1,0 +1,37 @@
+	{% if (reviews is not empty) %}
+	<!-- Media :: Start-->
+        <div class="reviews is-hidden is-lg-visible">
+            <div class="reviews__head">
+              <h2 class="reviews__heading">{{ heading_title }}</h2>
+            </div>
+            <div class="reviews__slides reviews__slides--catalog js-slick-reviews_catalog">
+			{% for review in reviews %}
+                    <div class="reviews__item">
+                      <div class="reviews__item-head">
+                        <figure class="reviews__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ review['thumb'] }}" alt=""></figure>
+                        <h3 class="reviews__item-title"><a href="{{ review['href'] }}">{{ review['name'] }}</a></h3>
+                      </div>
+                      <div class="reviews__item-body">
+                        <blockquote class="reviews__item-text">{{ review['description'] }}</blockquote><a class="reviews__item-link" href="{{ review['href'] }}">{{ text_all }}</a>
+                      </div>
+                      <div class="reviews__item-foot">
+                        <cite class="reviews__item-author">{{ review['author'] }}<small>{{ review['date_added'] }}</small></cite>
+                        <div class="reviews__item-voice">
+                          <button class="reviews__item-voice-btn reviews__item-voice-btn--like" style="cursor: default;pointer-events: none;">
+                            <svg class="icon-reviews-like">
+                              <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-reviews-like"></use>
+                            </svg>{{ review['count_good'] }}
+                          </button>
+                          <button class="reviews__item-voice-btn reviews__item-voice-btn--dislike" style="cursor: default;pointer-events: none;">
+                            <svg class="icon-reviews-dislike">
+                              <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-reviews-dislike"></use>
+                            </svg>{{ review['count_bad'] }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+			{% endfor %}
+			</div>
+        </div>
+     <!-- Media :: End-->
+    {% endif %}

@@ -1,0 +1,29 @@
+      <!-- Header Maintenance :: Start-->
+      <header class="header header--service">
+        <div class="container-fluid">
+          <div class="header__logo">
+					{% if (header_logo) %} 
+						<a {{ home == og_url ? '' : 'href="' ~ home ~'"'}}><img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+						{% else %} 
+						<a class="logo__text" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>{{ header_text_logo }}</a>
+					{% endif %} 
+		  </div>
+          <ul class="header__contacts">
+			{% if (technics_phones) %}
+            <li><b>{{ text_technics_maintenance_phone }}</b>
+			{% for key, technics_phone in technics_phones %}
+				{% if (key + 1 < (technics_phones)|length) %}
+				<a rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>,
+				{% else %}
+				<a rel="nofollow" href="tel:{{ technics_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ technics_phone[language_id] }}</a>
+				{% endif %}
+			{% endfor %}
+			</li>
+			{% endif %}
+            <li><b>{{ text_technics_maintenance_email }}</b>
+			<a href="mailto:{{ shop_email }}">{{ shop_email }}</a>
+			</li>
+          </ul>
+        </div>
+      </header>
+      <!-- Header Maintenance :: End-->

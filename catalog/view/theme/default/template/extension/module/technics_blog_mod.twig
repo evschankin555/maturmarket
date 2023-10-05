@@ -1,0 +1,30 @@
+	{% if (blogs is not empty) %}
+	<!-- Media :: Start-->
+        <div class="media">
+          <div class="container-fluid">
+            <div class="media__head">
+              <h2 class="media__heading">{{ heading_title }}</h2><a class="media__link" href="{{ blog_href }}">{{ text_all_blogs }}</a>
+            </div>
+            <div class="media__slides js-slick-media">
+			{% for i,blog in blogs %}
+      {% if i is odd %}
+			  <a class="media__item media__item--bg" href="{{ blog['href'] }}">
+      {% else %}
+        <a class="media__item" href="{{ blog['href'] }}">
+      {% endif %}
+        {% if i is odd %}
+				  <figure class="media__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ blog['image'] }}" alt="{{ blog['title'] }}"></figure>
+        {% endif %}
+                <div class="media__item-in"><span class="media__item-date">{{ blog['date_added'] }}</span>
+                  <h3 class="media__item-title">
+                    <u>{{ blog['title'] }}</u>
+                  </h3>
+				  <p class="media__item-text">{{ blog['description'] }}</p>
+                </div>
+			</a>
+			{% endfor %}
+			</div>
+          </div>
+        </div>
+     <!-- Media :: End-->
+    {% endif %}

@@ -1,0 +1,23 @@
+                <!-- Catalog Nav :: Start-->
+                <div class="catalog__nav is-hidden is-lg-visible">
+				<h2 class="catalog__nav-heading">{{ heading_title }}</h2>
+					<ul class="catalog__nav-menu">
+						{% for category in categories %} 
+						{% if (category['category_id'] == category_id) %} 
+						<li class="is-active"><a class="catalog__nav-link" href="{{ category['href'] }}">{{ category['name'] }}</a></li>
+						{% if (category['children']) %} 
+						{% for child in category['children'] %} 
+						{% if (child['category_id'] == child_id) %} 
+						<li class="is-active"><a class="catalog__nav-link" href="{{ child['href'] }}">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a></li>
+						{% else %} 
+						<li><a class="catalog__nav-link" href="{{ child['href'] }}">&nbsp;&nbsp;&nbsp;- {{ child['name'] }}</a></li>
+						{% endif %} 
+						{% endfor %} 
+						{% endif %} 
+						{% else %} 
+						<li><a class="catalog__nav-link" href="{{ category['href'] }}">{{ category['name'] }}</a></li>
+						{% endif %} 
+						{% endfor %} 
+					</ul>
+                </div>
+                <!-- Catalog Nav :: End-->

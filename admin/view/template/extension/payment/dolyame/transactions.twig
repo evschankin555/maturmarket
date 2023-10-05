@@ -1,0 +1,186 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="well">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label" for="input-order-id">{{ entry_order_id }}</label>
+                <input type="text" name="filter_order_id" value="{{ filter_order_id }}" placeholder="{{ entry_order_id }}" id="input-order-id" class="form-control" />
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <div class="form-group">
+              <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+            </div>
+          </div>
+            </div>
+          </div>
+          <form method="post" action="" enctype="multipart/form-data" id="form-order">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-right">
+                    {% if sort == 'o.order_id' %}
+                    <a href="{{ sort_order }}" class="{{ order | lower }}">{{ column_order_id }}</a>
+                    {% else %}
+                    <a href="{{ sort_order }}">{{ column_order_id }}</a>
+                    {% endif %}</td>
+                  <td class="text-left">
+                    {% if sort == 'o.status' %}
+                    <a href="{{ sort_status }}" class="{{ order | lower }}">{{ column_status }}</a>
+                    {% else %}
+                    <a href="{{ sort_status }}">{{ column_status }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">
+                    {% if sort == 'o.amount' %}
+                    <a href="{{ sort_total }}" class="{{ order | lower }}">{{ column_total }}</a>
+                    {% else %}
+                    <a href="{{ sort_total }}">{{ column_total }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if transactions %}
+                {% for transaction in transactions %}
+                <tr>
+                  <td class="text-right">{{ transaction.order_id }}</td>
+                  <td class="text-left">{{ transaction.status }}</td>
+                  <td class="text-right">{{ transaction.amount }}</td>
+                  <td class="text-right">
+                    {% if transaction.refund %}
+                    <button type="button" id="doyame-refund-id-{{ transaction.order_id }}" class="btn btn-info" onclick="showDolyameRefundForm({{ transaction.order_id }})">{{ text_refund_action }}</button>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="8">{{ text_no_results }}</td>
+                </tr>
+                {% endif  %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	url = 'index.php?route=extension/payment/dolyame/transactions&user_token={{ user_token }}';
+
+	var filter_order_id = $('input[name=\'filter_order_id\']').val();
+
+	if (filter_order_id) {
+		url += '&filter_order_id=' + encodeURIComponent(filter_order_id);
+	}
+
+	location = url;
+});
+function setOrderStatus(data) {
+  $.ajax({
+    url: '{{ catalog }}index.php?route=api/order/history&api_token={{ api_token }}&order_id=' + data.order_id,
+    type: 'post',
+    dataType: 'json',
+    data: 'order_status_id={{ refund_status }}&notify=1&override=0&append=0&comment=' + data.comment,
+    success: function(json) {
+      if (json['error']) {
+        alert(json['error']);
+      }
+      location.reload();
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+      alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+    }
+  });
+}
+$(document).on('click', '.dolyame-refund-submit', function(){
+  $('.dolyame-refund-submit').button('loading');
+  var form = $('#form-dolyame-refund');
+  var actionUrl = form.attr('action');
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: actionUrl,
+        data: form.serialize(), // serializes the form's elements.
+        success: function(data)
+        {
+          if (typeof data.error !== 'undefined') {
+            alert(data.error);
+            $('.dolyame-refund-submit').button('reset');
+            return;
+          } else {
+            setOrderStatus(data);
+          }
+        }
+    });
+});
+$(document).on('change', '.dolyame_payment_return_position', dolyamePaymentUpdateTotal);
+$(document).on('keyup', '#dolyame-modal-refund input', dolyamePaymentUpdateTotal);
+function dolyamePaymentUpdateTotal(){
+  var sum = 0;
+  document.querySelectorAll('.dolyame_payment_return_position:checked').forEach(function(el){
+    sum += $('#dolyame_payment_return_quantity_' + el.value).val() * $('#dolyame_payment_return_price_' + el.value).val()
+  });
+  sum -= $('input[name="refunded_prepaid_amount"]').val();
+  $('#dolyame_total_refund_sum').text(sum.toFixed(2));
+}
+function showDolyameRefundForm(id) {
+    $.ajax({
+        url: 'index.php?route=extension/payment/dolyame/transactions/items&order_id='+id+'&user_token={{ user_token }}',
+        dataType: 'html',
+        beforeSend: function() {
+            $('#doyame-refund-id-'+id).button('loading');
+        },
+        complete: function() {
+            $('#doyame-refund-id-'+id).button('reset');
+        },
+        success: function(html) {
+            $('#dolyame-modal-refund').remove();
+
+            $('body').prepend('<div id="dolyame-modal-refund" class="modal">' + html + '</div>');
+
+            $('#dolyame-modal-refund').modal('show');
+            dolyamePaymentUpdateTotal();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+}
+//--></script> 
+</div>
+{{ footer }}

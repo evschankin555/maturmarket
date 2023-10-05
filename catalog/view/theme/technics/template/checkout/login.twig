@@ -1,0 +1,35 @@
+<div class="ui-group login-method-group" style="margin:2.0rem 0 2.0rem 0">
+	<div class="row">
+	  <div class="col-auto">
+      <input type="radio" name="account" id="account-register" value="register" checked="checked" style="display: none;">
+		  <button type="button" class="btn login-method-check" id="button-account" data-loading-text="{{ text_loading }}">{{ text_register }}</button>
+	  </div>
+	  <div class="col-auto">
+		  <button type="button" class="btn login-method-check" id="account-login" data-fancybox data-src="#checkout-login">Уже зарегистрирован</button>
+	  </div>
+	 </div>
+</div>
+	
+<div class="popup popup--570" style="display: none;" id="checkout-login">
+  <button class="popup__close" data-fancybox-close>
+    <svg class="icon-close">
+      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use>
+    </svg>
+  </button>
+  <div class="writeus"><span class="writeus__heading">{{ text_returning_customer }}</span>
+    <div class="writeus__form">
+  <p>{{ text_i_am_returning_customer }}</p>
+        <label class="ui-label required">{{ entry_email }}</label>
+        <div class="ui-field">
+          <input class="ui-input" type="email" value="" name="email" placeholder="{{ entry_email }}">
+        </div>
+        <label class="ui-label required">{{ entry_password }}</label>
+        <div class="ui-field">
+          <input class="ui-input" type="password" value="" name="password" placeholder="{{ entry_password }}">
+        </div>
+        <div class="writeus__action">
+          <button type="button" class="btn btn--blue" id="button-login">{{ button_login }}</button>
+        </div>
+    </div>
+  </div>
+</div>

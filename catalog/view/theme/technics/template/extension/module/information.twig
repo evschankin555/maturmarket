@@ -1,0 +1,12 @@
+                <!-- Catalog Nav :: Start-->
+                <div class="catalog__nav is-hidden is-lg-visible">
+				<h2 class="catalog__nav-heading">{{ heading_title }}</h2>
+					<ul class="catalog__nav-menu">
+						{% for information in informations %} 
+						<li><a class="catalog__nav-link" href="{{ information['href'] }}">{{ information['title'] }}</a></li>
+						{% endfor %} 
+						<li><a class="catalog__nav-link" href="{{ contact }}">{{ text_contact }}</a></li>
+						<li><a class="catalog__nav-link" href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+					</ul>
+                </div>
+                <!-- Catalog Nav :: End-->

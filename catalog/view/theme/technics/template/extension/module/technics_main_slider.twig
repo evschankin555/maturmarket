@@ -1,0 +1,39 @@
+        <!-- Slides :: Start-->
+      <div class="slider">
+        <div class="slides slides--width-{{ slide_width }}{% if scale %} slides--scale{% endif %} js-slick-slides" data-slick='{"autoplay": {{ autoplay ? "true" : "false"}},"autoplaySpeed": {{ autoplay*1000 }},"speed": {{ speed*100 }},"fade": {{ slide_fade ? "true" : "false"}}}'>
+		    {% for i,banner1 in banners %} 
+				{% for banner in banner1 %} 
+					{% if (img_link) %} 
+					  <div class="slides__item slides__item--{{ i }} {% if (banner['text_color'] == '1') %}slides__item--black{% endif %}">
+					  {{ banner['link'] ? '<a href="' ~ banner['link'] ~ '">' : ''}}
+						<figure class="slides__item-image" {{ scale ? 'style="padding-top:'~ scale|round(5) ~'%; height: 0;"' : ''}}><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['slider_text'] }}"></figure>
+						<div class="container-fluid">
+						  <div class="slides__item-desc">
+							<h2 class="slides__item-title">{{ banner['title'] }}</h2>
+							<p class="slides__item-price">{{ banner['slider_text'] }}</p>
+							{% if (banner['link'] and banner['btn_text']) %} 
+							<a class="btn btn--sm {% if (banner['text_color'] == '1') %}btn--black{% else %}btn--white{% endif %}" href="{{ banner['link'] }}">{{ banner['btn_text'] }}</a>
+							{% endif %} 
+						  </div>
+						</div>
+							{{ banner['link'] ? '</a>' : ''}}
+					  </div>
+								{% else %} 
+					  <div class="slides__item slides__item--{{ i }} {% if (banner['text_color'] == '1') %}slides__item--black{% endif %}">
+						<figure class="slides__item-image" {{ scale ? 'style="padding-top:'~ scale|round(5) ~'%; height: 0;"' : ''}}><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['slider_text'] }}"></figure>
+						<div class="container-fluid">
+						  <div class="slides__item-desc">
+							<h2 class="slides__item-title">{{ banner['title'] }}</h2>
+							<p class="slides__item-price">{{ banner['slider_text'] }}</p>
+							{% if (banner['link'] and banner['btn_text']) %} 
+							<a class="btn btn--sm {% if (banner['text_color'] == '1') %}btn--black{% else %}btn--white{% endif %}" href="{{ banner['link'] }}">{{ banner['btn_text'] }}</a>
+							{% endif %} 
+						  </div>
+						</div>
+					  </div>
+					{% endif %} 
+				{% endfor %} 
+  		    {% endfor %} 
+        </div>
+      </div>
+        <!-- Slides :: End-->

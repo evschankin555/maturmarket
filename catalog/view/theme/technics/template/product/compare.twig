@@ -1,0 +1,177 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Compare :: Start-->
+        <div class="compare">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			{% if (products) %}
+            <div class="compare__wrapper">
+              <div class="compare__nav compare__nav--top">
+                <button class="compare__nav-prev js-slick-compare-prev">
+                  <svg class="icon-prev-small">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-prev-small"></use>
+                  </svg>
+                </button>
+                <button class="compare__nav-next js-slick-compare-next">
+                  <svg class="icon-next-small">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-next-small"></use>
+                  </svg>
+                </button>
+              </div>
+              <div class="compare__nav compare__nav--bottom">
+                <button class="compare__nav-prev js-slick-compare-prev">
+                  <svg class="icon-prev-small">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-prev-small"></use>
+                  </svg>
+                </button>
+                <button class="compare__nav-next js-slick-compare-next">
+                  <svg class="icon-next-small">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-next-small"></use>
+                  </svg>
+                </button>
+              </div>
+              <div class="compare__container">
+                <div class="compare__fixed">
+                  <div class="compare__column-item" data-mh="group-item"></div>
+                  <div class="compare__column-row" data-mh="model">
+                    <div class="compare__column-th">{{ text_model }}</div>
+                  </div>
+                  <div class="compare__column-row" data-mh="manufacturer">
+                    <div class="compare__column-th">{{ text_manufacturer }}</div>
+                  </div>
+                  <div class="compare__column-row" data-mh="availability">
+                    <div class="compare__column-th">{{ text_availability }}</div>
+                  </div>
+				  {% if (review_status) %}
+                  <div class="compare__column-row" data-mh="rating">
+                    <div class="compare__column-th">{{ text_rating }}</div>
+                  </div>
+				  {% endif %}
+                  <div class="compare__column-row" data-mh="weight">
+                    <div class="compare__column-th">{{ text_weight }}</div>
+                  </div>
+                  <div class="compare__column-row" data-mh="dimension">
+                    <div class="compare__column-th">{{ text_dimension }}</div>
+                  </div>
+				  {% for i,attribute_group in attribute_groups %}
+				  {% for key,attribute in attribute_group['attribute'] %}
+                  <div class="compare__column-row" data-mh="attribute-name-{{ key }}">
+                    <div class="compare__column-th">{{ attribute['name'] }}</div>
+                  </div>
+				  {% endfor %} 
+				  {% endfor %}
+                </div>
+                <div class="compare__sidebar">
+                  <div class="compare__column">
+                    <div class="compare__column-item" data-mh="group-item"></div>
+                    <div class="compare__column-row" data-mh="model">{{ text_model }}</div>
+                    <div class="compare__column-row" data-mh="manufacturer">{{ text_manufacturer }}</div>
+                    <div class="compare__column-row" data-mh="availability">{{ text_availability }}</div>
+					{% if (review_status) %}
+                    <div class="compare__column-row" data-mh="rating">{{ text_rating }}</div>
+					{% endif %}
+                    <div class="compare__column-row" data-mh="weight">{{ text_weight }}</div>
+                    <div class="compare__column-row" data-mh="dimension">{{ text_dimension }}</div>
+				    {% for i,attribute_group in attribute_groups %}
+                    <div class="compare__column-row compare__column-row--group" data-mh="attribute-group-name-{{ i }}">{{ attribute_group['name'] }}</div>
+				    {% for key,attribute in attribute_group['attribute'] %}
+                    <div class="compare__column-row" data-mh="attribute-name-{{ key }}">{{ attribute['name'] }}</div>
+			        {% endfor %} 
+				    {% endfor %} 
+                  </div>
+                </div>
+                <div class="compare__content">
+                  <div class="compare__slides js-slick-compare">
+				  {% for product in products %}
+                    <div class="compare__column">
+                      <div class="compare__column-item" data-mh="group-item">
+                        <a href="{{ product['remove'] }}" class="compare__column-item-delete">
+                          <svg class="icon-delete-compare">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete-compare"></use>
+                          </svg>{{ button_remove }}
+                        </a>
+						{% if (product['thumb']) %}
+                        <figure class="compare__column-item-image"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}"></figure>
+						{% endif %}
+                        <a class="compare__column-item-title" href="{{ product['href'] }}">{{ product['name'] }}</a>
+                        <p class="compare__column-item-price">							
+						    {% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+						</p>
+                        <div class="compare__column-item-action">
+						{% if (not product['buy_btn']) %}
+						<a class="btn btn--blue" onclick="cart.add('{{ product['product_id'] }}', '{{ product['minimum'] }}');">+
+                            <svg class="icon-cart">
+                              <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+                            </svg></a>
+						{% else %}
+						<a class="btn btn--blue disabled">+
+                            <svg class="icon-cart">
+                              <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+                            </svg></a>
+						{% endif %}
+						</div>
+                      </div>
+                      <div class="compare__column-row" data-mh="model">{{ product['model'] }}</div>
+                      <div class="compare__column-row" data-mh="manufacturer">{{ product['manufacturer'] }}</div>
+                      <div class="compare__column-row" data-mh="availability">{{ product['availability'] }}</div>
+					  {% if (review_status) %}
+                      <div class="compare__column-row" data-mh="rating">{{ product['rating'] }}/5. {{ product['reviews'] }}</div>
+					  {% endif %}
+                      <div class="compare__column-row" data-mh="weight">{{ product['weight'] }}</div>
+                      <div class="compare__column-row" data-mh="dimension">{{ product['length'] }} x {{ product['width'] }} x {{ product['height'] }}</div>
+					  {% for i,attribute_group in attribute_groups %} 
+                      <div class="compare__column-row compare__column-row--group" data-mh="attribute-group-name-{{ i }}">&nbsp;</div>
+					  {% for key,attribute in attribute_group['attribute'] %}
+					  {% if (product['attribute'][key] is defined) %}
+                      <div class="compare__column-row" data-mh="attribute-name-{{ key }}">{{ product['attribute'][key] }}</div>
+					  {% else %}
+                      <div class="compare__column-row" data-mh="attribute-name-{{ key }}">&nbsp;</div>
+					  {% endif %} 
+				      {% endfor %} 
+					  {% endfor %} 
+                    </div>
+				  {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+			{% else %}
+			<p>{{ text_empty }}</p>
+			<a href="{{ continue }}" class="btn btn--blue">{{ button_continue }}</a>
+			{% endif %}
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Compare :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

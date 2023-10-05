@@ -1,0 +1,604 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		{{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="personal__data">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<fieldset id="account" class="ui-fieldset">
+				<legend class="ui-legend">{{ text_your_details }}</legend>
+				<p class="ui-caption"></p>
+					<div class="personal__group form-group" style="display: {% if customer_groups|length > 1 %} block {% else %} none {% endif %};">
+						<div class="row">
+							<div class="col-auto">
+							<label class="ui-label required">{{ entry_customer_group }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-group{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+								{% for customer_group in customer_groups %}
+									{% if customer_group.customer_group_id == customer_group_id %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="customer_group_id" type="radio" value="{{ customer_group.customer_group_id }}" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										 {{ customer_group.name }}
+									</label>
+									{% else %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="customer_group_id" type="radio" value="{{ customer_group.customer_group_id }}">
+										<span class="ui-check__radio">
+										</span>
+										 {{ customer_group.name }}
+									</label>								
+									{% endif %} 
+								{% endfor %} 
+								</div>
+							</div>
+						</div>							
+					</div>	
+					
+					{% for fieldName in allCustomFields %} 
+						{% set fieldNameT = "entry_" ~ fieldName  ~ '_show' %}
+						{% set fieldNameR = "entry_" ~ fieldName  ~ '_required' %}
+						{% set fieldNameN = "entry_" ~ fieldName  %}
+						{% set fieldNameE = "error_" ~ fieldName  %}
+						{% set fieldNameV = fieldName  %}
+						<div {{ not attribute(_context, fieldNameT)  ? 'style="display:none"' : '' }} class="personal__group form-group">
+							<div class="row">
+								<div class="col-auto">
+									<label class="ui-label{{ attribute(_context, fieldNameR)  ? ' required' : ''  }}">{{ attribute(_context, fieldNameN) }}</label>
+								</div>
+								<div class="col">
+									<div class="ui-field{% if attribute(_context, fieldNameE) %} is-error{% endif %}">
+										{% if (fieldName == 'country') %} 
+											<select name="country_id" id="input-country" class="ui-select">
+												<option value="">{{ text_select }}</option>
+												{% for country in countries %} 
+												{% if (country['country_id'] == country_id) %} 
+												<option value="{{ country['country_id'] }}" selected="selected">{{ country['name'] }}</option>
+												{% else %} 
+												<option value="{{ country['country_id'] }}">{{ country['name'] }}</option>
+												{% endif %} 
+												{% endfor %} 
+											</select>
+										{% elseif (fieldName == 'zone') %}
+												<select name="zone_id" id="input-zone" class="ui-select"></select>
+										{% elseif (fieldName == 'city') %}
+											<select name="city_id" id="input-city" class="ui-select">
+												<option value="">{{ text_select }}</option>
+												{% for city in cities %}
+												{% if city.city_id == address.city_id %}
+												<option value="{{ city.city_id }}" selected="selected">{{ city.name }}</option>
+												{% else %}
+												<option value="{{ city.city_id }}">{{ city.name }}</option>
+												{% endif %}
+												{% endfor %}
+											</select>
+										{% else %}
+											<input class="ui-input" type="text" name="{{ fieldName }}" value="{{ attribute(_context, fieldNameV) }}" placeholder="{{ attribute(_context, fieldNameN) }}" id="input-{{ (fieldName)|replace({'_': '-'}) }}">
+										{% endif %}
+										{% if attribute(_context, fieldNameE) %} 
+											<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ attribute(_context, fieldNameE) }}</span>
+										{% endif %}	
+									</div>
+								</div>
+							</div>	
+						</div>	
+					{% endfor %} 
+
+					{% for custom_field in custom_fields %} 
+					{% if (custom_field['type'] == 'select') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<select name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="input-custom-field{{ custom_field['custom_field_id'] }}" class="ui-select">
+										<option value="">{{ text_select }}</option>
+										{% for custom_field_value in custom_field['custom_field_value'] %} 
+										{% if register_custom_field[custom_field.location][custom_field.custom_field_id] and custom_field_value.custom_field_value_id == register_custom_field[custom_field.custom_field_id] %}
+										<option value="{{ custom_field_value['custom_field_value_id'] }}" selected="selected">{{ custom_field_value['name'] }}</option>
+										{% else %} 
+										<option value="{{ custom_field_value['custom_field_value_id'] }}">{{ custom_field_value['name'] }}</option>
+										{% endif %} 
+										{% endfor %}						
+									</select>
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+										<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'radio') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+							<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-group{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+								{% for custom_field_value in custom_field['custom_field_value'] %} 
+									{% if (register_custom_field[custom_field['custom_field_id']] is defined and custom_field_value['custom_field_value_id'] == register_custom_field[custom_field['custom_field_id']]) %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" type="radio" value="{{ custom_field_value['custom_field_value_id'] }}" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>
+									{% else %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" type="radio" value="{{ custom_field_value['custom_field_value_id'] }}">
+										<span class="ui-check__radio">
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>								
+									{% endif %} 
+								{% endfor %} 
+								{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+								<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+								{% endif %}	
+								</div>
+							</div>
+						</div>							
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'checkbox') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-group{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+								{% for custom_field_value in custom_field['custom_field_value'] %} 
+									{% if (register_custom_field[custom_field['custom_field_id']] is defined and custom_field_value['custom_field_value_id'] == register_custom_field[custom_field['custom_field_id']]) %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}][]" type="checkbox" value="{{ custom_field_value['custom_field_value_id'] }}" checked="checked">
+										<span class="ui-check__checkbox">
+										  <svg class="icon-check">
+											<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+										  </svg>
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>
+									{% else %} 
+									<label class="ui-check">
+										<input class="ui-check__input" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}][]" type="checkbox" value="{{ custom_field_value['custom_field_value_id'] }}">
+										<span class="ui-check__checkbox">
+										  <svg class="icon-check">
+											<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+										  </svg>
+										</span>
+										{{ custom_field_value['name'] }}
+									</label>								
+									{% endif %} 
+								{% endfor %} 
+								{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+								<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+								{% endif %}		
+								</div>
+							</div>
+						</div>							
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'text') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ register_custom_field[custom_field['custom_field_id']] is defined ? register_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'textarea') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label ">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<textarea class="ui-textarea" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" class=" {{ error_custom_field[custom_field['custom_field_id']] is defined ? 'error' : ''}}">{{ register_custom_field[custom_field['custom_field_id']] is defined ? register_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}</textarea>
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'file') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field" data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<button type="button" id="button-custom-field{{ custom_field['custom_field_id'] }}" data-loading-text="{{ text_loading }}" class="btn">{{ button_upload }}</button>
+									<input type="hidden" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ register_custom_field[custom_field['custom_field_id']] is defined ? register_custom_field[custom_field['custom_field_id']] : '' }}" />
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'date') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field " data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input date" type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ register_custom_field[custom_field['custom_field_id']] is defined ? register_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" data-date-format="{{ date_format }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" data-toggle="datetimepicker" data-target=".date">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'time') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field " data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input time" type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ register_custom_field[custom_field['custom_field_id']] is defined ? register_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" data-date-format="{{ time_format }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" data-toggle="datetimepicker" data-target=".time">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% if (custom_field['type'] == 'datetime') %} 
+					<div id="custom-field{{ custom_field.custom_field_id }}" class="personal__group form-group custom-field " data-sort="{{ custom_field['sort_order'] }}">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ custom_field['name'] }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} is-error{% endif %}">
+									<input class="ui-input datetime" type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ register_custom_field[custom_field['custom_field_id']] is defined ? register_custom_field[custom_field['custom_field_id']] : custom_field['value'] }}" data-date-format="{{ datetime_format }}" placeholder="{{ custom_field['name'] }}" id="input-custom-field{{ custom_field['custom_field_id'] }}" data-toggle="datetimepicker" data-target=".datetime">
+									{% if (error_custom_field[custom_field['custom_field_id']] is defined) %} 
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_custom_field[custom_field['custom_field_id']] }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>					
+					{% endif %} 
+					{% endfor %}				
+			</fieldset>
+			<fieldset class="ui-fieldset">
+				<legend class="ui-legend">{{ text_your_password }}</legend>
+				<p class="ui-caption"></p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-password">{{ entry_password }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_password %} is-error{% endif %}">
+									<input class="ui-input" type="password" name="password" placeholder="{{ entry_password }}" value="{{ password }}" id="input-password">
+									{% if error_password %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_password }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-confirm">{{ entry_confirm }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_confirm %} is-error{% endif %}">
+									<input class="ui-input" type="password" name="confirm" placeholder="{{ entry_confirm }}" value="{{ confirm }}" id="input-confirm">
+									{% if error_confirm %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_confirm }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+			</fieldset>
+			<fieldset class="ui-fieldset">
+				<legend class="ui-legend">{{ text_newsletter }}</legend>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label">{{ entry_newsletter }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									{% if newsletter %}
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="newsletter" type="radio" value="1" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_yes }}
+									</label>
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="newsletter" type="radio" value="0">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_no }}
+									</label>
+									{% else %}
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="newsletter" type="radio" value="1">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_yes }}
+									</label>
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="newsletter" type="radio" value="0" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_no }}
+									</label>
+									{% endif %}
+								</div>
+							</div>
+						</div>	
+					</div>			
+			</fieldset>
+			{{ captcha }}
+			 {% if text_agree %}
+				<div class="personal__action">
+                      <label class="ui-check">
+                        <input class="ui-check__input" value="1" type="checkbox" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+						<span class="ui-check__checkbox">
+                          <svg class="icon-check">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                          </svg></span>{{ text_agree }}
+                      </label>
+				</div>
+			{% endif %}
+				<div class="personal__action">
+					<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+				</div>
+			</form>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+<script>
+// Sort the custom fields
+$('#account .form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#account .form-group').length) {
+		$('#account .form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('#account .form-group').length) {
+		$('#account .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') == $('#account .form-group').length) {
+		$('#account .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('#account .form-group').length) {
+		$('#account .form-group:first').before(this);
+	}
+});
+
+$('input[name=\'customer_group_id\']').on('change', function() {
+	$.ajax({
+		url: 'index.php?route=account/register/customfield&customer_group_id=' + this.value,
+		dataType: 'json',
+		success: function(json) {
+			$('.custom-field').hide();
+			$('.custom-field .ui-label').removeClass('required');
+
+			for (i = 0; i < json.length; i++) {
+				custom_field = json[i];
+
+				$('#custom-field' + custom_field['custom_field_id']).show();
+
+				if (custom_field['required']) {
+					$('#custom-field' + custom_field['custom_field_id']).find('.ui-label').addClass('required');
+				}
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('input[name=\'customer_group_id\']:checked').trigger('change');
+
+$('button[id^=\'button-custom-field\']').on('click', function() {
+	var element = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(element).button('loading');
+				},
+				complete: function() {
+					$(element).button('reset');
+				},
+				success: function(json) {
+					$(element).parent().find('.ui-error').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<span class="error ui-error">' + json['error'] + '</span>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(element).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+$('.date').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'L',
+	icons: {
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+$('.datetime').datetimepicker({
+	locale: '{{ datepicker }}',
+	icons: {
+		time: 'icon-datepicker icon-datepickerclock',
+		date: 'icon-datepicker icon-datepickercalendar',
+		up: 'icon-datepicker icon-datepickerchevron-small-up',
+		down: 'icon-datepicker icon-datepickerchevron-small-down',
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+$('.time').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'LT',
+	icons: {
+		up: 'icon-datepicker icon-datepickerchevron-small-up',
+		down: 'icon-datepicker icon-datepickerchevron-small-down'
+	}
+});
+
+$('select[name=\'country_id\']').on('change', function() {
+	$.ajax({
+		url: 'index.php?route=account/account/country&country_id=' + this.value,
+		dataType: 'json',
+		beforeSend: function() {
+			$('select[name=\'country_id\']').prop('disabled', true);
+		},
+		complete: function() {
+			$('select[name=\'country_id\']').prop('disabled', false).trigger('refresh');
+		},
+		success: function(json) {
+			if (json['postcode_required'] == '1') {
+				$('input[name=\'postcode\']').parent().parent().addClass('required');
+			} else {
+				$('input[name=\'postcode\']').parent().parent().removeClass('required');
+			}
+			
+			html = '<option value="">{{ text_select }}</option>';
+			
+			if (json['zone'] && json['zone'] != '') {
+				for (i = 0; i < json['zone'].length; i++) {
+					html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+					
+					if (json['zone'][i]['zone_id'] == '{{ zone_id }}') {
+						html += ' selected="selected"';
+					}
+					
+					html += '>' + json['zone'][i]['name'] + '</option>';
+				}
+			} else {
+				html += '<option value="0" selected="selected">{{ text_none }}</option>';
+			}
+			
+			$('select[name=\'zone_id\']').html(html).trigger('refresh');
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('select[name=\'country_id\']').trigger('change');
+</script> 
+</body></html>

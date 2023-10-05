@@ -1,0 +1,27 @@
+{% if currencies|length > 1 %}
+              <div class="wallet js-toggle">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-currency">
+                <button class="wallet__btn js-toggle-btn">
+                  <svg class="icon-wallet">
+                    <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-wallet"></use>
+                  </svg>
+		{% for currency in currencies %}
+		{% if currency.symbol_left and currency.code == code %} <strong>{{ currency.symbol_left }}</strong> {% elseif currency.symbol_right and currency.code == code %} <strong>{{ currency.symbol_right }}</strong> {% endif %}
+		{% endfor %}
+                </button>
+                <div class="wallet__dropdown js-toggle-dropdown">
+                  <ul class="wallet__menu">
+        {% for currency in currencies %}
+        {% if currency.symbol_left %}
+		<li data-curr="{{ currency.code }}"><a class="wallet__link" href="#">{{ currency.symbol_left }} {{ currency.title }}</a></li>
+        {% else %}
+		<li data-curr="{{ currency.code }}"><a class="wallet__link" href="#">{{ currency.symbol_right }} {{ currency.title }}</a></li>
+        {% endif %}
+        {% endfor %}
+                  </ul>
+                </div>
+				<input type="hidden" name="code" value="" />
+				<input type="hidden" name="redirect" value="{{ redirect }}" />
+			  </form>
+              </div>
+{% endif %}

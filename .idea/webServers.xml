@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="4bd7a24b-7cdc-4c40-9787-117613ca9780" name="maturmarket.ru">
+        <fileTransfer rootFolder="/var/www/maturmarket" accessType="SFTP" host="31.13.134.239" port="22" sshConfigId="b77dc076-27e1-438d-adcf-e83a5bc3eff4" sshConfig="maturmarket@31.13.134.239:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

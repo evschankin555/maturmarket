@@ -1,0 +1,95 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+        <!-- Page :: Start-->
+        <div class="page">
+		  {{ content_top }}
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			
+	   {% if thumb or description %}
+      <div class="row">
+        {% if thumb %}
+        <div class="col-sm-2"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail" /></div>
+        {% endif %}
+        {% if description %}
+        <div class="col-sm-10">{{ description }}</div>
+		{% endif %}
+      </div>
+	  {% endif %}
+      {% if articles %}
+	  
+      {% if articles %}
+			{% for article in articles %}
+               <div class="products__grid">
+				{% for article in articles %}
+                  <div class="products__line">
+						  {% if (article.thumb) %} 
+						  <div class="products__line-images"><a href="{{ article['href'] }}"><img src="{{ article['thumb'] }}" alt="{{ article['name'] }}"></a></div>
+						  {% endif %}
+                    <div class="products__line-desc">
+                      <div class="row align-items-center">
+                        <div class="col">
+						<a href="{{ article['href'] }}" class="products__line-title">{{ article['name'] }}
+						{% if (article['rating'] != constant('false')) %}
+						<span class="products__line-rating">
+                              <svg class="icon-star">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+                              </svg>{{ article['rating'] }}/5
+						</span>
+						{% endif %}
+						</a>
+						{% if (article['description']) %}
+						<p>{{ article['description'] }}</p>
+						{% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+				  {% endfor %}
+                </div>
+			{% endfor %}
+			
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %}
+
+		{% else %}
+	<div class="empty-products">
+		<p>{{ text_empty }}</p>
+		<div class="checkout__button-box">
+		<a href="{{ continue }}" class="btn btn--transparent">{{ button_continue }}<svg class="icon-arrow-long-right"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-long-right"></use></svg></a>
+		</div>
+	</div>
+      {% endif %}
+	  
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+		  {{ content_bottom }}
+        </div>
+        <!-- Page :: End-->
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

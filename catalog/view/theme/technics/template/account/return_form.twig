@@ -1,0 +1,293 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="personal__data">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<p class="ui-caption">{{ text_description }}</p>
+			<fieldset class="ui-fieldset">
+				<legend class="ui-legend">{{ text_order }}</legend>
+				<p class="ui-caption"></p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-firstname">{{ entry_firstname }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_firstname %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="firstname" placeholder="{{ entry_firstname }}" value="{{ firstname }}" id="input-firstname">
+									{% if error_firstname %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_firstname }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-lastname">{{ entry_lastname }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_lastname %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="lastname" placeholder="{{ entry_lastname }}" value="{{ lastname }}" id="input-lastname">
+									{% if error_lastname %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_lastname }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-email">{{ entry_email }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_email %} is-error{% endif %}">
+									<input class="ui-input" type="email" name="email" placeholder="{{ entry_email }}" value="{{ email }}" id="input-email">
+									{% if error_email %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_email }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-telephone">{{ entry_telephone }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_telephone %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="telephone" placeholder="{{ entry_telephone }}" value="{{ telephone }}" id="input-telephone">
+									{% if error_telephone %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_telephone }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-order-id">{{ entry_order_id }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_order_id %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="order_id" placeholder="{{ entry_order_id }}" value="{{ order_id }}" id="input-order-id">
+									{% if error_order_id %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_order_id }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-date-ordered">{{ entry_date_ordered }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input date" type="text" name="date_ordered" data-date-format="{{ date_format }}" placeholder="{{ entry_date_ordered }}" value="{{ date_ordered }}" id="input-date-ordered" data-toggle="datetimepicker" data-target=".date">
+								</div>
+							</div>
+						</div>	
+					</div>					
+			</fieldset>
+			<fieldset class="ui-fieldset">
+				<legend class="ui-legend">{{ text_product }}</legend>
+				<p class="ui-caption"></p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-product">{{ entry_product }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_product %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="product" placeholder="{{ entry_product }}" value="{{ product }}" id="input-product">
+									{% if error_product %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_product }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-model">{{ entry_model }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_model %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="model" placeholder="{{ entry_model }}" value="{{ model }}" id="input-model">
+									{% if error_model %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_model }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-quantity">{{ entry_quantity }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="quantity" placeholder="{{ entry_quantity }}" value="{{ quantity }}" id="input-quantity">
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-telephone">{{ entry_reason }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_reason %} is-error{% endif %}">
+									{% for return_reason in return_reasons %}
+									{% if return_reason.return_reason_id == return_reason_id %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="return_reason_id" type="radio" value="{{ return_reason.return_reason_id }}" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ return_reason.name }}
+									</label>
+									{% else %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="return_reason_id" type="radio" value="{{ return_reason.return_reason_id }}">
+										<span class="ui-check__radio">
+										</span>
+										{{ return_reason.name }}
+									</label>
+									{% endif %}
+									{% endfor %}
+									{% if error_reason %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_reason }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-opened">{{ entry_opened }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									{% if opened %}
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="opened" type="radio" value="1" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_yes }}
+									</label>
+									{% else %}
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="opened" type="radio" value="1">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_yes }}
+									</label>
+									{% endif %}
+									{% if not opened %}
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="opened" type="radio" value="0" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_no }}
+									</label>
+									{% else %}
+									<label class="ui-check ui-check--inline">
+										<input class="ui-check__input" name="opened" type="radio" value="0">
+										<span class="ui-check__radio">
+										</span>
+										{{ text_no }}
+									</label>
+									{% endif %}
+								</div>
+							</div>
+						</div>	
+					</div>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-comment">{{ entry_fault_detail }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<textarea class="ui-textarea" name="comment" placeholder="{{ entry_fault_detail }}" id="input-comment">{{ comment }}</textarea>
+								</div>
+							</div>
+						</div>	
+					</div>				
+			</fieldset>
+			 {% if text_agree %}
+				<div class="personal__action">
+                      <label class="ui-check">
+                        <input class="ui-check__input" value="1" type="checkbox" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+						<span class="ui-check__checkbox">
+                          <svg class="icon-check">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                          </svg></span>{{ text_agree }}
+                      </label>
+				</div>
+			{% endif %}
+				<div class="personal__action">
+					<a href="{{ back }}" class="btn btn--transparent">{{ button_back }}</a>
+					<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+				</div>
+			</form>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+<script>
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+$('.date').datetimepicker({
+	locale: '{{ datepicker }}',
+	format: 'L',
+	icons: {
+		previous: 'icon-datepicker icon-datepickerchevron-small-left',
+		next: 'icon-datepicker icon-datepickerchevron-small-right'
+	}
+});
+</script> 
+</body></html>

@@ -1,0 +1,5 @@
+{% for id,link in header_navs[number].type[2].links %}
+
+    <li><a class="nav__topline-link" href="{{ link }}" {% if (header_navs[number].type[2].target[id]) %} {{ 'target="'~header_navs[number].type[2].target[id]~'"' }}{% endif %}>{{  header_navs[number].type[2].name[id] }}</a></li>
+
+{% endfor %}

@@ -1,0 +1,104 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button onclick="$('#form').attr('action', '{{ update }}'); $('#form').submit();" data-toggle="tooltip" title="{{ status_done }}" class="btn btn-success"><i class="fa fa-refresh"></i></button>
+        <a onclick="$('form').submit();" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">  
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    {% if (success) %} 
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+     <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> Заявки</h3>
+      </div>
+      <div class="panel-body">
+		<form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+							<td class="text-left">{% if (sort == 'call_id') %} 
+								<a href="{{ sort_call_id }}" class="{{ (order)|lower }}">{{ "Номер" }}</a>
+								 {% else %} 
+								<a href="{{ sort_call_id }}">{{ "Номер" }}</a>
+								{% endif %}</td>
+							<td class="text-left">{% if (sort == 'store_id') %}
+								<a href="{{ sort_store_id }}" class="{{ (order)|lower }}">{{ text_store }}</a>
+								 {% else %} 
+								<a href="{{ sort_store_id }}">{{ text_store }}</a>
+								{% endif %}</td>							
+							<td class="text-left">{% if (sort == 'name') %} 
+								<a href="{{ sort_name }}" class="{{ (order)|lower }}">{{ column_name }}</a>
+								{% else %} 
+								<a href="{{ sort_name }}">{{ column_name }}</a>
+								{% endif %}</td>
+							<td class="text-right">{% if (sort == 'telephone') %} 
+								<a href="{{ sort_telephone }}" class="{{ (order)|lower }}">{{ column_telephone }}</a>
+								{% else %} 
+								<a href="{{ sort_telephone }}">{{ column_telephone }}</a>
+								{% endif %}</td>
+							<td class="text-left">{{ text_comment }}</td>
+							<td class="text-right">{{ text_status }}</td>
+							<td class="text-right">{{ text_added }}</td>
+							<td class="text-right">{{ text_modified }}</td>
+							<td class="text-right">{{ text_action }}</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% if (callbacks) %} 
+						{% for callback in callbacks %} 
+						<tr {% if (callback['status'] != status_done) %}class="warning"{% endif %}>
+							<td class="text-center">{% if (callback['selected']) %} 
+								<input type="checkbox" name="selected[]" value="{{ callback['callback_id'] }}" checked="checked" />
+								{% else %} 
+								<input type="checkbox" name="selected[]" value="{{ callback['callback_id'] }}" />
+								{% endif %}</td>
+							<td class="text-left">{{ callback['callback_id'] }}</td>
+							<td class="text-left">{{ callback['store_name'] }}</td>
+							<td class="text-left">{{ callback['name'] }}</td>
+							<td class="text-right">{{ callback['telephone'] }}</td>
+							<td class="text-left">{{ callback['comment'] }}</td>
+							<td class="text-right">{{ callback['status'] }}</td>
+							<td class="text-right">{{ callback['date_added'] }}</td>
+							<td class="text-right">{{ callback['date_modified'] }}</td>
+							<td class="text-right">
+								<a href="{{ callback['action'] }}" data-toggle="tooltip" title="{{ text_edit }}</a>" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+							</td>
+						</tr>
+						{% endfor %} 
+						{% else %} 
+						<tr>
+						<td class="text-center" colspan="10">{{ text_no_results }}</td>
+						</tr>
+						{% endif %} 
+					</tbody>		
+				</table>
+			</div>
+		</form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{# echo $results; #}</div>
+        </div>	  
+	  </div>	
+    </div>
+  </div>
+</div>
+{{ footer }} 

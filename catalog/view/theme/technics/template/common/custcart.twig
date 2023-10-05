@@ -1,0 +1,120 @@
+                <div class="checkout__basket">
+                  <div class="checkout__basket-heading">
+                  <div class="checkout__basket-title">{{ text_custcart }}</div><a class="link-underline" href="{{ cart }}">{{ text_technics_edit_cart }}</a></div>
+                  <div class="checkout__basket-content">
+                    <table class="checkout__table">
+					{% if (products or vouchers) %}
+					{% for product in products %}
+                      <tr>
+                        <td style="width: 10.0rem;">
+                          <figure class="checkout__table-image">
+						    <a href="{{ product['href'] }}"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a>
+                          </figure>
+                        </td>
+                        <td>
+						<span class="cart__item-id">{{ product['model'] }}</span>
+						<span class="checkout__table-title"><a href="{{ product['href'] }}">{{ product['name'] }}</a></span>
+						<span class="cart__item-option">{{ product['quantity'] }} {{ text_technics_cart_quantity }}</span>
+						 {% if (product['option']) %} 
+						 {% for option in product['option'] %}
+						 <span class="cart__item-option">{{ option['name'] }} {{ option['value'] }}</span>
+						 {% endfor %}
+						 {% endif %} 
+						 {% if (product['recurring']) %}
+						 <span class="cart__item-option">{{ text_recurring }} {{ product['recurring'] }}</span>
+						 {% endif %}
+                        </td>
+                        <td>
+                          <p class="checkout__table-price">
+                            <b>{{ product['total'] }}</b>
+                          </p>
+                        </td>
+                      </tr>
+					  {% endfor %} 
+					  {% for voucher in vouchers %}
+                      <tr>
+                        <td colspan="2">
+						<span class="checkout__table-title">{{ voucher['description'] }}</span>
+						<span class="cart__item-option">1 {{ text_technics_cart_quantity }}</span>
+                        </td>
+                        <td>
+                          <p class="checkout__table-price"><b>{{ voucher['amount'] }}</b></p>
+                        </td>
+                      </tr>
+					  {% endfor %}
+                      <tr class="basket__coupon_tr">
+							<td colspan="3" style="text-align: right;">
+								<div class="basket__coupon_label"><label class="ui-label">{{ text_technics_coupon }}</label></div>
+								
+								<div class="basket__coupon">
+								<input class="ui-input" type="text" name="coupon" value="{{ coupon }}" placeholder="{{ entry_coupon }}">
+								<a id="button-coupon" data-loading-text="{{ text_loading }}" href="#" class="btn btn--link">{{ button_submit }}</a>
+								</div>
+								<div class="help-text">Для использования промокода необходимо авторизоваться!</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="text-align: right;">
+							{% for i,total in totals %}
+								{% if (i + 1 < (totals)|length) %}
+								<p class="cart__total-item"><span class="cart__total-item_title">{{ total['title'] }}:</span> {{ total['text'] }}</p>
+								{% else %}
+								<p class="cart__total-item cart__total-item--last"><span class="cart__total-item_title">{{ total['title'] }}:</span> <span>{{ total['text'] }}</span></p>
+								{% endif %}
+							{% endfor %}
+							{% if (delivery_description) %}
+								<div class="delivery_info">{{ delivery_description }}</div>
+							{% endif %}
+							</td>
+                      	</tr> 
+					{% endif %} 
+                    </table>
+                  </div>
+                </div>
+
+				<div class="main_delivery_info_ul">
+					<ul>
+						<li>Курьер позвонит перед доставкой</li>
+						<li>Возврат товара без проблем</li>
+						<li>Можно оплатить при получении</li>
+					</ul>
+				</div>
+<script>
+// --------------------------------------------------------------------------
+	// Loading ocAddCoupon
+	// --------------------------------------------------------------------------
+
+  $('#button-coupon').on('click', function(e) {
+		e.preventDefault();
+			$.ajax({
+				url: 'index.php?route=extension/total/coupon/coupon',
+				type: 'post',
+				data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+				dataType: 'json',
+				beforeSend: function() {
+					$('input[name=\'coupon\']').attr('disabled', 'disabled');
+				},
+				complete: function() {
+					$('input[name=\'coupon\']').removeAttr('disabled');
+				},
+				success: function(json) {
+					$('.alert').remove();
+
+					if (json['error']) {
+						$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+					}
+				
+					refreshcart();
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});
+		$('input[name=\'coupon\']').keypress(function(e){
+			if(e.which == 13){
+				$('#button-coupon').trigger('click');
+			}
+		});
+
+</script>                

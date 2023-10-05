@@ -1,0 +1,8 @@
+{% if (tags is not empty) %} 
+                <!-- Tags :: Start-->
+                <div class="tags">
+                  <h3 class="tags__heading">{{ heading_title }}</h3>
+                  <div class="tags__group">{% for tag in tags %}<a class="tags__btn" href="{{ tag['href'] }}">{{ tag['tag'] }} <span>{{ tag['total'] }}</span></a>{% endfor %}</div>
+                </div>
+                <!-- Tags :: End-->
+{% endif %} 

@@ -1,0 +1,125 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+	{% if (order_id is defined) %}
+      <!-- Main :: Start-->
+      <main class="main">
+		{{ content_top }}
+        <!-- System :: Start-->
+        <div class="system system--success">
+          <div class="container-fluid">
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+            <figure class="system__image">
+					{% if (logo_success) %} 
+						<img src="{{ logo_success }}" alt="{{ heading_title }}">
+					{% else %} 
+						<img src="catalog/view/theme/technics/images/img-system-shopping.svg" width="418" height="auto" alt="{{ heading_title }}">
+					{% endif %} 
+			</figure><strong class="system__title">{{ heading_title }}</strong>
+            <div class="system__text">{{ text_message }}</div>
+			{% if (soc_stat) %}
+            <div class="system__social">
+              <p class="system__social-text">{{ text_technics_con_soc }}</p>
+			  {% if (social_navs is not empty) %}
+              <ul class="system__social-menu">
+			  {% for key,social_nav in social_navs %}
+                <li><a class="system__social-link" href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow">
+					<svg class="icon-social-{{ (social_links[social_nav['settype']])|lower }}">
+						<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-social-{{ (social_links[social_nav['settype']])|lower }}"></use>
+					</svg>{{ social_nav['language'][language_id]['name'] }}</a></li>
+			  {% endfor %}
+              </ul>
+			  {% endif %}
+            </div>
+			{% endif %}
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- System :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+	{% else %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+				{{ text_message }} 
+				<a href="{{ continue }}" class="btn btn--blue">{{ button_continue }}</a>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+	{% endif %}
+
+	{% if (metrica_order_id is defined and metrica_order_id) %} 
+	<script type="text/javascript">
+		dataLayer.push({
+			"ecommerce": {
+			"currencyCode": "{{ currency_code }}",
+			"purchase": {
+				"actionField": {
+				"id" : "{{ metrica_order_id }}",
+				{% if metrica_coupon is defined and metrica_coupon %}
+				"coupon": "{{ metrica_coupon }}",
+				{% endif %}
+				"revenue": "{{ metrica_total }}"
+				},
+				"products": [
+				{% for product in metrica_order_products %} 
+				{
+					"id": "{{ product["metrica_product_id"] }}",
+					"name": "{{ product["metrica_product_name"] }}",
+					"price": {{ product["metrica_product_price"] }},
+					"brand": "{{ product["metrica_product_manufacturer"] }}",
+					"category": "{{ product["metrica_product_category"] }}",
+					"quantity": {{ product["metrica_product_quantity"] }}
+				},
+				{% endfor %} 
+				]
+			}
+			}
+		});
+	</script>
+	{% endif %}
+{{ footer }}
+<script>
+	{% if (order_id is defined) %} 
+	function send_checkout_success() {
+		$(document).ready(function() {
+			sendGAch("order_id={{ order_id }}",'purchase');
+			sendYM('technics_checkout_success');
+		});
+	}
+	document.addEventListener('DOMContentLoaded', send_checkout_success);
+	{% endif %} 
+</script>	
+</body></html>

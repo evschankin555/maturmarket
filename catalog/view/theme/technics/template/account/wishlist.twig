@@ -1,0 +1,116 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			{% if products %}
+				{% for product in products %}
+                  <div class="products__micro">
+                    <div class="products__micro-stickers">
+							{% if (product['isnewest']) %} 
+								<mark class="products__micro-mark products__micro-mark--new">{{ labelsinfo['new']['name'][language_id] }}</mark>
+							{% endif %} 
+							{% if (product['special'] and product['sales']) %} 
+								<mark class="products__micro-mark products__micro-mark--sale">{{ labelsinfo['sale']['name'][language_id] ~ ' ' ~ product['discount'] }}</mark>
+							{% endif %} 
+							{% if (product['popular']) %} 
+								<mark class="products__micro-mark products__micro-mark--popular">{{ product['popular'] }}</mark>
+							{% endif %} 
+							{% if (product['hit']) %} 
+								<mark class="products__micro-mark products__micro-mark--hit">{{ product['hit'] }}</mark>
+							{% endif %} 
+							{% if (product['catch']) %} 
+								{% if (product['nocatch']) %} 
+									<mark class="products__micro-mark products__micro-mark--nocatch">{{ product['catch'] }}</mark>
+								{% else %} 
+									<mark class="products__micro-mark products__micro-mark--catch">{{ product['catch'] }}</mark>
+								{% endif %} 
+							{% endif %} 
+							{% if (product['reward']) %} 
+								<mark class="products__micro-mark products__micro-mark--reward">{{ text_reward }} {{ product['reward'] }}</mark>
+							{% endif %} 
+                    </div>
+                    <div class="products__micro-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+                    <div class="products__micro-desc">
+						{% if (product['manufacturer']) %}
+						<span class="products__micro-category">{{ product['brand_name'] ?: product['manufacturer'] }}</span>
+						{% endif %}
+						<span class="products__micro-title">{{ product['name'] }}
+						{% if (product['rating'] != constant('false')) %}
+						<span class="products__micro-rating">
+							  <svg class="icon-star">
+								<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+							  </svg>{{ product['rating'] }}/5
+						</span>
+						{% endif %}
+						</span>
+						<span class="products__micro-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+						</span>
+					</div>
+                    <div class="products__micro-action">
+						  <a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                            <svg class="icon-preview">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                            </svg>
+						  </a>
+                      <input class="ui-number" type="number" name="quantity" min="{{ product['minimum'] }}" max="9999" value="{{ product['minimum'] }}">
+					  <button type="button" class="btn btn--cart" title="{{ button_cart }}" data-for="{{ product['product_id'] }}" {{ product['buy_btn'] ? 'disabled' : ''}}>{{ button_cart }}
+								<svg class="icon-cart">
+								  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+								</svg></button>
+						  <a class="btn btn--blog" title="{{ button_compare }}" onclick="compare.add('{{ product['product_id'] }}');">
+							  <svg class="icon-blog">
+								 <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-blog"></use>
+							  </svg></a>
+						  <a class="btn btn--like btn--like-clear" title="{{ button_wishlist }}" href="{{ product.remove }}">
+							  {{ button_remove }} 
+							</a>
+                    </div>
+                  </div>
+				{% endfor %}
+			{% else %}
+			<p>{{ text_empty }}</p>
+			{% endif %}
+			<div class="personal__data">
+				<div class="personal__action">
+					<a href="{{ continue }}" class="btn btn--transparent">{{ button_continue }}</a>
+				</div>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

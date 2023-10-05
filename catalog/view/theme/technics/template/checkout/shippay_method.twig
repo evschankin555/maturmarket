@@ -1,0 +1,116 @@
+{% if (error_warning) %} 
+	<div class="alert alert-danger fade show" role="alert">
+		{{ error_warning }}
+	</div>
+{% endif %} 
+{% if (shipping_methods) %} 
+<h3 class="checkout__data-heading">{{ text_technics_ship }}</h3>
+{% if (not st4_title_status) %}<div class="ui-group">{% endif %}
+{% for shipping_method in shipping_methods %} 
+
+			{% if (st4_title_status) %} 
+			<div class="ui-group">
+			{% endif %}
+			<label {% if (not st4_title_status) %}style="display: none;"{% endif %} class="ui-label ui-label--uppercase">{{ shipping_method['title'] }}</label>
+			{% if (not shipping_method['error']) %} 
+				{% for quote in shipping_method['quote'] %} 
+					<label class="ui-check" style="display: none;">
+						{% if (quote['code'] == shipping_code or not shipping_code) %} 
+						{% set shipping_code = quote['code'] %} 
+						<input  class="ui-check__input" name="shipping_method" id="shipping_method-{{ quote['code'] }}" type="radio" value="{{ quote['code'] }}" checked="checked">
+						{% else %} 
+						<input  class="ui-check__input" name="shipping_method" id="shipping_method-{{ quote['code'] }}" type="radio" value="{{ quote['code'] }}">
+						{% endif %} 
+						<span class="ui-check__radio"></span>
+							{{ quote['title'] }} ({{ quote['text'] }})
+							
+					</label>
+              <div class="shipping-date">
+                <div class="ui-check__content"{% if (quote['content'] is not defined or quote['code'] != shipping_code) %}style="display: none;"{% endif %}>{{ quote['content'] }}</div>
+              </div>
+				{% endfor %}	
+				{% else %} 
+				<div class="alert alert--red">
+					<span class="alert__text">
+						{{ shipping_method['error'] }} 
+					</span>
+				</div>
+				{% endif %} 
+			{% if (st4_title_status) %} 
+			</div>
+			{% endif %} 
+{% endfor %} 
+{% if (not st4_title_status) %}</div>{% endif %}
+
+{% endif %} 
+
+{% if (payment_methods) %} 
+<h3 class="checkout__data-heading">{{ text_technics_pay }}</h3>
+{% if (not st4_title_status) %}<div class="ui-group flex">{% endif %}
+{% for payment_method in payment_methods %} 
+			{% if (st4_title_status) %} 
+			<div class="ui-group flex">
+			{% endif %}
+			<div class="payment_group">
+			<label {% if (not st4_title_status) %}style="display: none;"{% endif %} class="ui-label ui-label--uppercase">{{ payment_method['title'] }}</label>
+				<label class="ui-check">
+					{% if (payment_method['code'] == payment_code or not payment_code) %} 
+					{% set payment_code = payment_method['code'] %} 
+					<input  class="ui-check__input" name="payment_method" id="payment_method-{{ payment_method['code'] }}" type="radio" value="{{ payment_method['code'] }}" checked="checked">
+					{% else %} 
+					<input  class="ui-check__input" name="payment_method" id="payment_method-{{ payment_method['code'] }}" type="radio" value="{{ payment_method['code'] }}">
+					{% endif %} 
+					<span class="ui-check__radio"></span>
+						{{ payment_method['title'] }} 
+						{% if (payment_method['terms']) %} 
+						({{ payment_method['terms'] }})
+						{% endif %}							
+						{% if (payment_method['description'] is defined) %} 
+						<div class="ui-check__description">{{ payment_method['description'] }}</div>
+						{% endif %} 
+				</label>
+				<span class="payment_group_text">{{ payment_method['group_text'] }}</span>
+			</div>
+			{% if (st4_title_status) %} 
+			</div>
+			{% endif %}
+{% endfor %} 
+{% if (not st4_title_status) %}</div>{% endif %}
+{% endif %} 
+
+<h3 class="checkout__data-heading">{{ text_technics_comment }}</h3>
+<div class="ui-group">
+	<div class="ui-field">
+		<textarea  class="ui-textarea" name="comment" placeholder="{{ text_comments }}">{{ comment }}</textarea>				
+	</div>
+</div>
+
+	{% if text_agree %}
+	<div class="ui-group finish-check">
+		<label class="ui-check">
+			<input class="ui-check__input" value="1" id="agree" type="checkbox" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+			<span class="ui-check__checkbox"><svg class="icon-check"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use></svg></span>
+			{{ text_agree }}
+		</label>
+	</div>
+	{% endif %}
+
+{{ payment }} 
+<script>
+$('#button-confirm').bindFirst('click', function(e) { 
+	if($("#agree").prop("checked") == false){
+		e.preventDefault();
+		$('.alerts').empty();
+		$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error_agree }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+		e.stopImmediatePropagation();
+		return ;
+	}
+	if( ($('[name=shipping_method]:checked').val() == 'maturmarket.maturmarket') && (!$('[name=shipment_date]').val()) ){
+		e.preventDefault();
+		$('.alerts').empty();
+		$('.alerts').append($('<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error_shipment_date }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+		e.stopImmediatePropagation();
+		return ;
+	}
+});	
+</script>

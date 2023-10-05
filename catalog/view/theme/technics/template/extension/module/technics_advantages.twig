@@ -1,0 +1,44 @@
+        <!-- Info :: Start-->
+        <div class="info advantages">
+          <div class="container-fluid">
+            <div class="row">
+			{% if (title) %} 
+			  <div class="col-xl-12">
+					<div class="info__head">
+					  <h2 class="info__heading">{{ title }}</h2>
+					</div>
+			  </div>
+			{% endif %} 
+              <div class="col-xl-12">
+                <div class="row justify-content-center">
+		    {% for advantage1 in advantages %} 
+				{% for advantage in advantage1 %} 
+                  <div class="{{ grid }}">
+					{% if (advantage['link']) %} 
+						<a class="info__item" href="{{ advantage['link'] }}">
+							{% if (icon_type == 'html') %} 
+								{{ advantage['html'] }}
+							{% else %} 
+								<img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ advantage['image'] }}" alt="{{ advantage['title'] }}">
+							{% endif %} 
+						{{ advantage['title'] }}
+						</a>
+						{% else %} 
+						<div class="info__item">
+							{% if (icon_type == 'html') %} 
+								{{ advantage['html'] }}
+							{% else %} 
+								<img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ advantage['image'] }}" alt="{{ advantage['title'] }}">
+							{% endif %} 
+						{{ advantage['title'] }}
+						</div>
+					{% endif %} 
+                  </div>
+				{% endfor %} 
+  		    {% endfor %} 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Info :: End-->

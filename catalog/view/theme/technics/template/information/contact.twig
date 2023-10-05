@@ -1,0 +1,377 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+       <!-- Contacts :: Start-->
+        <div class="contacts">
+          <div class="container-fluid">
+            <h1 class="contacts__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+				<div class="contacts__container">
+					{% if (contact_map == 'google_map') %} 
+					<div class="contacts__map" id="contacts__map"></div>
+					<a class="btn btn--white" href="https://maps.google.com/maps?q={{ geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z={{ zoom }}" target="_blank">{{ button_map }}</a>
+					{% elseif (contact_map == 'yandex_map') %} 
+					<div class="contacts__map" id="contacts__map"></div>
+					<a class="btn btn--white" href="https://yandex.ru/maps/?pt={{ geocodeY|url_encode }}&z={{ zoom }}&l=map" target="_blank">{{ button_map }}</a>
+					{% else %}
+					<div class="contacts__map" id="contacts__map" style="height: 7.0rem;background: transparent;"></div>
+					{% endif %}
+				</div>
+				<div class="contacts__info">
+				  <div class="row justify-content-center">
+					<div class="col-6 col-md-4">
+					  <div class="contacts__item">
+						<figure class="contacts__item-icon">
+						  <svg class="icon-contacts-loc">
+							<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-contacts-loc"></use>
+						  </svg>
+						</figure><b class="contacts__item-title">{{ store }}</b>
+						<p class="contacts__item-text">
+						<span>{{ address }}</span>
+						{% if comment %}
+						<br>{{ text_comment }}: {{ comment }}
+						{% endif %}
+						{% if open %}
+						<br>{{ text_open }}: {{ open }}
+						{% endif %}
+						</p>
+					  </div>
+					</div>
+					{% if (shop_email) %}
+					<div class="col-6 col-md-4">
+					  <div class="contacts__item">
+						<figure class="contacts__item-icon">
+						  <svg class="icon-contacts-email">
+							<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-contacts-email"></use>
+						  </svg>
+						</figure><b class="contacts__item-title">{{ text_technics_support }}</b>
+						<p class="contacts__item-text"><span>{{ shop_email }}</span></p><a class="link link--dashed" href="#" data-fancybox data-src="#contact-form" id="contact_popup"><span>{{ text_contact }}</span></a>
+					  </div>
+					</div>
+					{% endif %}
+					{% if (technics_phones) %} 
+					<div class="col-6 col-md-4">
+					  <div class="contacts__item">
+						<figure class="contacts__item-icon">
+						  <svg class="icon-contacts-phone">
+							<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-contacts-phone"></use>
+						  </svg>
+						</figure><b class="contacts__item-title">{{ text_telephone }}</b>
+							<p class="contacts__item-text">
+							{% for key, technics_phone in technics_phones %}                 	                    
+								<span>{{ technics_phone[language_id] }}</span><br>
+							{% endfor %} 
+							{% if fax %}
+								{{ text_fax }}: {{ fax }}
+							{% endif %}
+							</p>
+					  </div>
+					</div>
+					{% endif %} 
+				  </div>
+				</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+      <div class="popup popup--570" style="display: none;" id="contact-form">
+        <button class="popup__close" data-fancybox-close>
+          <svg class="icon-close">
+            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use>
+          </svg>
+        </button>
+        <div class="writeus"><span class="writeus__heading">{{ text_contact }}</span>
+          <div class="writeus__form">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+              <label class="ui-label">{{ entry_name }}</label>
+              <div class="ui-field {{ error_name ? 'is-error' : ''}}">
+                <input class="ui-input" type="text" value="{{ name }}" name="name" placeholder="{{ entry_name }}">
+				{% if (error_name) %} 
+				<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg>
+					<span class="error ui-error">{{ error_name }}</span>
+				{% endif %} 
+              </div>
+              <label class="ui-label">{{ entry_email }}</label>
+              <div class="ui-field {{ error_email ? 'is-error' : ''}}">
+                <input class="ui-input" type="email" value="{{ email }}" name="email" placeholder="{{ entry_email }}">
+				{% if (error_email) %} 
+				<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg>
+					<span class="error ui-error">{{ error_email }}</span>
+				{% endif %} 
+              </div>
+              <label class="ui-label">{{ entry_enquiry }}</label>
+              <div class="ui-field {{ error_enquiry ? 'is-error' : ''}}">
+                <textarea class="ui-textarea" name="enquiry" cols="30" rows="10" placeholder="{{ entry_enquiry }}">{{ enquiry }}</textarea>
+				{% if (error_enquiry) %} 
+				<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg>
+					<span class="error ui-error">{{ error_enquiry }}</span>
+				{% endif %} 
+              </div>
+			  {{ captcha }}
+              <div class="writeus__action">
+                <button class="btn btn--blue">{{ button_submit }}</button>
+              </div>
+				{% if (text_technics_pdata) %} 
+					{{ text_technics_pdata }}
+				{% endif %} 
+            </form>
+          </div>
+        </div>
+      </div>
+        <!-- Contacts :: End-->
+{% if (locations) %} 
+        <!-- Offices :: Start-->
+        <div class="offices">
+          <div class="container-fluid">
+            <div class="offices__panel">
+              <div class="row">
+                <div class="col">
+                  <h2 class="offices__heading">{{ text_store }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="offices__slides js-slick-offices">
+			{% for location in locations %} 
+              <div class="offices__item">
+				{% if location.image %}
+                <figure class="offices__item-image"><img src="{{ location.image }}" alt="{{ location.name }}" title="{{ location.name }}" class="img-thumbnail"></figure>
+				{% endif %}
+                <div class="offices__item-desc">
+                  <ul class="offices__item-info">
+                    <li>{{ location.name }}</li>
+					{% if location.open %}
+                    <li>{{ location.open }}</li>
+					{% endif %}
+					{% if location.geocode %}
+						{% if (contact_map == 'google_map') %} 
+							<li><a class="link link--dashed" title="{{ button_map }}" target="_blank" href="https://maps.google.com/maps?q={{ location.geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z={{ zoom }}"><span>{{ location.address }}</span></a></li>
+						{% elseif (contact_map == 'yandex_map') %} 
+							<li><a class="link link--dashed" title="{{ button_map }}" target="_blank" href="https://yandex.ru/maps/?pt={{ location.geocode|url_encode }}&z={{ zoom }}&l=map"><span>{{ location.address }}</span></a></li>
+						{% else %}
+							<li><span>{{ location.address }}</span></li>
+						{% endif %}
+					{% endif %}
+					{% if location.telephone %}
+                    <li>{{ location.telephone }}</li>
+					{% endif %}
+					{% if location.fax %}
+                    <li>{{ text_fax }}: {{ location.fax }}</li>
+					{% endif %}
+                  </ul>{% if location.comment %}<b class="offices__item-dialog">
+                    <svg class="icon-dialog">
+                      <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-dialog"></use>
+                    </svg>{{ location.comment }}</b>{% endif %}
+                </div>
+              </div>
+			  {% endfor %} 
+            </div>
+          </div>
+        </div>
+        <!-- Offices :: End-->
+{% endif %} 
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+{% if (contact_map == 'google_map') %} 
+<script src="//maps.google.com/maps/api/js?key={{ api_key }}"></script>
+{% elseif (contact_map == 'yandex_map') %} 
+<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+{% endif %}
+<script>
+
+	// --------------------------------------------------------------------------
+	// Map
+	// --------------------------------------------------------------------------
+
+	function initMap() {
+	
+{% if (contact_map == 'google_map') %} 
+
+		if ($('#contacts__map').length) {
+
+			var map = new google.maps.Map(document.getElementById('contacts__map'), {
+				center: new google.maps.LatLng({{ geocode }}),
+				zoom: {{ zoom }},
+				zoomControl: {{ zoom_control ? 'true' : 'false' }},
+				disableDefaultUI: true
+			});
+
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng({{ geocode }}),
+				map: map,
+				icon: {
+					url: "catalog/view/theme/technics/images/pin.svg",
+					scaledSize: new google.maps.Size(32, 50)
+				}
+			});
+		}
+
+{% elseif (contact_map == 'yandex_map') %} 
+
+		if ($('#contacts__map').length) {
+			ymaps.ready(function () {
+			var myMap = new ymaps.Map("contacts__map", {
+					center: [{{ geocode }}],
+					zoom: {{ zoom }},
+					controls: []
+				}, {
+					searchControlProvider: 'yandex#search'
+				}),
+
+        MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
+            '<div style="color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>'
+        ),
+
+        myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
+            hintContent: '{{ store }}'
+        }, {
+            iconLayout: 'default#image',
+            iconImageHref: 'catalog/view/theme/technics/images/pin.svg',
+            iconImageSize: [32, 50]
+        });
+
+    myMap.geoObjects.add(myPlacemark);
+	myMap.behaviors.disable('scrollZoom'); 
+		
+{% if (zoom_control) %} 
+		myMap.controls.add('zoomControl', {
+		    float: 'none',
+		    size: 'small',
+		    position: {
+		        right: 20,
+		        bottom: 50
+		    }
+		});
+{% endif %} 
+
+		var isMobile = {
+			Android: function () {
+				return navigator.userAgent.match(/Android/i)
+			},
+			BlackBerry: function () {
+				return navigator.userAgent.match(/BlackBerry/i)
+			},
+			iOS: function () {
+				return navigator.userAgent.match(/iPhone|iPad|iPod/i)
+			},
+			Opera: function () {
+				return navigator.userAgent.match(/Opera Mini/i)
+			},
+			Windows: function () {
+				return navigator.userAgent.match(/IEMobile/i)
+			},
+			any: function () {
+				return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows())
+			}
+		}
+		if (isMobile.any()) {
+			myMap.behaviors.disable('drag')
+		}
+		
+			});
+		}
+
+{% endif %}
+
+	}
+
+$(document).on('ready', function() {
+	initMap();
+	var $errors = $('#contact-form .error.ui-error') ;
+	if($errors.length){
+		$("#contact_popup").trigger('click');
+	}
+});
+</script>
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+          {
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+			{% for i,breadcrumb in breadcrumbs %}
+			{
+              "@type": "ListItem",
+              "position": {{ i + 1 }},
+              "item": {
+                "@id": "{{ breadcrumb['href'] }}",
+                "name": "{{ breadcrumb['text'] }}"
+              }
+            }{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+			{% endfor %}
+			]
+          }
+</script>
+<script type="application/ld+json">
+		{
+		  "@context": "http://schema.org",
+		  "@type": "Store",
+		  "name": "{{ store }}",
+		  {% if (image) %}
+		  "image": "{{ image }}",
+		  {% endif %}
+		  {% if (telephone) %}
+		  "telephone": "{{ telephone }}",
+		  {% endif %}
+		  {% if (contact_map == 'google_map') %}
+		  "hasMap": "https://maps.google.com/maps?q={{ geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z={{ zoom }}",
+		  {% elseif (contact_map == 'yandex_map') %}
+		  "hasMap": "https://yandex.ru/maps/?pt={{ geocode|url_encode }}&z={{ zoom }}&l=map",
+		  {% endif %}
+		  {% if (shop_email) %}
+		  "email": "{{ shop_email }}",
+		  {% endif %}
+		  "address":
+		  {
+		  "@type": "PostalAddress",
+		  "streetAddress": "{{ address }}"
+		  }
+		  {% if (locations) %} 
+		  ,
+		  "department": [
+		  {% for i,location in locations %}
+		  {
+			"@type": "Store",
+			"name": "{{ location.name }}",
+			{% if location.telephone %}
+			"telephone": "{{ location.telephone }}",
+			{% endif %}
+			{% if location.image %}
+			"image": "{{ location.image }}",
+			{% endif %}
+			"address":
+			{
+			  "@type": "PostalAddress",
+			  "streetAddress": "{{ location.address }}"
+			}
+		  }
+		  {% if (i + 1 < locations|length) %},{% endif %}
+		  {% endfor %}
+		  ]
+		  {% endif %}
+		}
+</script>
+ <!-- Schema Org :: End-->
+{% endif %}
+</body></html>

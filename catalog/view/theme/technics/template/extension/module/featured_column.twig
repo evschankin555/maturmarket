@@ -1,0 +1,60 @@
+{% if (products) %} 
+				<div class="media-col is-hidden is-lg-visible">
+					<div class="media-col__head">
+						<h3 class="media-col__heading">
+							{{ heading_title }}
+						</h3>
+					</div>
+				{% for product in products %}
+					<a class="other__item other__item--col" href="{{ product['href'] }}">
+						  <div class="products__item-stickers">
+						  {% if (product['rating'] != constant('false')) %}
+							<div class="products__item-rating">
+								<svg class="icon-star">
+									<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+								</svg>{{ product['rating'] }}/5
+							</div>
+							{% endif %}
+							{% if (product['isnewest']) %} 
+								<mark class="products__item-mark products__item-mark--new">{{ labelsinfo['new']['name'][language_id] }}</mark>
+							{% endif %} 
+							{% if (product['special'] and product['sales']) %} 
+								<mark class="products__item-mark products__item-mark--sale">{{ labelsinfo['sale']['name'][language_id] ~ ' ' ~ product['discount'] }}</mark>
+							{% endif %} 
+							{% if (product['popular']) %} 
+								<mark class="products__item-mark products__item-mark--popular">{{ product['popular'] }}</mark>
+							{% endif %} 
+							{% if (product['hit']) %} 
+								<mark class="products__item-mark products__item-mark--hit">{{ product['hit'] }}</mark>
+							{% endif %} 
+							{% if (product['catch']) %} 
+								{% if (product['nocatch']) %} 
+									<mark class="products__item-mark products__item-mark--nocatch">{{ product['catch'] }}</mark>
+								{% else %} 
+									<mark class="products__item-mark products__item-mark--catch">{{ product['catch'] }}</mark>
+								{% endif %} 
+							{% endif %} 
+							{% if (product['reward']) %} 
+								<mark class="products__item-mark products__item-mark--reward">{{ text_reward }} {{ product['reward'] }}</mark>
+							{% endif %} 
+						  </div>
+						<figure class="other__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></figure>
+						<div class="other__item-desc">
+							<span class="other__item-title">{{ product['name'] }}</span>
+						  <span class="products__item-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+							{% if (product['isProductHasPriceForMasters']) %}
+								<span class="products__item-master-price"><b>%</b> для мастера</span>
+							{% endif %}
+						  </span>
+						</div>
+					</a>
+					{% endfor %}			
+				</div>
+{% endif %}		

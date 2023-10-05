@@ -1,0 +1,260 @@
+<!doctype html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="MobileOptimized" content="380">
+    <base href="{{ base }}">
+    <title>{{ title }}</title>
+    <meta name="theme-color" content="#{% if (theme_color) %}{{ theme_color_2 }}{% else %}3660BC{% endif %}">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+{% if robots %}
+		<meta name="robots" content="{{ robots }}" />
+{% endif %}
+{% if (description) %} 
+		<meta name="description" content="{{ description }}">
+{% endif %} 
+{% if (keywords) %} 
+		<meta name="keywords" content= "{{ keywords }}">
+{% endif %} 
+{% if (google_site_verification) %} 
+		<meta name="google-site-verification" content="{{ google_site_verification }}">
+{% endif %} 
+{% if (yandex_verification) %} 
+		<meta name="yandex-verification" content="{{ yandex_verification }}">
+{% endif %} 
+{% if (fav_180) %} 
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ fav_180 }}">
+{% endif %} 
+{% if (fav_32) %} 
+		<link rel="icon" type="image/png" href="{{ fav_32 }}" sizes="32x32">
+{% endif %} 
+{% if (fav_16) %} 
+		<link rel="icon" type="image/png" href="{{ fav_16 }}" sizes="16x16">
+{% endif %} 
+{% if (open_graph) %} 
+		<meta property="og:title" content="{{ title }} {% if (_GET['page'] is defined) %} {{ " - "~ _GET['page']~" "~text_page }}{% endif %}" />
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="{{ og_url }}">
+{% if (og_image) %} 
+		<meta property="og:image" content="{{ og_image }}">
+{% else %} 
+		<meta property="og:image" content="{{ logo }}">
+{% endif %} 
+		<meta property="og:site_name" content="{{ name }}">
+{% endif %} 
+
+{% if (fontawesome == 1) %} 
+	<link rel="stylesheet" href="catalog/view/theme/technics/css/fontawesome/svg-with-js.min.css{{ '?v'~version }}">
+{% elseif (fontawesome == 2) %}
+	<link rel="stylesheet" href="catalog/view/theme/technics/css/fontawesome/4.7.0/css/font-awesome.min.css{{ '?v'~version }}">
+{% endif %}
+	<link rel="stylesheet" href="catalog/view/theme/technics/css/bootstrap/{{ bootstrap_ver ? '4.4.1' : '3.3.5' }}/bootstrap.min.css{{ '?v'~version }}">
+	<link rel="stylesheet" href="catalog/view/theme/technics/css/app.min.css{{ '?v'~version }}">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ fonts }}:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" media="screen and (min-width: 767px)">
+{% for style in styles %} 
+	<link href="{{ style['href'] }}" type="text/css" rel="{{ style['rel'] }}" media="{{ style['media'] }}">
+{% endfor %} 
+<style>
+:root {font-size: 10px; } @media (max-width: 479px) {:root {font-size: 9px; }}
+.app {overflow: hidden;position: relative;min-height: 100%;}
+body {font: 400 1.4rem/1.714 "{{fonts|replace({'+': ' '})}}", Helvetica, Arial, als_rublregular, sans-serif;}
+button,input,optgroup,select,textarea,.fancybox-container {font-family: "{{fonts|replace({'+': ' '})}}", Helvetica, Arial, als_rublregular, sans-serif;}
+{% if (theme_color) %} 
+/* {{ theme_color_1 }} {{ theme_color_2 }} {{ theme_color_3 }} {{ theme_color_4 }} {{ theme_color_5 }} */
+a,mark,.btn--copy:hover,.btn--blog:hover,.btn--preview:hover,.btn--preview:focus,.btn--dashed,.btn--link,.btn--transparent,.ui-check:hover,.ui-number .jq-number__spin:hover,.fancybox-close-small:hover,.popup__close:hover,.signin__close:hover,.slides .slick-arrow:hover,.products__sorting-btn,.products__item-price,.products__line-price,.products__line-buttons .btn--blog:hover,.products__micro-price,.products__tabs-btn,.media__item-title,.category__item:hover,.info__item svg,.sku__close:hover,.sku__thumbs-video,.sku__rating mark,.other__item-price,.details__tabs-btn,.comments__heading mark,.comments__statistic-count,.tabs__btn,.options__link, .options__btn,.catalog__nav-link:hover, .catalog__nav-link.is-active,.checkout__accordion dt,.checkout__basket-title,.offices__panel .ui-select .jq-selectbox__select,.personal__nav-link:hover,.personal__nav-link.is-active,.brands__item-link,.compare__column-item-price,.nav__topline-sublink,.nav__topbar-sublink,.search__btn:hover,.phone__link,.cart__item-title a,.nav__priority-dropdown .nav__link,.is-open > .nav__link,.is-open > .nav__link:not([href]):not([tabindex]),.is-open > .nav__link:not([href]):not([tabindex]):hover, .is-open > .nav__priority-toggle,.nav__promo-slides .slick-arrow:hover,.footer__social-link,.footer--v6 .footer__middle .nav-categories__link,.footer--v6 .footer__middle .footer__social-link:hover,.link, .sku__brand a,.link-underline, .sorting__link, .media__link, .category__link, .seo__readmore-link, .breadcrumbs__link, .reviews__link, .reviews__item-link,.footer__phone-link,.link-dashed, .products__status-link, .sku__status-link,.modal-header .close:hover,.blog__nav-link,.search__input,.subsc-min__btn,.footer__questions-link,.products__item-images .slick-arrow:hover,.products__line-images .slick-arrow:hover,.products__micro-images .slick-arrow:hover{
+  color: #{{ theme_color_2 }};}
+.search__input:-ms-input-placeholder{
+  color: #{{ theme_color_2 }};}
+.search__input::placeholder{
+  color: #{{ theme_color_2 }};}
+@media (max-width: 767px) {
+.header--v1 .acc .acc__btn.is-active,.header--v1 .lang .lang__btn.is-active,.header--v1 .wallet .wallet__btn.is-active,.header--v2 .acc .acc__btn.is-active,.header--v2 .lang .lang__btn.is-active,.header--v2 .wallet .wallet__btn.is-active,.header--v4 .acc .acc__btn.is-active,.header--v4 .lang .lang__btn.is-active,.header--v4 .wallet .wallet__btn.is-active,.header--v5 .acc .acc__btn.is-active,.header--v5 .lang .lang__btn.is-active,.header--v5 .wallet .wallet__btn.is-active,.header--v6 .acc .acc__btn.is-active,.header--v6 .lang .lang__btn.is-active,.header--v6 .wallet .wallet__btn.is-active,.header--v8 .acc .acc__btn.is-active,.header--v8 .lang .lang__btn.is-active,.header--v8 .wallet .wallet__btn.is-active,.header--v9 .acc .acc__btn.is-active,.header--v9 .lang .lang__btn.is-active,.header--v9 .wallet .wallet__btn.is-active,.header--v10 .acc .acc__btn.is-active,.header--v10 .lang .lang__btn.is-active,.header--v10 .wallet .wallet__btn.is-active{
+  color: #{{ theme_color_2 }};}
+}
+@media (min-width: 480px) {
+.products__item--dual .products__item-title{
+  color: #{{ theme_color_2 }};}
+}
+.btn--transparent:hover,.btn--transparent:focus,.ui-check__input:checked ~ .ui-check__checkbox,.products__item-mark--new,.products__line-mark--new,.products__micro-mark--new,.pagination > li.active > a:after,.pagination > li.active > span:after,.tabs__btn.is-active:after,.options__dropdown > li:hover,.catalog__nav-menu > li.is-active > .catalog__nav-link,.contacts__item-icon,.blog__nav-link:hover,.article__tags-item:hover,.tags__btn:hover,.cart__counter,.nav,.ctrl-v6__btn-counter,.ctrl-v4__btn-counter,.header--service,.subsc__btn,.irs-bar,.irs-handle,.nav__topline-sublink:hover,.nav__topbar-sublink:hover,.nav__priority-dropdown li.is-open > .nav__link:not(.nav__link--arrow), .nav__priority-dropdown li.is-open > .nav__list-link,.nav__list-link:not(.nav__list-link--arrow):hover{
+  background: #{{ theme_color_2 }};}
+.btn--transparent:hover,.btn--transparent:focus,.ui-range__input:focus,.ui-check__input:checked ~ .ui-check__radio,.ui-check__input:checked ~ .ui-check__checkbox,.options__dropdown > li:hover [class^="icon-view"]:after, .options__dropdown > li:hover [class^="icon-view"]:before,.offices__panel .ui-select .jq-selectbox__trigger-arrow,.personal__nav-link.is-active,.nav__priority-dropdown li.is-open > .nav__link--arrow:after, .nav__priority-dropdown li.is-open > .nav__list-link--arrow:after,.header--v9 .nav .nav__priority-toggle:after,.subsc-min__input:focus,.nav__list-link--arrow:hover:after{
+  border-color: #{{ theme_color_2 }};}
+.irs-handle.state_hover, .irs-handle:hover{
+  box-shadow: inset 0 0 0 .2rem #{{ theme_color_2 }};}
+.products__item-replace .icon-replace,.products__item-replace:hover,.reviews__slides--catalog .slick-arrow:hover,.compare__nav-prev:hover, .compare__nav-next:hover,.compare__column-add:hover,.compare__column-item-delete .icon-delete-compare,.compare__column-item-delete:hover{
+  color: #{{ theme_color_1 }};}
+.btn--white:hover,.btn--white:focus,.btn--blue,.btn--cart,.ui-size__input:checked ~ .ui-size__btn,.ui-select.opened .jq-selectbox__trigger,.ui-select .jq-selectbox__dropdown li:hover,.app-notice__btn:hover,.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,.products__slides > .slick-arrow:hover,.set__slides > .slick-arrow:hover,.sku__thumbs .slick-arrow:hover,.other__slides .slick-arrow:hover,.filter__back:hover,.filter__clear:hover,.reviews__slides--homepage > .slick-arrow:hover,.compare__column-add-icon,.cart__back:hover,.cart__clear:hover,.nav__list-close:hover,#collapse-shipping-method .btn.btn-primary,.scroll-to-top:hover,.btn--black:hover,.btn--black:focus,.app-chats__toggle{
+  background: #{{ theme_color_1 }};}
+.bootstrap-datetimepicker-widget table td.active, .bootstrap-datetimepicker-widget table td.active:hover,.bootstrap-datetimepicker-widget table td span.active,s.bootstrap-datetimepicker-widget table td.today:before {
+  background-color: #{{ theme_color_1 }};}
+.btn--white:hover,.btn--white:focus,.ui-size__input:checked ~ .ui-size__btn,.ui-size__btn:hover,.slick-current .sku__thumbs-item,.slick-current .sku__thumbs-video,.sku__thumbs-item:hover,.filter__clear:hover,.cart__clear:hover,.btn--black:hover,.btn--black:focus{
+  border-color: #{{ theme_color_1 }};}
+a:hover,.btn--link:hover,.btn--dashed:hover,.btn--dashed:focus,.products__sorting-btn:hover,.products__tabs-btn:hover,.media__item:not(.media__item--bg):hover .media__item-title,.sku__thumbs-video:hover,.tabs__btn:hover,.options__link:hover, .options__btn:hover,.brands__item-link:hover,.phone__btn:hover,.phone__link:hover,.acc__btn:hover,.lang__btn:hover,.wallet__btn:hover,.cart__item-title a:hover,.header--v1 .search .search__close:hover,.header--v2 .search .search__close:hover,.header--v3 .search .search__close:hover,.header--v4 .search .search__close:hover,.header--v6 .search .search__close:hover,.header--v7 .search .search__close:hover,.header--v1 .search .search__send:hover,.header--v2 .search .search__send:hover,.header--v3 .search .search__send:hover,.header--v4 .search .search__send:hover,.header--v6 .search .search__send:hover,.header--v7 .search .search__send:hover,.subsc-min__btn:hover,.footer__social--icons .footer__social-link:hover,.footer__social-link:hover,.footer__nav .footer__phone-link:hover,.footer--v6 .footer__middle .nav-categories__link:hover,.link:hover, .sku__brand a:hover,.link-underline:hover, .sorting__link:hover, .media__link:hover, .category__link:hover, .seo__readmore-link:hover, .breadcrumbs__link:hover, .reviews__link:hover, .reviews__item-link:hover, .footer__phone-link:hover,.link-dashed:hover, .products__status-link:hover, .sku__status-link:hover{
+  color: #{{ theme_color_3 }};}
+.pagination > li > span:after,.tabs__btn:hover:after,.subsc__btn:hover,.app-chats__toggle:hover,.pagination > li > a:after, .pagination > li > span:after{
+  background: #{{ theme_color_3 }};}
+.cart__clear:hover,.system__social-link:hover{
+  border-color: #{{ theme_color_3 }};}
+.search__input:focus,.header--v1 .search .search__input:focus,.header--v2 .search .search__input:focus,.header--v3 .search .search__input:focus,.header--v4 .search .search__input:focus,.header--v6 .search .search__input:focus,.header--v7 .search .search__input:focus,.nav__priority-toggle:after,.nav__link--arrow:after {
+  border-bottom-color: #{{ theme_color_3 }};}
+.nav__priority-toggle:after,.nav__link--arrow:after{
+  border-right-color: #{{ theme_color_3 }};}
+.ui-input:focus, .ui-textarea:focus, .ui-select .jq-selectbox__select:focus,.ui-check:hover .ui-check__radio, .ui-check:hover .ui-check__checkbox,.cart__counter:after,.ctrl-v6__btn-counter:after,.ctrl-v4__btn-counter:after{
+  border-color: rgba({{ theme_color_4 }}); /* {{ theme_color_2 }} 0.5 */ }
+.btn--dashed span,.products__sorting-btn,.media__item-title u,.phone__link,.link--underline, .sku__brand a,.link--dashed,.link-underline, .sorting__link, .media__link, .category__link, .seo__readmore-link, .breadcrumbs__link, .reviews__link, .reviews__item-link, .footer__phone-link,.link-dashed, .products__status-link, .sku__status-link{
+  border-bottom-color: rgba({{ theme_color_5 }}); /* {{ theme_color_2 }} 0.1 */ }
+.footer__nav .footer__phone-link:hover{
+  border-color: rgba({{ theme_color_5 }}); /* {{ theme_color_2 }} 0.1 */ }
+{% endif %}
+
+{% if (theme_fc_color) %} 
+/* {{ theme_fc_color_1 }} {{ theme_fc_color_2 }} {{ theme_fc_color_3 }} */
+.app--v7 .slider,.header--v7.header,.app--v8 .slider,.header--v8.header,.header--v8 .nav,.cart__btn:after,.ctrl-v6__btn:after,.ctrl-v4__btn:after {
+  background: #{{ theme_fc_color_1 }};}
+.cart:after,.ctrl-v6 .ctrl:after,.ctrl-v4 .ctrl:after,.ctrl-v6__btn:before,.ctrl-v4__btn:before,.header--v2 .search:after,.header--v3 .search:after,.header--v7 .search:after{
+  border-left-color: #{{ theme_fc_color_1 }};}
+.header--v2 .search .search__input,.header--v3 .search .search__input,.header--v7 .search .search__input{
+  border-color: #{{ theme_fc_color_1 }};}
+@media (min-width: 768px) and (max-width: 1199px) {
+.header--v1 .search:after,.header--v4 .search:after,.header--v6 .search:after,.header--v8 .search:after,.header--v9 .search:after,.header--v10 .search:after{
+  border-left-color: #{{ theme_fc_color_1 }};}
+.header--v1 .search .search__input,.header--v4 .search .search__input,.header--v6 .search .search__input,.header--v8 .search .search__input,.header--v9 .search .search__input,.header--v10 .search .search__input{
+  border-color: #{{ theme_fc_color_1 }};}
+}
+.topline,.footer__nav {
+  background: #{{ theme_fc_color_2 }};}
+.footer__subsc,.footer__line,.footer--service {
+  background: #{{ theme_fc_color_3 }};}
+{% endif %}
+
+{% if (not product_detail) %}.btn--preview.js-btn-preview {display: none;}{% endif %}
+{% if (custom_css or container_width) %} 
+{% if (container_width) %}
+@media (min-width: 992px) {
+.container-fluid {max-width: {{ container_width }};}
+.slides--width-container {max-width: calc({{ container_width }} - 4.0rem);}
+}
+@media (min-width: {{ container_width == '160rem' ? '1600px' : '1200px' }}) {
+.slides .slick-prev {margin: 0 0 0 calc(-{{ container_width }}/2);} 
+.slides .slick-next {margin: 0 calc(-{{ container_width }}/2) 0 0;}
+}
+{% endif %}	
+{{ custom_css }} 
+{% endif %}	
+</style>
+{% for link in links %} 
+		<link href="{{ link['href'] }}" rel="{{ link['rel'] }}">
+{% endfor %} 
+{% if (js_footorhead == 1) %} 
+		<script src="catalog/view/javascript/technics/plugins.min.js{{ '?v'~version }}"></script>
+		{{ fontawesome == 1 ? '<script defer src="catalog/view/javascript/technics/fontawesome/js/all.min.js?v' ~ version ~ '"></script>' : '' }} 
+		<script src="catalog/view/javascript/technics/bootstrap/{{ bootstrap_ver ? '4.4.1' : '3.3.5' }}/bootstrap.min.js{{ '?v'~version }}"></script>
+		<script src="catalog/view/javascript/technics/app.min.js{{ '?v'~version }}"></script>
+{% for script in scripts %} 
+		<script src="{{ script }}"></script>
+{% endfor %} 
+{% endif %} 
+
+{% if (js_footorhead == 1 and custom_js) %} 
+		<script>{{ custom_js }}</script>
+{% endif %} 
+
+{% for analytic in analytics %} 
+{{ analytic }} 
+{% endfor %} 
+
+<!-- VK Pixel Code -->
+<script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?169",t.onload=function(){VK.Retargeting.Init("VK-RTRG-1221130-3pMrG"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-1221130-3pMrG" style="position:fixed; left:-999px;" alt=""/></noscript>
+<!-- End VK Pixel Code -->
+
+  {% if (yandex_metrica_status is not empty) and (yandex_metrica_status == 1) %} 
+  <!-- Yandex.Metrica counters -->
+  {% if yandex_metrics is not empty %}
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+  </script>
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    {% for metrica in yandex_metrics %}
+    ym({{ metrica.code }}, "init", {
+      clickmap:true,
+      trackLinks:true,
+      accurateTrackBounce:true,
+      webvisor:{{ metrica.ya_metrica_webvizor }},
+      ecommerce:"dataLayer",
+      params: { __ym: {"ymCmsPlugin": { "cms": "opencart", "cmsVersion":"{{ cms_version }}", "pluginVersion":"1.1.6"}}}
+    });
+    {% endfor %}
+  </script>
+  <noscript>
+    <div>
+      {% for metrica in yandex_metrics %}
+      <img src="https://mc.yandex.ru/watch/{{ metrica.code }}" style="position:absolute; left:-9999px;" alt="" />
+      {% endfor %}
+    </div>
+  </noscript>
+  {% endif %}
+  <!-- /Yandex.Metrica counters -->
+  {% endif %}
+
+  </head>
+  <body class="page-homepage{{ class ? ' ' ~ class : '' }}">
+    <!-- Rating Mail.ru counter -->
+    <script type="text/javascript">
+    var _tmr = window._tmr || (window._tmr = []);
+    _tmr.push({id: "3247903", type: "pageView", start: (new Date()).getTime(), pid: "USER_ID"});
+    (function (d, w, id) {
+    if (d.getElementById(id)) return;
+    var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+    ts.src = "https://top-fwz1.mail.ru/js/code.js";
+    var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
+    if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+    })(document, window, "topmailru-code");
+    </script><noscript><div>
+    <img src="https://top-fwz1.mail.ru/counter?id=3247903;js=na" style="border:0;position:absolute;left:-9999px;" alt="Top.Mail.Ru" />
+    </div></noscript>
+    <!-- //Rating Mail.ru counter -->
+
+    <div class="app app--v{{ header_type }}">
+      <!-- Popups :: Start-->
+	  <!--noindex-->
+      <div class="popup popup--570" style="display: none;" id="signin">
+        <button class="popup__close" data-fancybox-close>
+          <svg class="icon-close">
+            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-close"></use>
+          </svg>
+        </button>
+        <div class="signin">
+          <div class="row">
+            <div class="col-12 col-md-12">
+              <div class="signin__head"><span class="signin__title">{{ text_account_title }}</span></div>
+              <div class="signin__body">
+                <form action="{{ login }}" enctype="multipart/form-data" id="loginform" method="post">
+                  <label class="ui-label">{{ text_technics_email }}</label>
+                  <div class="ui-field">
+                    <input class="ui-input" type="email" name="email" placeholder="{{ text_technics_email }}" required>
+                  </div>
+                  <label class="ui-label">{{ text_account_password }}</label>
+                  <div class="ui-field">
+                    <input class="ui-input" type="password" name="password" placeholder="{{ text_account_password }}" required>
+					<a href="{{ forgotten }}">{{ text_forgotten }}</a>
+                  </div>
+                  <div class="signin__action">
+					<button class="btn btn--blue" form="loginform" type="submit">{{ text_account_submit }}</button>
+					<a class="btn btn--link" href="{{ register }}">{{ text_register }}</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+	  <!--/noindex-->
+      <!-- Popups :: End-->
+	  {{ header_view }}

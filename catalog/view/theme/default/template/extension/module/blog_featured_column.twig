@@ -1,0 +1,18 @@
+				<div class="catalogue__product">
+					<span class="catalogue__product-title">
+						{{ heading_title }} 
+					</span>
+					<ul class="catalogue__product-list">
+					{% for article in articles %}
+						<li class="catalogue__product-list-item">		
+							<a class="catalogue__product-list-link" href="{{ article['href'] }}">
+								<img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ article['thumb'] }}" alt="{{ article['name'] }}">
+							</a>
+							<div class="catalogue__product-list-item-desc">
+								<a class="link--brown" href="{{ article['href'] }}"><span>{{ article['name'] }}</span></a>
+								<p style="max-height: 69px;overflow: hidden;padding: 0;">{{ article.description }}</p>
+							</div>
+						</li>
+					{% endfor %} 
+					</ul>
+				</div>

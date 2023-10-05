@@ -1,0 +1,289 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+       <!-- Article :: Start-->
+        <article class="article">
+          <div class="container-fluid">
+		    {% if (blog_background) %}
+			  <figure class="article__image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ image }}" alt="{{ heading_title }}"></figure>
+			{% endif %}
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col == 12 ? 8 : col }}">
+			 <h1 class="article__heading">{% if (blog_background) %}<small>{% endif %}{{ heading_title }}{% if (blog_background) %}</small>{% endif %}</h1>
+                <div class="article__group">
+                  {% if (tags is not empty) %}
+				  <div class="article__tags">{% for tag in tags %}<a class="article__tags-item" href="{{ tag['href'] }}">{{ tag['title'] }}</a>{% endfor %}</div>
+				  {% endif %}
+                  <div class="article__numbers">{% if (commenrtsenable) %}<span class="article__numbers-item">
+                      <svg class="icon-numbers-comments">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-numbers-comments"></use>
+                      </svg>{{ totalComments }}</span>{% endif %}<span class="article__numbers-item">
+                      <svg class="icon-numbers-views">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-numbers-views"></use>
+                      </svg>{{ viewed }}</span></div>
+                </div>
+				<div class="editor">
+					{{ description }}
+				</div>
+				<div class="share">
+				{% if (soc_share_blog) %}
+				<p class="share__text">{{ text_technics_share }}</p>
+						{% if (soc_share_code) %} 
+							{{ soc_share_code }} 
+						{% else %} 
+							<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4dc053ae406c06af"></script>
+							<div class="addthis_inline_share_toolbox"></div>
+						{% endif %} 
+				{% endif %}
+				</div>
+			</div>
+			<div class="col-xl-3">
+				<span class="article__time">
+				{{ date_added }}
+				</span>
+				{{ column_right }}
+			</div>
+            </div>
+			{% if (blogs is not empty) %} 
+            <div class="article__other">
+              <h2 class="article__other-heading">{{ text_related }} </h2>
+				<div class="article__other-slides js-slick-article">
+				{% for blog in blogs %} 
+				<a class="blog__item" href="{{ blog['href'] }}">
+                  <figure class="blog__item-image"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ blog['thumb'] }}" alt="{{ blog['name'] }}">
+                          <div class="blog__item-numbers">{% if (blog['commenrtsenable']) %}<span class="blog__item-numbers-item">
+                              <svg class="icon-numbers-comments">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-numbers-comments"></use>
+                              </svg>{{ blog['commentcount'] }}</span>{% endif %}<span class="blog__item-numbers-item">
+                              <svg class="icon-numbers-views">
+                                <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-numbers-views"></use>
+                              </svg>{{ blog['viewed'] }}</span></div>
+				  </figure>
+                  <h3 class="blog__item-title">{{ blog['name'] }}</h3>
+                  <p class="blog__item-text">{{ blog['description'] }}</p>
+				  		<span class="blog__item-time">
+							{{ blog['date'] }}
+						</span>
+				</a>
+				{% endfor %} 
+				</div>
+            </div>
+			{% endif %} 
+          </div>
+        </article>
+        <!-- Article :: End-->
+		{% if (commenrtsenable) %} 
+        <!-- Comments :: Start-->
+        <div class="comments">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-8 push-lg-2">
+                <h2 class="comments__heading">{{ text_comments }} ({{ totalComments }})</h2>
+                <div class="comments__container">
+				{% if (totalComments != 0) %}
+				  {% for comment in comments %}
+                  <div class="comments__item">
+                    <figure class="comments__item-image">
+                      <svg class="icon-photo">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-photo"></use>
+                      </svg>
+                    </figure>
+                    <p class="comments__item-author"><b>{{ comment['author'] }}</b><small>{{ comment['date_added'] }}</small></p>
+                    <div class="comments__item-message">
+                      <p>{{ comment['text'] }}</p>
+                    </div>
+                  </div>
+				  {% endfor %}
+				{% else %} 
+				<div class="comments__item" style="padding: 0;">{{ text_first_comment }}</div>
+				{% endif %} 
+                  <div class="comments__form">
+				  <div class="message"></div>
+                    <form id="form-comment">
+				      <input class="ui-input" type="text" value="{{ email }}" name="name" placeholder="{{ text_comment_name }}">
+                      <textarea name="text" class="ui-textarea" placeholder="{{ text_comment_text }}"></textarea>
+					  {{ captcha }}
+					  <input type="hidden"  name="blog_id" value="{{ blog_id }}">
+                      <div class="comments__form-action">
+						<button type="button" class="btn btn--blue" data-loading-text="{{ text_loading }}" onclick="comment.add('{{ blog_id }}');">{{ text_comment_add }}</button>
+                      </div>
+						{% if (text_technics_pdata) %} 
+							<div class="technics-pdata">{{ text_technics_pdata }}</div>
+						{% endif %} 
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+		{% endif %}
+        <!-- comments :: End-->
+		{% if (products is not empty) %} 
+        <!-- Products :: Start-->
+        <div class="products products--recomended">
+          <div class="container-fluid">
+            <h2 class="products__heading">{{ text_related_products }}</h2>
+            <div class="products__slides js-slick-recomended">
+			  {% for product in products %}
+              <div class="products__item">
+                <div class="products__item-in">
+                  <div class="products__item-buttons">
+				  <a class="btn btn--blog" title="{{ button_compare }}" onclick="compare.add('{{ product['product_id'] }}');">
+                      <svg class="icon-blog">
+                         <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-blog"></use>
+                      </svg></a>
+				  <a class="btn btn--like" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product['product_id'] }}');">
+                      <svg class="icon-like">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-like"></use>
+                      </svg></a>
+				  </div>
+				  <div class="products__item-stickers">
+				  {% if (product['rating'] != constant('false')) %}
+					<div class="products__item-rating">
+						<svg class="icon-star">
+							<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+						</svg>{{ product['rating'] }}/5
+					</div>
+					{% endif %}
+					{% if (product['isnewest']) %} 
+						<mark class="products__item-mark products__item-mark--new">{{ labelsinfo['new']['name'][language_id] }}</mark>
+					{% endif %} 
+					{% if (product['special'] and product['sales']) %} 
+						<mark class="products__item-mark products__item-mark--sale">{{ labelsinfo['sale']['name'][language_id] ~ ' ' ~ product['discount'] }}</mark>
+					{% endif %} 
+					{% if (product['popular']) %} 
+						<mark class="products__item-mark products__item-mark--popular">{{ product['popular'] }}</mark>
+					{% endif %} 
+					{% if (product['hit']) %} 
+						<mark class="products__item-mark products__item-mark--hit">{{ product['hit'] }}</mark>
+					{% endif %} 
+					{% if (product['catch']) %} 
+						{% if (product['nocatch']) %} 
+							<mark class="products__item-mark products__item-mark--nocatch">{{ product['catch'] }}</mark>
+						{% else %} 
+							<mark class="products__item-mark products__item-mark--catch">{{ product['catch'] }}</mark>
+						{% endif %} 
+					{% endif %} 
+				  </div>
+				  {% if (not product['images']) %} 
+					<div class="products__item-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+				  {% else %}
+				  <div class="products__item-images js-slick-products">
+					<a href="{{ product['href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+					{% for imageX in product['images'] %} 
+						<a href="{{ product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+				  {% endfor %} 
+				  </div>
+				  {% endif %}
+                  <div class="products__item-desc">
+				  {% if (product['manufacturer']) %} 
+				  <span class="products__item-category">{{ product['brand_name'] ?: product['manufacturer'] }}</span>
+				  {% endif %}
+				  <a href="{{ product['href'] }}" class="products__item-title">{{ product['name'] }}</a>
+				  <span class="products__item-price">
+					{% if (product['price']) %} 
+						{% if (product['special']) %} 
+							<u>{{ product['price'] }}</u>{{ product['special'] }} 
+						{% else %} 
+							{{ product['price'] }}
+						{% endif %}
+					{% endif %} 
+					{% if (product['isProductHasPriceForMasters']) %}
+						<span class="products__item-master-price"><b>%</b> для мастера</span>
+					{% endif %}
+				  </span>		
+							<div class="products__item-action">
+								<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ product.product_id }}');" {{ product['buy_btn'] ? 'disabled' : ''}}>{{ button_cart }}
+								<svg class="icon-cart">
+								  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-cart"></use>
+								</svg></button>
+								<a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                                <svg class="icon-preview">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                </svg></a>
+							</div>
+                  </div>
+                </div>
+              </div>
+			  {% endfor %}
+            </div>
+          </div>
+        </div>
+		{% endif %} 
+        <!-- Products :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+          {
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+			{% for i,breadcrumb in breadcrumbs %}
+			{
+              "@type": "ListItem",
+              "position": {{ i + 1 }},
+              "item": {
+                "@id": "{{ breadcrumb['href'] }}",
+                "name": "{{ breadcrumb['text'] }}"
+              }
+            }{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+			{% endfor %}
+			]
+          }
+</script>
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "BlogPosting",
+		"mainEntityOfPage":{
+		"@type":"WebPage",
+		"@id":"{{ href }}"
+		},
+		"headline": "{{ heading_title }}",
+		"image": {
+		"@type": "ImageObject",
+		"url": "{{ image }}"
+		},
+		"datePublished": "{{ schema_date_added }}",
+		"dateModified": "{{ schema_date_added }}",
+		"author": {
+		"@type": "Organization",
+		"name": "{{ store }}"
+		},
+		"publisher": {
+		"@type": "Organization",
+		"name": "{{ store }}",
+		"logo": {
+		"@type": "ImageObject",
+		"url": "{{ schema_logo }}"
+		}
+		},
+		"description": "{{ schema_meta_description }}",
+		"articleBody": "{{ schema_description }}"
+	}
+</script>
+ <!-- Schema Org :: End-->
+{% endif %}
+</body></html>

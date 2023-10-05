@@ -1,0 +1,51 @@
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!--заголовок и кнопка закрытия-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title"></h4>
+            </div>
+
+            <!--контентная часть окна-->
+            <div class="modal-body">
+<form method="post" action="index.php?route=extension/payment/dolyame/transactions/refund&user_token={{ user_token }}" enctype="multipart/form-data" id="form-dolyame-refund">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td style="width: 1px;" class="text-center"><input checked="checked" type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+          <td>{{ column_transaction_name }}</td>
+          <td>{{ column_transaction_quantity }}</td>
+          <td>{{ column_transaction_price }}</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td><input class="dolyame_payment_return_position" type="checkbox" name="selected[]" value="{{ loop.index0}}" checked="checked" /></td>
+            <td><input type="hidden" name="name[]" value="{{ item.name }}">{{ item.name }}</td>
+            <td><input id="dolyame_payment_return_quantity_{{ loop.index0}}" type='text' name="quantity[]" value="{{ item.quantity }}" class="form-control text-right" ></td>
+            <td><input id="dolyame_payment_return_price_{{ loop.index0}}" type="text" name="price[]" value="{{ item.price }}" class="form-control text-right">
+              <input type="hidden" name="sku[]" value="{{ item.sku }}">
+            </td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="3" class="text-right"><b>{{ text_prepaid_amount }}</b></td>
+          <td><input type="text" name="refunded_prepaid_amount" value="{{ prepaid }}"  class="form-control"></td>
+        </tr>
+        <tr>
+          <td colspan="3" class="text-right"><b>{{ text_total_sum }}</b></td>
+          <td><span id="dolyame_total_refund_sum">0</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="btn btn-info dolyame-refund-submit">{{ text_return_action }}</button>
+  <input type="hidden" name="order_id" value="{{ order_id }}">
+</form>
+</div>
+
+        </div>
+    </div>

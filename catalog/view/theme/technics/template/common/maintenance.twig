@@ -1,0 +1,23 @@
+{{ header }}
+        <!-- System :: Start-->
+        <div class="system system--service">
+          <div class="container-fluid">
+            <figure class="system__image"><img src="catalog/view/theme/technics/images/img-system-service.png" width="354" height="auto" alt="{{ text_technics_maintenance_message1 }}"></figure><strong class="system__title">{{ text_technics_maintenance_message1 }}</strong>
+            <p class="system__text">{{ text_technics_maintenance_message2 }}</p>
+            <div class="system__social">
+              <p class="system__social-text">{{ text_technics_con_soc2 }}</p>
+			  {% if (social_navs is not empty) %}
+              <ul class="system__social-menu">
+			  {% for key,social_nav in social_navs %}
+                <li><a class="system__social-link" href="{{ social_nav['link'] }}" target="{{ social_nav['attr'] }}" rel="nofollow">
+					<svg class="icon-social-{{ (social_links[social_nav['settype']])|lower }}">
+						<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-social-{{ (social_links[social_nav['settype']])|lower }}"></use>
+					</svg>{{ social_nav['language'][language_id]['name'] }}</a></li>
+			  {% endfor %}
+              </ul>
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- System :: End-->
+{{ footer }}

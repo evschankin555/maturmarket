@@ -1,0 +1,203 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		{{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="personal__data">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<fieldset class="ui-fieldset">
+				<p class="ui-caption">{{ text_description }}</p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-to-name">{{ entry_to_name }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_to_name %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="to_name" placeholder="{{ entry_to_name }}" value="{{ to_name }}" id="input-to-name">
+									{% if error_to_name %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_to_name }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-to-email">{{ entry_to_email }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_to_email %} is-error{% endif %}">
+									<input class="ui-input" type="email" name="to_email" placeholder="{{ entry_to_email }}" value="{{ to_email }}" id="input-to-email">
+									{% if error_to_email %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_to_email }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-from-name">{{ entry_from_name }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_from_name %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="from_name" placeholder="{{ entry_from_name }}" value="{{ from_name }}" id="input-from-name">
+									{% if error_from_name %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_from_name }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-from-email">{{ entry_from_email }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_from_email %} is-error{% endif %}">
+									<input class="ui-input" type="email" name="from_email" placeholder="{{ entry_from_email }}" value="{{ from_email }}" id="input-from-email">
+									{% if error_from_email %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_from_email }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required">{{ entry_theme }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_theme %} is-error{% endif %}">
+									{% for voucher_theme in voucher_themes %}
+									{% if voucher_theme.voucher_theme_id == voucher_theme_id %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="voucher_theme_id" type="radio" value="{{ voucher_theme.voucher_theme_id }}" checked="checked">
+										<span class="ui-check__radio">
+										</span>
+										{{ voucher_theme.name }}
+									</label>
+									{% else %}
+									<label class="ui-check">
+										<input class="ui-check__input" name="voucher_theme_id" type="radio" value="{{ voucher_theme.voucher_theme_id }}">
+										<span class="ui-check__radio">
+										</span>
+										{{ voucher_theme.name }}
+									</label>
+									{% endif %}
+									{% endfor %}
+									{% if error_theme %}
+									<span class="error ui-error">{{ error_theme }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label" for="input-message" data-toggle="tooltip" title="{{ help_message }}">{{ entry_message }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field">
+									<textarea class="ui-textarea" name="message" placeholder="{{ entry_message }}" id="input-comment">{{ message }}</textarea>
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-amount">{{ entry_amount }}<br>{{ help_amount }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_amount %} is-error{% endif %}">
+									<input class="ui-input" type="text" name="amount" placeholder="{{ entry_amount }}" value="{{ amount }}" id="input-amount">
+									{% if error_amount %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_amount }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+			</fieldset>
+			{% if (text_technics_pdata_checkbox) %} 	
+				<div class="personal__action">
+                      <label class="ui-check">
+                        <input class="ui-check__input" value="1" type="checkbox" name="pdata" {{ pdata ? 'checked="checked"' : ''}}>
+						<span class="ui-check__checkbox">
+                          <svg class="icon-check">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                          </svg></span>{{ text_technics_pdata_checkbox }}
+                      </label>
+					{% if error_pdata %}
+						<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_pdata }}</span>
+					{% endif %} 
+				</div>
+			{% endif %}	
+			{% if text_agree %}
+				<div class="personal__action">
+                      <label class="ui-check">
+                        <input class="ui-check__input" value="1" type="checkbox" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+						<span class="ui-check__checkbox">
+                          <svg class="icon-check">
+                            <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-check"></use>
+                          </svg></span>{{ text_agree }}
+                      </label>
+				</div>
+			{% endif %}
+				<div class="personal__action">
+					<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+				</div>
+			</form>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

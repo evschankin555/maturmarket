@@ -1,0 +1,85 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts">
+	{% if success %}
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		{{ success }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		{{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<svg class="icon-delete">
+			<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+		</svg>
+		</button>
+	</div>
+	{% endif %}
+</div>
+
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="row">
+				{% if (addresses) %} 
+					{% for result in addresses %} 
+						<div class="col-md-6 col-sm-6">
+							<div class="ui-card">
+							<a href="{{ result['delete'] }}" class="ui-card--delete" title="{{ button_delete }}">
+                                <svg class="icon-delete">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use>
+                                </svg>
+									</a>
+								<p>{{ result['address'] }}</p>
+								<a href="{{ result['update'] }}" class="btn btn--sm btn--transparent">{{ button_edit }}</a>
+							</div>
+						</div>
+					{% endfor %} 
+				{% else %} 
+				<div class="col-sm-12"><p>{{ text_empty }}</p></div>
+				{% endif %} 
+				<div class="col-sm-12">		
+					<div class="personal__action">
+						<a href="{{ back }}" class="btn btn--transparent">{{ button_back }}</a>
+						<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+					</div>
+				</div>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

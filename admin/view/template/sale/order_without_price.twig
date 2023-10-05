@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+<head>
+<meta charset="UTF-8" />
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+<link href="view/javascript/bootstrap/css/bootstrap.css" rel="stylesheet" media="all" />
+<script type="text/javascript" src="view/javascript/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="view/javascript/bootstrap/js/bootstrap.min.js"></script>
+<link href="view/javascript/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+<link type="text/css" href="view/stylesheet/stylesheet.css" rel="stylesheet" media="all" />
+</head>
+<body>
+<div class="container">
+  {% for order in orders %}
+  <div style="page-break-after: always;">
+    <h1>{% if order.invoice_no %}{{ text_invoice }} #{{ order.invoice_no }}{% else %}{{ text_order }}{% endif %}</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <td><b>{{ column_product }}</b></td>
+          <td><b>{{ column_model }}</b></td>
+          <td class="text-right"><b>{{ column_quantity }}</b></td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in order.product %}
+        <tr>
+          <td>{{ product.name }}
+            {% for option in product.option %}
+            <br />
+            &nbsp;<small> - {{ option.name }}: {{ option.value }}</small>
+            {% endfor %}</td>
+          <td>{{ product.model }}</td>
+          <td class="text-right">{{ product.quantity }}</td>
+        </tr>
+        {% endfor %}
+        {% for voucher in order.voucher %}
+        <tr>
+          <td>{{ voucher.description }}</td>
+          <td></td>
+          <td class="text-right">1</td>
+          <td class="text-right">{{ voucher.amount }}</td>
+          <td class="text-right">{{ voucher.amount }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if order.comment %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <td><b>{{ text_comment }}</b></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ order.comment }}</td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+</body>
+</html>

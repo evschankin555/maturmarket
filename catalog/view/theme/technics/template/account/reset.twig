@@ -1,0 +1,78 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			<div class="personal__data">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data">
+			<fieldset class="ui-fieldset">
+				<legend class="ui-legend">{{ text_password }}</legend>
+				<p class="ui-caption"></p>
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-password">{{ entry_password }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_password %} is-error{% endif %}">
+									<input class="ui-input" type="password" name="password" placeholder="{{ entry_password }}" value="{{ password }}" id="input-password">
+									{% if error_password %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_password }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>	
+					<div class="personal__group form-group">
+						<div class="row">
+							<div class="col-auto">
+								<label class="ui-label required" for="input-confirm">{{ entry_confirm }}</label>
+							</div>
+							<div class="col">
+								<div class="ui-field{% if error_confirm %} is-error{% endif %}">
+									<input class="ui-input" type="password" name="confirm" placeholder="{{ entry_confirm }}" value="{{ confirm }}" id="input-confirm">
+									{% if error_confirm %}
+									<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">{{ error_confirm }}</span>
+									{% endif %} 
+								</div>
+							</div>
+						</div>	
+					</div>			
+			</fieldset>
+				<div class="personal__action">
+					<a href="{{ back }}" class="btn btn--transparent">{{ button_back }}</a>
+					<button type="submit" class="btn btn--blue">{{ button_continue }}</button>
+				</div>
+			</form>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

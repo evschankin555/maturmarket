@@ -1,0 +1,80 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+				<div class="return_info_caption ui-legend">{{ return_info_caption }}</div>
+				<div class="return_info_address">{{ return_info_address }}</div>
+				<div class="return_info_advice">{{ return_info_advice }}</div>
+				<br>
+			  {% if returns %}
+			  <div class="table-responsive">
+				<table class="table table-bordered table-hover">
+				  <thead>
+					<tr>
+					  <td class="text-right">{{ column_return_id }}</td>
+					  <td class="text-left">{{ column_status }}</td>
+					  <td class="text-left">{{ column_date_added }}</td>
+					  <td class="text-right">{{ column_order_id }}</td>
+					  <td class="text-left">{{ column_customer }}</td>
+					  <td></td>
+					</tr>
+				  </thead>
+				  <tbody>
+				  
+				  {% for return in returns %}
+				  <tr>
+					<td class="text-right">#{{ return.return_id }}</td>
+					<td class="text-left">{{ return.status }}</td>
+					<td class="text-left">{{ return.date_added }}</td>
+					<td class="text-right">{{ return.order_id }}</td>
+					<td class="text-left">{{ return.name }}</td>
+					<td class="text-right"><a href="{{ return.href }}" class="btn btn--blue btn--sm">{{ button_view }}</a></td>
+				  </tr>
+				  {% endfor %}
+					</tbody>
+				  
+				</table>
+			  </div>
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+			  {% else %}
+			  <p>{{ text_empty }}</p>
+			  {% endif %}
+				<div class="personal__action">
+					<a href="{{ continue }}" class="btn btn--transparent">{{ button_continue }}</a>
+				</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>
