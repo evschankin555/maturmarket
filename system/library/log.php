@@ -18,9 +18,16 @@ class Log {
 	 *
 	 * @param	string	$filename
  	*/
-	public function __construct($filename) {
-		$this->handle = fopen(DIR_LOGS . $filename, 'a');
-	}
+    public function __construct($filename) {
+        try {
+            $this->handle = @fopen(DIR_LOGS . $filename, 'a');
+            if ($this->handle === false) {
+                throw new Exception("Unable to open or create the log file.");
+            }
+        } catch (Exception $e) {
+            // Просто игнорируем ошибку, не выводим ее для пользователя
+        }
+    }
 	
 	/**
      * 
