@@ -5546,6 +5546,8 @@ class ControllerCatalogImport extends Controller {
 					$extra_image1 = $row[9];
 					$extra_image2 = null;
 
+                    $tags = $row[10];
+
 					if (!empty($size) && count($size) > 0 && !empty($size[0])){
 						$length = $size[0];		
 						$width = $size[1];
@@ -5628,7 +5630,7 @@ class ControllerCatalogImport extends Controller {
 								'meta_description' => $productName,
 								'meta_keyword'     => $productName,
 								'description'      => $productDescription,
-								'tag'			   => '',
+								'tag'			   => $tags,
 								'consist'		   => $consist
 						);
 					}
@@ -5720,7 +5722,7 @@ class ControllerCatalogImport extends Controller {
 							$product_description[$language['language_id']]['meta_keyword'] = isset($product_old_description[$language['language_id']]['meta_keyword']) ? 
 												$product_old_description[$language['language_id']]['meta_keyword'] : $productName;
 							$product_description[$language['language_id']]['tag'] = isset($product_old_description[$language['language_id']]['tag']) ? 
-												$product_old_description[$language['language_id']]['tag'] : '';							
+												$product_old_description[$language['language_id']]['tag'] : '';
 						}
 
 						$product_filter = $this->model_catalog_product->getProductFilters($product_id);
@@ -7441,8 +7443,7 @@ class ControllerCatalogImport extends Controller {
 				if (!trim($row[1])){ // Если тут пусто, то это наименование категории
 					$categoryName = trim($row[2]);
 					$category = $this->model_catalog_category->getCategoryByManufacturerAndImportName($manufacturer_id, $categoryName);
-
-					if (empty($category['category_id'])){ 
+					if (empty($category['category_id'])){
 						// Убрал создание категории, а вместо этого, если не нашли соответствия, то ругаемся и не грузим ни категорию, ни ее товары
 						$this->log->write('Не найдено соответствие категории "' . $categoryName . '" для поставщика ' . $manufacturer['name'] . '. Категория и ее товары не загружены! ');
 						$category_id = 0;
@@ -7465,8 +7466,7 @@ class ControllerCatalogImport extends Controller {
 				} else { // Иначе это товар
 					if ($category_id == 0){
 						continue;
-					}
-
+					};
 					$SKU = trim($row[1]);
 					$productName = htmlentities(trim($row[2]));
 					$productShortDescription = htmlentities(trim($row[3]));
@@ -7481,6 +7481,7 @@ class ControllerCatalogImport extends Controller {
 					$image_remote_url = $row[7];
 					$extra_image1 = $row[8];
 					$extra_image2 = $row[9];
+					$tags = $row[10];
 
 					if (!empty($size) && count($size) > 0 && !empty($size[0])){
 						$length = $size[0];		
@@ -7573,7 +7574,7 @@ class ControllerCatalogImport extends Controller {
 								'meta_description' => $productName,
 								'meta_keyword'     => $productName,
 								'description'      => $productDescription,
-								'tag'			   => '',
+								'tag'			   => $tags,
 								'consist'		   => $consist
 						);
 					}
@@ -7667,8 +7668,7 @@ class ControllerCatalogImport extends Controller {
 												$product_old_description[$language['language_id']]['meta_description'] : $productName;
 							$product_description[$language['language_id']]['meta_keyword'] = isset($product_old_description[$language['language_id']]['meta_keyword']) ? 
 												$product_old_description[$language['language_id']]['meta_keyword'] : $productName;
-							$product_description[$language['language_id']]['tag'] = isset($product_old_description[$language['language_id']]['tag']) ? 
-												$product_old_description[$language['language_id']]['tag'] : '';							
+							$product_description[$language['language_id']]['tag'] = $tags;
 						}
 
 						$product_filter = $this->model_catalog_product->getProductFilters($product_id);
