@@ -469,31 +469,42 @@ class ControllerCatalogImport extends Controller {
 		return $manufacturer;
 	}
 
-	private function getCategoryIdByManufacturerAndName($manufacturer, $categoryName, $filter_id){
-		$manufacturer_id = $manufacturer['manufacturer_id'];
-		$category = $this->model_catalog_category->getCategoryByManufacturerAndImportName($manufacturer_id, $categoryName);
+    private function getCategoryIdByManufacturerAndName($manufacturer, $categoryName, $filter_id) {
+        $manufacturer_id = $manufacturer['manufacturer_id'];
+        $category = $this->model_catalog_category->getCategoryByManufacturerAndImportName($manufacturer_id, $categoryName);
 
-		if (empty($category['category_id'])){ 
-			// Если не нашли соответствия, то ругаемся и не грузим ни категорию, ни ее товары
-			$this->log->write('Не найдено соответствие категории "' . $categoryName . '" для поставщика ' . $manufacturer['name'] . '. Категория и ее товары не загружены! ');
-			$category_id = 0;
+        // Логирование полученной категории
+        $this->log->write('Получена категория: ' . print_r($category, true));
 
-			// А также добавим эту категорию в соответствия, но с пустой категорией, если еще не добавлена
-			if (empty($category['import_name'])){
-				$matching = array(
-					'manufacturer_id'	=> $manufacturer_id,
-					'category_id'		=> null,
-					'import_name'		=> $categoryName
-				);
-				$category = $this->model_catalog_category->addCategoryMathings($matching);
-			}
-		} else {
-			$category_id = $category['category_id'];
-			$this->addBrandFilterToCategoryIfNotExists($category_id, $filter_id);
-		}
+        if (!isset($category) && empty($category['category_id'])) {
+            // Если не нашли соответствия, то ругаемся и не грузим ни категорию, ни ее товары
+            $this->log->write('Не найдено соответствие категории "' . $categoryName . '" для поставщика ' . $manufacturer['name'] . '. Категория и ее товары не загружены! ');
+            $category_id = 0;
 
-		return $category_id;
-	}
+            // А также добавим эту категорию в соответствия, но с пустой категорией, если еще не добавлена
+            if (empty($category['import_name'])) {
+                $matching = array(
+                    'manufacturer_id'   => $manufacturer_id,
+                    'category_id'       => null,
+                    'import_name'       => $categoryName
+                );
+                $category = $this->model_catalog_category->addCategoryMathings($matching);
+
+                // Логирование добавленного соответствия
+                $this->log->write('Добавлено соответствие категории: ' . print_r($category, true));
+            }
+        } else {
+            $category_id = $category['category_id'];
+            $this->log->write('Найдено соответствие категории с ID: ' . $category_id);
+            $this->addBrandFilterToCategoryIfNotExists($category_id, $filter_id);
+        }
+
+        // Логирование возвращаемого ID категории
+        $this->log->write('Возвращаемый ID категории: ' . $category_id);
+
+        return $category_id;
+    }
+
 
 	private function parseSofiProfiXLS($filename) {
 		require_once(DIR_SYSTEM . 'library/SimpleXLSX.php');
@@ -4591,6 +4602,7 @@ class ControllerCatalogImport extends Controller {
 			$category_id = null;
 			
 			$category_id_with_series = (string)$offer->categoryId . '-' . $series;
+
 			if (array_key_exists($category_id_with_series, $categories)) {
 				$category_id = $categories[$category_id_with_series]; // Сначала поищем в кеш-массиве
 			}
@@ -4604,6 +4616,10 @@ class ControllerCatalogImport extends Controller {
 
 			if (!$category_id){ // Если из кеша пришел null, то поищем в БД
 				$category_name_with_series = $series ? $category_names[(string)$offer->categoryId] . '-' . $series : $category_names[(string)$offer->categoryId];
+                if($category_name_with_series == 'Краска для волос-EVE Experience'){
+                    $category_name_with_series = 'Краска для волос-FarmaVita';
+                }
+                $this->log->write('$category_name_with_series = ' . $category_name_with_series . ' ');
 				$category_id = $this->getCategoryIdByManufacturerAndName($manufacturer, $category_name_with_series, $filter_id);
 				$categories[$category_id_with_series] = $category_id; // Кладем в кеш (даже если 0 - это означает, что категорию уже искали в БД и не нашли)
 				if (!$category_id){ // Если и в БД не нашли соответствие для такой категории, то пропустим ее
@@ -4616,7 +4632,10 @@ class ControllerCatalogImport extends Controller {
 			$productShortDescription = htmlentities(trim((string)$offer->description));
 			$productDescription = htmlentities(trim((string)$offer->description));
 			$price = (int)trim((string)$offer->oldprice) * 1.05; // Цена РРЦ
-			if (!$price){
+            $this->log->write('$productName = ' . $productName . ' ');
+            $this->log->write('$price = ' . $price . ' ');
+
+            if (!$price){
 				$this->log->write('Для товара с offer_id = ' . $SKU . ' не указана цена РРЦ (oldprice)');
 				continue;
 			}

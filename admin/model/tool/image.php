@@ -1,52 +1,75 @@
 <?php
 class ModelToolImage extends Model {
-	public function resize($filename, $width, $height) {
-		if (!is_file(DIR_IMAGE . $filename) || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $filename)), 0, strlen(DIR_IMAGE)) != str_replace('\\', '/', DIR_IMAGE)) {
-			return;
-		}
+    public function resize($filename, $width, $height) {
+        $file_path = DIR_IMAGE . $filename;
 
-		$extension = pathinfo($filename, PATHINFO_EXTENSION);
+        // Проверка существования и доступности файла
+        if (!is_file($file_path)) {
+            $this->log->write('Файл не найден или недоступен: ' . $file_path);
+            return;
+        }
 
-		$image_old = $filename;
-		$image_new = 'cache/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . $width . 'x' . $height . '.' . $extension;
+        if (substr(str_replace('\\', '/', realpath($file_path)), 0, strlen(DIR_IMAGE)) != str_replace('\\', '/', DIR_IMAGE)) {
+            $this->log->write('Файл вне разрешенной директории: ' . $file_path);
+            return;
+        }
 
-		if (!is_file(DIR_IMAGE . $image_new) || (filemtime(DIR_IMAGE . $image_old) > filemtime(DIR_IMAGE . $image_new))) {
-			list($width_orig, $height_orig, $image_type) = getimagesize(DIR_IMAGE . $image_old);
-			// $this->log->write('image ' . DIR_IMAGE . $image_old );
-				 
-			if (!in_array($image_type, array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF, IMAGETYPE_WEBP))) { 
-				if ($this->request->server['HTTPS']) {
-					return HTTPS_CATALOG . 'image/' . $image_old;
-				} else {
-					return HTTP_CATALOG . 'image/' . $image_old;
-				}
-			}
- 
-			$path = '';
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-			$directories = explode('/', dirname($image_new));
+        $image_old = $filename;
+        $image_new = 'cache/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . $width . 'x' . $height . '.' . $extension;
 
-			foreach ($directories as $directory) {
-				$path = $path . '/' . $directory;
+        $file_old_path = DIR_IMAGE . $image_old;
+        $file_new_path = DIR_IMAGE . $image_new;
 
-				if (!is_dir(DIR_IMAGE . $path)) {
-					@mkdir(DIR_IMAGE . $path, 0777);
-				}
-			}
+        if (!is_file($file_new_path) || (filemtime($file_old_path) > filemtime($file_new_path))) {
+            $image_info = @getimagesize($file_old_path);
 
-			if ($width_orig != $width || $height_orig != $height) {
-				$image = new Image(DIR_IMAGE . $image_old);
-				$image->resize($width, $height);
-				$image->save(DIR_IMAGE . $image_new);
-			} else {
-				copy(DIR_IMAGE . $image_old, DIR_IMAGE . $image_new);
-			}
-		}
+            if ($image_info === false) {
+                // Логирование ошибки
+                $this->log->write('Ошибка чтения изображения: ' . $file_old_path);
+                return;
+            }
 
-		if ($this->request->server['HTTPS']) {
-			return HTTPS_CATALOG . 'image/' . $image_new;
-		} else {
-			return HTTP_CATALOG . 'image/' . $image_new;
-		}
-	}
+            list($width_orig, $height_orig, $image_type) = $image_info;
+
+            if (!in_array($image_type, array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF, IMAGETYPE_WEBP))) {
+                $this->log->write('Неподдерживаемый тип изображения: ' . $file_old_path);
+                if ($this->request->server['HTTPS']) {
+                    return HTTPS_CATALOG . 'image/' . $image_old;
+                } else {
+                    return HTTP_CATALOG . 'image/' . $image_old;
+                }
+            }
+
+            $path = '';
+
+            $directories = explode('/', dirname($image_new));
+
+            foreach ($directories as $directory) {
+                $path = $path . '/' . $directory;
+
+                if (!is_dir(DIR_IMAGE . $path)) {
+                    if (!@mkdir(DIR_IMAGE . $path, 0777) && !is_dir(DIR_IMAGE . $path)) {
+                        $this->log->write('Не удалось создать директорию: ' . DIR_IMAGE . $path);
+                        return;
+                    }
+                }
+            }
+
+            if ($width_orig != $width || $height_orig != $height) {
+                $image = new Image($file_old_path);
+                $image->resize($width, $height);
+                $image->save($file_new_path);
+            } else {
+                copy($file_old_path, $file_new_path);
+            }
+        }
+
+        if ($this->request->server['HTTPS']) {
+            return HTTPS_CATALOG . 'image/' . $image_new;
+        } else {
+            return HTTP_CATALOG . 'image/' . $image_new;
+        }
+    }
 }

@@ -66,6 +66,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="storage">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="wf-maaeditori">
         <serverdata>
           <mappings>

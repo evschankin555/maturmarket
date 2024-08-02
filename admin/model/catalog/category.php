@@ -361,11 +361,81 @@ class ModelCatalogCategory extends Model {
 		return $query->rows;
 	}
 
-	public function getCategoryByManufacturerAndImportName($manufacturer_id, $importName) {
-		$query = $this->db->query("SELECT category_matching_for_import_id, import_name, matching.category_id , GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS name FROM " . DB_PREFIX . "category_matching_for_import matching LEFT JOIN " . DB_PREFIX . "category_path cp ON matching.category_id = cp.category_id LEFT JOIN " . DB_PREFIX . "category_description cd1 ON cp.path_id = cd1.category_id AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' WHERE matching.manufacturer_id = '" . (int)$manufacturer_id . "' AND matching.import_name = '" . $this->db->escape($importName) . "'");
+    public function getCategoryByManufacturerAndImportName($manufacturer_id, $importName) {
+        // Логирование входных данных
+        $this->log->write('Входные данные для getCategoryByManufacturerAndImportName: manufacturer_id = ' . (int)$manufacturer_id . ', import_name = ' . $importName);
 
-		return $query->row;
-	}
+        // Оригинальный запрос
+        $query_original = $this->db->query("SELECT category_matching_for_import_id, import_name, matching.category_id , GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS name FROM " . DB_PREFIX . "category_matching_for_import matching LEFT JOIN " . DB_PREFIX . "category_path cp ON matching.category_id = cp.category_id LEFT JOIN " . DB_PREFIX . "category_description cd1 ON cp.path_id = cd1.category_id AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' WHERE matching.manufacturer_id = '" . (int)$manufacturer_id . "' AND matching.import_name = '" . $this->db->escape($importName) . "'");
+
+        // Логирование результата оригинального запроса
+        $this->log->write('Результат оригинального запроса getCategoryByManufacturerAndImportName: ' . print_r($query_original->row, true));
+        $original_result = $query_original->row;
+
+        /*
+                // Дополнительный запрос
+                $query_additional = $this->db->query("
+                SELECT
+                    category_id,
+                    name
+                FROM
+                    " . DB_PREFIX . "category_description
+                WHERE
+                    name LIKE 'Краска для волос%'
+                    AND language_id = '" . (int)$this->config->get('config_language_id') . "'
+            ");
+
+                // Логирование результата дополнительного запроса
+                $this->log->write('Результат дополнительного зроса: ' . print_r($query_additional->rows, true));
+
+                $original_result = $query_original->row;
+
+                /*
+                // Если category_id равен 0 в оригинальном запросе, попробуем найти его в дополнительном запросе и обновить запись
+                if ($original_result['category_id'] == 0) {
+                    foreach ($query_additional->rows as $row) {
+                        if ($row['name'] === $importName) {
+                            // Обновление category_id в таблице category_matching_for_import
+                            $this->db->query("
+                            UPDATE " . DB_PREFIX . "category_matching_for_import
+                            SET category_id = '" . (int)$row['category_id'] . "'
+                            WHERE category_matching_for_import_id = '" . (int)$original_result['category_matching_for_import_id'] . "'
+                        ");
+
+                            // Логирование обновления
+                            $this->log->write('Обновлен category_id для import_name ' . $importName . ' на ' . $row['category_id']);
+
+                            // Обновление значения category_id в оригинальном результате
+                            $original_result['category_id'] = (int)$row['category_id'];
+                            break;
+                        }
+                    }
+                }
+
+                // Логирование результата после возможного обновления
+                $this->log->write('Результат после обновления getCategoryByManufacturerAndImportName: ' . print_r($original_result, true));
+
+                // Дополнительный запрос для проверки всех записей с category_id = 0
+                $query_zero_categories = $this->db->query("
+                SELECT
+                    category_matching_for_import_id,
+                    manufacturer_id,
+                    import_name,
+                    category_id
+                FROM
+                    " . DB_PREFIX . "category_matching_for_import
+                WHERE
+                    category_id = 0
+            ");
+
+                // Логирование результата запроса с category_id = 0
+                $this->log->write('Записи с category_id = 0: ' . print_r($query_zero_categories->rows, true));
+        */
+        return $original_result;
+    }
+
+
+
 
 	public function getCategoryMathingsByManufacturer($manufacturer_id) {
 		$query = $this->db->query("SELECT category_matching_for_import_id, import_name, matching.category_id , GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS name FROM " . DB_PREFIX . "category_matching_for_import matching LEFT JOIN " . DB_PREFIX . "category_path cp ON matching.category_id = cp.category_id LEFT JOIN " . DB_PREFIX . "category_description cd1 ON cp.path_id = cd1.category_id AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' WHERE matching.manufacturer_id = '" . (int)$manufacturer_id . "' GROUP BY matching.import_name");

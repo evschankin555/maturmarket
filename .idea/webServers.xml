@@ -9,6 +9,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="2224da2c-7eb3-4cdf-826d-c01f96e5fe5d" name="storage">
+        <fileTransfer rootFolder="/var/www/maturmarket_storage/logs" accessType="SFTP" host="31.13.134.239" port="22" sshConfigId="b77dc076-27e1-438d-adcf-e83a5bc3eff4" sshConfig="maturmarket@31.13.134.239:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

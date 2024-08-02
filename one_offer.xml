@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2024-06-19 23:51">
+    <shop>
+        <name>Erfolg</name>
+        <company>Erfolg</company>
+        <url>https://erfolg-c.ru/</url>
+        <platform>Webasyst Shop-Script</platform>
+        <version>10.1.2</version>
+        <enable_auto_discounts>false</enable_auto_discounts>
+        <currencies>
+            <currency id="RUB" rate="1"/>
+        </currencies>
+        <categories>
+            <category id="3125">Уход за телом</category>
+            <category id="3126" parentId="3125">Обертывание</category>
+            <category id="3134">Уход за лицом, визаж</category>
+            <category id="3135" parentId="3134">Косметика для лица</category>
+            <category id="3083">Маникюр</category>
+            <category id="3086" parentId="3083">Средства по уходу за руками, ногами</category>
+            <category id="3129" parentId="3125">Средства для депиляции</category>
+            <category id="3130" parentId="3129">Сахарная паста и вспомогательные средства для шугаринга</category>
+            <category id="3087" parentId="3083">Парафинотерапия</category>
+            <category id="3133" parentId="3129">Воск и вспомогательные средства для депиляции</category>
+            <category id="3108">Уход за волосами</category>
+            <category id="3110" parentId="3108">Краска для волос</category>
+            <category id="3109" parentId="3108">Косметика для волос</category>
+            <category id="3112" parentId="3108">Кератиновое выпрямление волос</category>
+            <category id="3152" parentId="3083">Акварель для дизайна</category>
+            <category id="3091" parentId="3083">Гель-лак</category>
+            <category id="3114" parentId="3108">Электрика</category>
+            <category id="3115" parentId="3108">Бигуди</category>
+            <category id="3113" parentId="3108">Расчески</category>
+            <category id="3132" parentId="3129">Полоски и шпатели для депиляции</category>
+            <category id="3116" parentId="3108">Аксессуары</category>
+            <category id="3084" parentId="3083">Дизайн, украшения для ногтей</category>
+            <category id="3131" parentId="3129">Воскоплавы и  нагреватели</category>
+            <category id="3074">Ресницы и брови</category>
+            <category id="3079" parentId="3074">Краска для окрашивания ресниц и бровей</category>
+            <category id="3085" parentId="3083">UV Лампы для полимеризации гелей и гель-лаков</category>
+            <category id="3100" parentId="3083">Электрика</category>
+            <category id="3092" parentId="3083">​Жидкости для ногтей</category>
+            <category id="3098" parentId="3083">Акссесуары</category>
+            <category id="3094" parentId="3083">​Кисти для ногтей</category>
+            <category id="3096" parentId="3083">Гель для наращивания</category>
+            <category id="3306">Гель-лак</category>
+            <category id="3089" parentId="3083">Аппараты и насадки для маникюра</category>
+            <category id="3088" parentId="3083">​Пилки и блоки для ногтей</category>
+            <category id="3102" parentId="3083">Клей, типсы, формы</category>
+            <category id="3078" parentId="3074">Инструменты и аксессуары</category>
+            <category id="3264" parentId="3091">Покрытие базовое</category>
+            <category id="3270" parentId="3091">Покрытие топовое</category>
+        </categories>
+        <offers>
+            <offer id="55187">
+                <name>Краска для волос EVE Experience 5.0 каштановый, 100мл</name>
+                <vendor>FarmaVita</vendor>
+                <price>1678.00</price>
+                <oldprice>1970.00</oldprice>
+                <weight>0.10</weight>
+                <series>EVE Experience</series>
+                <url>https://erfolg-c.ru/eve-experience-50-kashtanovyy/</url>
+                <count>5</count>
+                <currencyId>RUB</currencyId>
+                <categoryId>3110</categoryId>
+                <picture>https://erfolg-c.ru/wa-data/public/shop/products/85/51/55185/images/31875/31875.970.jpg</picture>
+                <picture>https://erfolg-c.ru/wa-data/public/shop/products/85/51/55185/images/31876/31876.970.jpg</picture>
+                <param name="Коллекция">EVE Experience</param>
+            </offer>
+        </offers>
+    </shop>
+</yml_catalog>
