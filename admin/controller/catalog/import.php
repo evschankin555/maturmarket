@@ -381,6 +381,9 @@ class ControllerCatalogImport extends Controller {
 						case $this->language->get('supplier_erfolg'):
 							$this->parseErfolgXML($file);
 							break;
+						case $this->language->get('supplier_dibidi'):
+							$this->parseDibidiXML($file);
+							break;
 						case $this->language->get('supplier_erfolg_changes'):
 							$this->parseErfolgJSON($file);
 							break;							
@@ -4880,6 +4883,323 @@ class ControllerCatalogImport extends Controller {
 				$this->model_catalog_product->editProduct($product_id, $product);
 			}
 		}		
+	}
+	private function parseDibidiXML($filename) {
+		$this->load->model('catalog/category');
+		$this->load->model('localisation/language');
+		$this->load->model('tool/image');
+		$this->load->model('catalog/product');
+		$this->load->model('customer/customer_group');
+		$this->load->model('localisation/city');
+		$languages = $this->model_localisation_language->getLanguages();
+		$stock_status_id = 5;
+		$MASTER_CUSTOMER_GROUP_NAME = 'Мастер';
+
+		$manufacturerName = 'Dibidi';
+
+		$manufacturer = $this->getManufacturerByName($manufacturerName, $languages);
+		$manufacturer_id = $manufacturer['manufacturer_id'];
+
+		$xml = simplexml_load_file($filename);
+
+		$category_names = array();
+
+		foreach ($xml->shop->categories->category as $category) {
+			$external_category_id = (string)$category['id'];
+			$category_names[$external_category_id] = $category;
+		}
+
+		$city_names = array('Казань', 'Зеленодольск', 'Бугульма', 'Альметьевск', 'Лениногорск', 'Арск', 'Набережные Челны', 'Нижнекамск', 'Чистополь', 'Елабуга', 'Другой населенный пункт Республики Татарстан');
+		$product_city = array();
+		foreach($city_names as $city_name) {
+			$city_id = $this->model_localisation_city->getCityByName(trim($city_name))['city_id'];
+			if (!$city_id) {
+				$this->log->write('Не найден город ' . $city_name);
+			} else {
+				$product_city[] = $city_id;
+			}
+		}
+
+		$categories = array();
+
+		foreach ($xml->shop->offers->offer as $offer) {
+			$series = trim((string)$offer->shopSku);
+
+			$category_id = null;
+
+			$category_id_with_series = (string)$offer->categoryId . '-' . $series;
+
+			if (array_key_exists($category_id_with_series, $categories)) {
+				$category_id = $categories[$category_id_with_series]; // Сначала поищем в кеш-массиве
+			}
+
+			if (!$category_id && isset($category_id)){ // 0 - означает, что категорию уже искали в БД и не нашли
+				continue;
+			}
+
+			$brandName = trim((string)$offer->vendor) ? trim((string)$offer->vendor) : 'FarmaVita';
+			$filter_id = $this->getBrandFilter($languages, $brandName);
+
+			if (!$category_id){ // Если из кеша пришел null, то поищем в БД
+				$category_name_with_series = $series ? $category_names[(string)$offer->categoryId] . '-' . $series : $category_names[(string)$offer->categoryId];
+
+                $this->log->write('$category_name_with_series = ' . $category_name_with_series . ' ');
+				$category_id = $this->getCategoryIdByManufacturerAndName($manufacturer, $category_name_with_series, $filter_id);
+				$categories[$category_id_with_series] = $category_id; // Кладем в кеш (даже если 0 - это означает, что категорию уже искали в БД и не нашли)
+				if (!$category_id){ // Если и в БД не нашли соответствие для такой категории, то пропустим ее
+					continue;
+				}
+			}
+
+			$SKU = trim((string)$offer['id']);
+			$productName = htmlentities(trim((string)$offer->name));
+			$productShortDescription = htmlentities(trim((string)$offer->description));
+			$productDescription = htmlentities(trim((string)$offer->description));
+			$price = (int)trim((string)$offer->price) ; // Цена РРЦ
+            $this->log->write('$productName = ' . $productName . ' ');
+            $this->log->write('$price = ' . $price . ' ');
+
+            if (!$price){
+				$this->log->write('Для товара с offer_id = ' . $SKU . ' не указана цена РРЦ (price)');
+				continue;
+			}
+			/*$price_for_masters = (int)trim((string)$offer->price) * 1; // Цена для мастеров
+			if ($price_for_masters > $price) {
+				$price_for_masters = $price;
+			}
+			$primeCost = $price_for_masters; */// отключаем
+			$quantity = (int)trim((string)$offer->count);
+			$weight = (float)trim((string)$offer->weight);
+			$consist = null;
+			$size = null;
+			$image_remote_url = trim((string)$offer->picture[0]);
+			$extra_image1 = trim((string)$offer->picture[1]);
+			$extra_image2 = trim((string)$offer->picture[2]);
+
+			if (!empty($size) && count($size) > 0 && !empty($size[0])){
+				$length = $size[0];
+				$width = $size[1];
+				$height = $size[2];
+			} else {
+				$length = '';
+				$width = '';
+				$height = '';
+			}
+
+			$modelPrefix = $manufacturerName . '-' . $brandName;
+
+			$model = $modelPrefix . '-' . $SKU;
+
+			$product = $this->model_catalog_product->getProductByModel($model);
+
+			$manufacturer_image_path = 'catalog/manufacturers/' . $manufacturer_id;
+			if (!is_dir(DIR_IMAGE . $manufacturer_image_path)) {
+				mkdir(DIR_IMAGE . $manufacturer_image_path, 0775, true);
+			}
+
+			if (!empty($image_remote_url)){
+				if (empty($product) || ($product['image_uploaded_from_url'] != $image_remote_url) || !is_file(DIR_IMAGE . $product['image'])){
+					$ext = pathinfo($image_remote_url)['extension'];
+					$image_path = $manufacturer_image_path . '/' . token(10) . '.' . ($ext ? $ext : 'png');
+					file_put_contents(DIR_IMAGE . $image_path, file_get_contents($image_remote_url));
+					$image = $image_path;
+				} else {
+					$image = $product['image'];
+					$image_remote_url = $product['image_uploaded_from_url'];
+				}
+			} else {
+				$image = 'no_image.png';
+			}
+
+			$product_images = array();
+
+			if (!empty($extra_image1)){
+				$product_old_image = '';
+				if (!empty($product)) {
+					$product_old_image = $this->model_catalog_product->getProductImageByUploadedURL($product['product_id'], $extra_image1);
+				}
+
+				if (empty($product_old_image) || !is_file(DIR_IMAGE . $product_old_image['image'])){
+					$ext = pathinfo($extra_image1)['extension'];
+					$image_path = $manufacturer_image_path . '/' . token(10) . '.' . ($ext ? $ext : 'png');
+					file_put_contents(DIR_IMAGE . $image_path, file_get_contents($extra_image1));
+					$product_images[] = array(
+						'image' 					=> $image_path,
+						'image_uploaded_from_url'	=> $extra_image1,
+						'sort_order'				=> 0
+					);
+				} else {
+					$product_images[] = $product_old_image;
+				}
+			}
+			if (!empty($extra_image2)){
+				$product_old_image = '';
+				if (!empty($product)) {
+					$product_old_image = $this->model_catalog_product->getProductImageByUploadedURL($product['product_id'], $extra_image2);
+				}
+
+				if (empty($product_old_image) || !is_file(DIR_IMAGE . $product_old_image['image'])){
+					$ext = pathinfo($extra_image2)['extension'];
+					$image_path = $manufacturer_image_path . '/' . token(10) . '.' . ($ext ? $ext : 'png');
+					file_put_contents(DIR_IMAGE . $image_path, file_get_contents($extra_image2));
+					$product_images[] = array(
+						'image' 					=> $image_path,
+						'image_uploaded_from_url'	=> $extra_image2,
+						'sort_order'				=> 0
+					);
+				} else {
+					$product_images[] = $product_old_image;
+				}
+			}
+
+			$product_description = array();
+			foreach($languages as $language) {
+				$product_description[$language['language_id']] = array(
+						'name'             => $productName,
+						'meta_title'       => $productName,
+						'meta_h1'      	   => $productName,
+						'meta_description' => $productName,
+						'meta_keyword'     => $productName,
+						'description'      => $productDescription,
+						'tag'			   => '',
+						'consist'		   => $consist
+				);
+			}
+
+			$product_seo_url = array();
+			foreach($languages as $language) {
+				if (strtolower(trim($language['name'])) == 'ru') {
+					$product_seo_url[0][$language['language_id']] = $manufacturer_id . '-' . $this->make_chpu($productName);
+				} elseif (strtolower(trim($language['name'])) == 'en') {
+					$product_seo_url[0][$language['language_id']] = $manufacturer_id . '-' . $this->make_chpu($productName, true);
+				} else {
+					$product_seo_url[0][$language['language_id']] = $manufacturer_id . '-' . strtolower(trim($language['name'])) . '-' . $this->make_chpu($productName, true);
+				}
+			}
+
+			$customer_group_id = $this->model_customer_customer_group->getCustomerGroupByName($MASTER_CUSTOMER_GROUP_NAME)['customer_group_id'];
+			/*$product_special = array();
+			$product_special[] = array(
+				'customer_group_id'		=> $customer_group_id,
+				'priority'				=> 1,
+				'price'					=> $price_for_masters,
+				'date_start'			=> '',
+				'date_end'				=> ''
+			);*/
+
+			if (empty($product)){
+				$product = array(
+					'product_description'		=> $product_description,
+					'model' 					=> $model,
+					'sku' 						=> $SKU,
+					'upc'						=> '',
+					'ean'						=> '',
+					'jan'						=> '',
+					'isbn'						=> '',
+					'mpn'						=> '',
+					'location'					=> '',
+					'product_store' 			=> array(0),
+					'shipping'					=> 1,
+					'price'						=> $price,
+					'product_recurring'			=> array(),
+					'tax_class_id'				=> 0,
+					'date_available' 			=> date('Y-m-d'),
+					'quantity' 					=> $quantity,
+					'minimum' 					=> 1,
+					'subtract'					=> 1,
+					'sort_order'				=> 1,
+					'stock_status_id'			=> $stock_status_id,
+					'status'					=> 1,
+					'noindex' 					=> 1,
+					'weight'					=> $weight,
+					'weight_class_id' 			=> $this->config->get('config_weight_class_id'),
+					'length' 					=> $length,
+					'width' 					=> $width,
+					'height' 					=> $height,
+					'length_class_id'			=> $this->config->get('config_length_class_id'),
+					'manufacturer_id'			=> $manufacturer_id,
+					'main_category_id' 			=> $category_id,
+					'product_category' 			=> array($category_id),
+					'product_filter' 			=> array($filter_id),
+					'product_attribute' 		=> array(),
+					'product_option' 			=> array(),
+					'product_discount' 			=> array(),
+					'image'						=> $image,
+					'image_uploaded_from_url'	=> $image_remote_url,
+					'product_image'				=> $product_images,
+					'product_related' 			=> array(),
+					'product_related_article'   => array(),
+					'points' 					=> '',
+					'product_reward' 			=> array(),
+					'product_seo_url' 			=> $product_seo_url,
+					'product_layout'			=> array(),
+					'import_history_id'			=> $this->session->data['import_history_id'],
+					'brand_name'				=> $brandName,
+					'product_city'				=> $product_city
+				);
+				$this->model_catalog_product->addProduct($product);
+			} else {
+				$product_id = $product['product_id'];
+
+				$product_old_description = $this->model_catalog_product->getProductDescriptions($product_id);
+				foreach($languages as $language) {
+					$product_description[$language['language_id']]['meta_title'] = isset($product_old_description[$language['language_id']]['meta_title']) ?
+										$product_old_description[$language['language_id']]['meta_title'] : $productName;
+					$product_description[$language['language_id']]['meta_h1'] = isset($product_old_description[$language['language_id']]['meta_h1']) ?
+										$product_old_description[$language['language_id']]['meta_h1'] : $productName;
+					$product_description[$language['language_id']]['meta_description'] = isset($product_old_description[$language['language_id']]['meta_description']) ?
+										$product_old_description[$language['language_id']]['meta_description'] : $productName;
+					$product_description[$language['language_id']]['meta_keyword'] = isset($product_old_description[$language['language_id']]['meta_keyword']) ?
+										$product_old_description[$language['language_id']]['meta_keyword'] : $productName;
+					$product_description[$language['language_id']]['tag'] = isset($product_old_description[$language['language_id']]['tag']) ?
+										$product_old_description[$language['language_id']]['tag'] : '';
+				}
+
+				$product_filter = $this->model_catalog_product->getProductFilters($product_id);
+				if (!in_array($filter_id, $product_filter)){
+					$product_filter[] = $filter_id;
+				}
+
+				/*$old_product_special = $this->model_catalog_product->getProductSpecials($product_id);
+				foreach($old_product_special as $product_special_item) {
+					if ($product_special_item['customer_group_id'] == $customer_group_id && $product_special_item['priority'] == 1){
+						continue;
+					}
+					$product_special[] = $product_special_item;
+				}*/
+
+				$product['product_description'] = $product_description;
+				$product['product_recurring'] = $this->model_catalog_product->getRecurrings($product_id);
+				$product['product_filter'] = $product_filter;
+				$product['product_attribute'] = $this->model_catalog_product->getProductAttributes($product_id);
+				$product['product_option'] = $this->model_catalog_product->getProductOptions($product_id);
+				$product['product_discount'] = $this->model_catalog_product->getProductDiscounts($product_id);
+				$product['product_image'] = $this->model_catalog_product->getProductImages($product_id);
+				$product['product_related'] = $this->model_catalog_product->getProductRelated($product_id);
+				$product['product_related_article'] = $this->model_catalog_product->getArticleRelated($product_id);
+				$product['product_reward'] = $this->model_catalog_product->getProductRewards($product_id);
+				$product['product_seo_url'] = $product_seo_url;
+				$product['product_layout'] = $this->model_catalog_product->getProductLayouts($product_id);
+				$product['product_store'] = array(0);
+				$product['price'] = $price;
+				$product['quantity'] = $quantity;
+				$product['weight'] = $weight;
+				$product['length'] = $length;
+				$product['width'] = $width;
+				$product['height'] = $height;
+				$product['main_category_id'] = $category_id;
+				$product['product_category'] = array($category_id);
+				$product['image'] = $image;
+				$product['product_image'] = $product_images;
+				$product['image_uploaded_from_url'] = $image_remote_url;
+				$product['import_history_id'] = $this->session->data['import_history_id'];
+				$product['brand_name'] = $brandName;
+				$product['product_city'] = $product_city;
+				$product['status'] = 1;
+
+				$this->model_catalog_product->editProduct($product_id, $product);
+			}
+		}
 	}
 
 	private function parseErfolgJSON($filename) {

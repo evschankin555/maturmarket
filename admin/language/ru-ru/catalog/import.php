@@ -54,6 +54,7 @@ $_['supplier_mio']              = 'MiO Nails';
 $_['supplier_uno']              = 'UNO';
 $_['supplier_dewal']            = 'DEWAL cosmetics';
 $_['supplier_erfolg']           = 'Erfolg';
+$_['supplier_dibidi']           = 'DiBiDiShop';
 $_['supplier_keune']            = 'KEUNE';
 $_['supplier_ollin']            = 'OLLIN';
 $_['supplier_kondor']           = 'KONDOR';

@@ -20,6 +20,8 @@ class ControllerApiImport extends Controller {
 			$error_message = $this->importErfolgFull();
 		} else if ($this->request->post['type'] == 'erfolg_changes'){
 			$error_message = $this->importErfolgChanges();
+		} else if ($this->request->post['type'] == 'dibidi'){
+			$error_message = $this->importDibidiFull();
 		}
 
 		if ($error_message) {
@@ -83,6 +85,37 @@ class ControllerApiImport extends Controller {
 		if (is_file($file)) {
 			$this->load->model('catalog/import');
 			
+			$import_history_id = $this->model_catalog_import->addImportHistory($this->session->data['supplier'], $this->session->data['import_original_filename']);
+			$this->session->data['import_history_id'] = $import_history_id;
+
+			// Далее вызовем те же методы, что и при ручной загрузке
+			$this->load->load_controller('catalog/import');
+			$this->request->get['import_history_id'] = $import_history_id;
+			$this->controller_catalog_import->import();
+			$this->controller_catalog_import->unzip();
+			$this->controller_catalog_import->save();
+
+			return null;
+		} else {
+			$this->load->language('api/import');
+			return $this->language->get('error_file');
+		}
+	}
+	private function importDibidiFull(){
+		$this->load->language('catalog/import');
+		// Загрузим файл
+		$this->session->data['import'] = token(10);
+		$this->session->data['import_original_filename'] = 'dibidi_' . $this->session->data['import'] . '.xml';
+		$this->session->data['supplier'] = $this->language->get('supplier_dibidi');
+
+		$ERFOLG_FILE_URL = 'https://dibidishop.ru/bitrix/catalog_export/export_gY8.xml';
+		$file = DIR_UPLOAD . $this->session->data['import'] . '.tmp-import';
+
+		file_put_contents($file, file_get_contents($ERFOLG_FILE_URL));
+
+		if (is_file($file)) {
+			$this->load->model('catalog/import');
+
 			$import_history_id = $this->model_catalog_import->addImportHistory($this->session->data['supplier'], $this->session->data['import_original_filename']);
 			$this->session->data['import_history_id'] = $import_history_id;
 
