@@ -49,6 +49,13 @@ find $BACKUP_DIR -type f -name "*.sql" -exec gzip "{}" \;
 
 echo "Все файлы .sql были архивированы."
 
+# Путь к архивам импортов
+IMPORT_ARCHIVE_DIR="/var/www/maturmarket_storage/upload/archive"
+
+# Удаляем файлы старше одного месяца
+find $IMPORT_ARCHIVE_DIR -type f -mtime +30 -exec rm -f {} \;
+
+echo "Архивы импортов товаров старше одного месяца удалены."
 
 # Получаем текущий день месяца
 CURRENT_DAY=$(date +%d)
@@ -57,4 +64,12 @@ CURRENT_DAY=$(date +%d)
 if [[ "$CURRENT_DAY" == "02" || "$CURRENT_DAY" == "03" ]]; then
     # Находим и удаляем архивированные (.gz) файлы логов в /var/log
     find /var/log -type f -name "*.gz" -delete
+
+    # Удаляем старые логи .1, .2 и другие
+    sudo rm -rf /var/log/*.gz /var/log/*.1 /var/log/*.2 /var/log/*.3 /var/log/*.4
+
+    # Очищаем systemd journal старше 7 дней
+    sudo journalctl --vacuum-time=7d
+
+    echo "Логи очищены."
 fi
