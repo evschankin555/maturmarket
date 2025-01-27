@@ -83,176 +83,189 @@ class ControllerSaleOrder extends Controller {
 
 		$this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true));
 	}
-			
-	protected function getList() {
-		if (isset($this->request->get['filter_order_id'])) {
-			$filter_order_id = $this->request->get['filter_order_id'];
-		} else {
-			$filter_order_id = '';
-		}
 
-		if (isset($this->request->get['filter_customer'])) {
-			$filter_customer = $this->request->get['filter_customer'];
-		} else {
-			$filter_customer = '';
-		}
+    protected function getList() {
+        if (isset($this->request->get['filter_order_id'])) {
+            $filter_order_id = $this->request->get['filter_order_id'];
+        } else {
+            $filter_order_id = '';
+        }
 
-		if (isset($this->request->get['filter_order_status'])) {
-			$filter_order_status = $this->request->get['filter_order_status'];
-		} else {
-			$filter_order_status = '';
-		}
-		
-		if (isset($this->request->get['filter_order_status_id'])) {
-			$filter_order_status_id = $this->request->get['filter_order_status_id'];
-		} else {
-			$filter_order_status_id = '';
-		}
-		
-		if (isset($this->request->get['filter_total'])) {
-			$filter_total = $this->request->get['filter_total'];
-		} else {
-			$filter_total = '';
-		}
+        if (isset($this->request->get['filter_customer'])) {
+            $filter_customer = $this->request->get['filter_customer'];
+        } else {
+            $filter_customer = '';
+        }
 
-		if (isset($this->request->get['filter_date_added'])) {
-			$filter_date_added = $this->request->get['filter_date_added'];
-		} else {
-			$filter_date_added = '';
-		}
+        if (isset($this->request->get['filter_order_status'])) {
+            $filter_order_status = $this->request->get['filter_order_status'];
+        } else {
+            $filter_order_status = '';
+        }
 
-		if (isset($this->request->get['filter_date_modified'])) {
-			$filter_date_modified = $this->request->get['filter_date_modified'];
-		} else {
-			$filter_date_modified = '';
-		}
+        if (isset($this->request->get['filter_order_status_id'])) {
+            $filter_order_status_id = $this->request->get['filter_order_status_id'];
+        } else {
+            $filter_order_status_id = '';
+        }
 
-		if (isset($this->request->get['filter_shipment_date'])) {
-			$filter_shipment_date = $this->request->get['filter_shipment_date'];
-		} else {
-			$filter_shipment_date = '';
-		}
+        if (isset($this->request->get['filter_total'])) {
+            $filter_total = $this->request->get['filter_total'];
+        } else {
+            $filter_total = '';
+        }
 
-		if (isset($this->request->get['sort'])) {
-			$sort = $this->request->get['sort'];
-		} else {
-			$sort = 'o.order_id';
-		}
+        if (isset($this->request->get['filter_date_added'])) {
+            $filter_date_added = $this->request->get['filter_date_added'];
+        } else {
+            $filter_date_added = '';
+        }
 
-		if (isset($this->request->get['order'])) {
-			$order = $this->request->get['order'];
-		} else {
-			$order = 'DESC';
-		}
+        if (isset($this->request->get['filter_date_modified'])) {
+            $filter_date_modified = $this->request->get['filter_date_modified'];
+        } else {
+            $filter_date_modified = '';
+        }
 
-		if (isset($this->request->get['page'])) {
-			$page = (int)$this->request->get['page'];
-		} else {
-			$page = 1;
-		}
+        // Новый фильтр по телефону
+        if (isset($this->request->get['filter_telephone'])) {
+            $filter_telephone = $this->request->get['filter_telephone'];
+        } else {
+            $filter_telephone = '';
+        }
 
-		$url = '';
+        if (isset($this->request->get['filter_shipment_date'])) {
+            $filter_shipment_date = $this->request->get['filter_shipment_date'];
+        } else {
+            $filter_shipment_date = '';
+        }
 
-		if (isset($this->request->get['filter_order_id'])) {
-			$url .= '&filter_order_id=' . $this->request->get['filter_order_id'];
-		}
+        if (isset($this->request->get['sort'])) {
+            $sort = $this->request->get['sort'];
+        } else {
+            $sort = 'o.order_id';
+        }
 
-		if (isset($this->request->get['filter_customer'])) {
-			$url .= '&filter_customer=' . urlencode(html_entity_decode($this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8'));
-		}
+        if (isset($this->request->get['order'])) {
+            $order = $this->request->get['order'];
+        } else {
+            $order = 'DESC';
+        }
 
-		if (isset($this->request->get['filter_order_status'])) {
-			$url .= '&filter_order_status=' . $this->request->get['filter_order_status'];
-		}
-	
-		if (isset($this->request->get['filter_order_status_id'])) {
-			$url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
-		}
-			
-		if (isset($this->request->get['filter_total'])) {
-			$url .= '&filter_total=' . $this->request->get['filter_total'];
-		}
+        if (isset($this->request->get['page'])) {
+            $page = (int)$this->request->get['page'];
+        } else {
+            $page = 1;
+        }
 
-		if (isset($this->request->get['filter_date_added'])) {
-			$url .= '&filter_date_added=' . $this->request->get['filter_date_added'];
-		}
+        $url = '';
 
-		if (isset($this->request->get['filter_date_modified'])) {
-			$url .= '&filter_date_modified=' . $this->request->get['filter_date_modified'];
-		}
+        if (isset($this->request->get['filter_order_id'])) {
+            $url .= '&filter_order_id=' . $this->request->get['filter_order_id'];
+        }
 
-		if (isset($this->request->get['filter_shipment_date'])) {
-			$url .= '&filter_shipment_date=' . $this->request->get['filter_shipment_date'];
-		}
+        if (isset($this->request->get['filter_customer'])) {
+            $url .= '&filter_customer=' . urlencode(html_entity_decode($this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8'));
+        }
 
-		if (isset($this->request->get['sort'])) {
-			$url .= '&sort=' . $this->request->get['sort'];
-		}
+        if (isset($this->request->get['filter_order_status'])) {
+            $url .= '&filter_order_status=' . $this->request->get['filter_order_status'];
+        }
 
-		if (isset($this->request->get['order'])) {
-			$url .= '&order=' . $this->request->get['order'];
-		}
+        if (isset($this->request->get['filter_order_status_id'])) {
+            $url .= '&filter_order_status_id=' . $this->request->get['filter_order_status_id'];
+        }
 
-		if (isset($this->request->get['page'])) {
-			$url .= '&page=' . $this->request->get['page'];
-		}
+        if (isset($this->request->get['filter_total'])) {
+            $url .= '&filter_total=' . $this->request->get['filter_total'];
+        }
 
-		$data['breadcrumbs'] = array();
+        if (isset($this->request->get['filter_date_added'])) {
+            $url .= '&filter_date_added=' . $this->request->get['filter_date_added'];
+        }
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
-		);
+        if (isset($this->request->get['filter_date_modified'])) {
+            $url .= '&filter_date_modified=' . $this->request->get['filter_date_modified'];
+        }
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true)
-		);
+        if (isset($this->request->get['filter_telephone'])) {
+            $url .= '&filter_telephone=' . urlencode(html_entity_decode($this->request->get['filter_telephone'], ENT_QUOTES, 'UTF-8'));
+        }
 
-		$data['invoice'] = $this->url->link('sale/order/invoice', 'user_token=' . $this->session->data['user_token'], true);
-		$data['shipping'] = $this->url->link('sale/order/shipping', 'user_token=' . $this->session->data['user_token'], true);
-		$data['add'] = $this->url->link('sale/order/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url, true));
+        if (isset($this->request->get['filter_shipment_date'])) {
+            $url .= '&filter_shipment_date=' . $this->request->get['filter_shipment_date'];
+        }
 
-		$data['orders'] = array();
+        if (isset($this->request->get['sort'])) {
+            $url .= '&sort=' . $this->request->get['sort'];
+        }
 
-		$filter_data = array(
-			'filter_order_id'        => $filter_order_id,
-			'filter_customer'	     => $filter_customer,
-			'filter_order_status'    => $filter_order_status,
-			'filter_order_status_id' => $filter_order_status_id,
-			'filter_total'           => $filter_total,
-			'filter_date_added'      => $filter_date_added ? date_create_from_format("d.m.Y", $filter_date_added)->format("Y-m-d") : '',
-			'filter_date_modified'   => $filter_date_modified ? date_create_from_format("d.m.Y", $filter_date_modified)->format("Y-m-d") : '',
-			'filter_shipment_date'   => $filter_shipment_date ? date_create_from_format("d.m.Y", $filter_shipment_date)->format("Y-m-d") : '',
-			'sort'                   => $sort,
-			'order'                  => $order,
-			'start'                  => ($page - 1) * $this->config->get('config_limit_admin'),
-			'limit'                  => $this->config->get('config_limit_admin')
-		);
+        if (isset($this->request->get['order'])) {
+            $url .= '&order=' . $this->request->get['order'];
+        }
 
-		$order_total = $this->model_sale_order->getTotalOrders($filter_data);
+        if (isset($this->request->get['page'])) {
+            $url .= '&page=' . $this->request->get['page'];
+        }
 
-		$results = $this->model_sale_order->getOrders($filter_data);
+        $data['breadcrumbs'] = array();
 
-		foreach ($results as $result) {
-			$data['orders'][] = array(
-				'order_id'      => $result['order_id'],
-				'customer'      => $result['customer'],
-				'order_status'  => $result['order_status'] ? $result['order_status'] : $this->language->get('text_missing'),
-				'total'         => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
-				'date_added'    => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
-				'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
-				'shipment_date' => $result['shipment_date'] ? date($this->language->get('date_format_short'), strtotime($result['shipment_date'])) : '',
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+        );
+
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('heading_title'),
+            'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true)
+        );
+
+        $data['invoice'] = $this->url->link('sale/order/invoice', 'user_token=' . $this->session->data['user_token'], true);
+        $data['shipping'] = $this->url->link('sale/order/shipping', 'user_token=' . $this->session->data['user_token'], true);
+        $data['add'] = $this->url->link('sale/order/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+        $data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url, true));
+
+        $data['orders'] = array();
+
+        $filter_data = array(
+            'filter_order_id'        => $filter_order_id,
+            'filter_customer'        => $filter_customer,
+            'filter_order_status'    => $filter_order_status,
+            'filter_order_status_id' => $filter_order_status_id,
+            'filter_total'           => $filter_total,
+            'filter_date_added'      => $filter_date_added ? date_create_from_format("d.m.Y", $filter_date_added)->format("Y-m-d") : '',
+            'filter_date_modified'   => $filter_date_modified ? date_create_from_format("d.m.Y", $filter_date_modified)->format("Y-m-d") : '',
+            'filter_telephone'       => $filter_telephone,
+            'filter_shipment_date'   => $filter_shipment_date ? date_create_from_format("d.m.Y", $filter_shipment_date)->format("Y-m-d") : '',
+            'sort'                   => $sort,
+            'order'                  => $order,
+            'start'                  => ($page - 1) * $this->config->get('config_limit_admin'),
+            'limit'                  => $this->config->get('config_limit_admin')
+        );
+
+        $order_total = $this->model_sale_order->getTotalOrders($filter_data);
+
+        $results = $this->model_sale_order->getOrders($filter_data);
+
+        foreach ($results as $result) {
+            $data['orders'][] = array(
+                'order_id'      => $result['order_id'],
+                'customer'      => $result['customer'],
+                'telephone'     => $result['telephone'], // Поле для вывода телефона
+                'order_status'  => $result['order_status'] ? $result['order_status'] : $this->language->get('text_missing'),
+                'total'         => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+                'date_added'    => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+                'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
+                'shipment_date' => $result['shipment_date'] ? date($this->language->get('date_format_short'), strtotime($result['shipment_date'])) : '',
 				'shipping_code' => $result['shipping_code'],
 				'readiness'		=> $result['readiness'],
 				'readiness_text'=> $result['readiness'] == 1 ? $this->language->get('text_ready') : $this->language->get('text_not_ready'),
-				'view'          => $this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $result['order_id'] . $url, true),
-				'edit'          => $this->url->link('sale/order/edit', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $result['order_id'] . $url, true)
-			);
-		}
+                'view'          => $this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $result['order_id'] . $url, true),
+                'edit'          => $this->url->link('sale/order/edit', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $result['order_id'] . $url, true)
+            );
+        }
 
-		$data['user_token'] = $this->session->data['user_token'];
+        $data['user_token'] = $this->session->data['user_token'];
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -422,10 +435,11 @@ class ControllerSaleOrder extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('sale/order_list', $data));
-	}
-		
-	public function getForm() {
+        $this->response->setOutput($this->load->view('sale/order_list', $data));
+    }
+
+
+    public function getForm() {
 		$data['text_form'] = !isset($this->request->get['order_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 
 		$url = '';

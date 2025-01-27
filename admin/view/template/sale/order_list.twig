@@ -36,7 +36,11 @@
             <label class="control-label" for="input-order-id">{{ entry_order_id }}</label>
             <input type="text" name="filter_order_id" value="{{ filter_order_id }}" placeholder="{{ entry_order_id }}" id="input-order-id" class="form-control" />
           </div>
-          <div class="form-group">
+            <div class="form-group">
+                <label class="control-label" for="input-telephone">{{ entry_telephone }}</label>
+                <input type="text" name="filter_telephone" value="{{ filter_telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="form-control" />
+            </div>
+            <div class="form-group">
             <label class="control-label" for="input-shipment-date">{{ entry_shipment_date }}</label>
             <div class="input-group date">
               <input type="text" name="filter_shipment_date" value="{{ filter_shipment_date }}" placeholder="{{ entry_shipment_date }}" data-date-format="DD.MM.YYYY" id="input-shipment-date" class="form-control" />
@@ -219,7 +223,14 @@ $('#button-filter').on('click', function() {
 		url += '&filter_shipment_date=' + encodeURIComponent(filter_shipment_date);
 	}
 
-	location = 'index.php?route=sale/order&user_token={{ user_token }}' + url;
+    var filter_telephone = $('input[name=\'filter_telephone\']').val();
+
+    if (filter_telephone) {
+        url += '&filter_telephone=' + encodeURIComponent(filter_telephone);
+    }
+
+
+    location = 'index.php?route=sale/order&user_token={{ user_token }}' + url;
 });
 //--></script> 
   <script type="text/javascript"><!--

@@ -149,91 +149,123 @@ class ModelSaleOrder extends Model {
 		}
 	}
 
-	public function getOrders($data = array()) {
-		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified, o.shipment_date, o.readiness FROM `" . DB_PREFIX . "order` o";
+    public function getOrders($data = array()) {
+        $sql = "SELECT 
+                o.order_id, 
+                CONCAT(o.firstname, ' ', o.lastname) AS customer, 
+                (SELECT os.name 
+                 FROM " . DB_PREFIX . "order_status os 
+                 WHERE os.order_status_id = o.order_status_id 
+                   AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, 
+                o.shipping_code, 
+                o.total, 
+                o.currency_code, 
+                o.currency_value, 
+                o.date_added, 
+                o.date_modified, 
+                o.shipment_date, 
+                o.readiness,
+                o.telephone
+            FROM `" . DB_PREFIX . "order` o";
 
-		if (!empty($data['filter_order_status'])) {
-			$implode = array();
+        // Условия для фильтрации заказов
+        $conditions = array();
 
-			$order_statuses = explode(',', $data['filter_order_status']);
+        // Фильтр по статусу заказа
+        if (!empty($data['filter_order_status'])) {
+            $order_statuses = explode(',', $data['filter_order_status']);
+            $status_conditions = array();
 
-			foreach ($order_statuses as $order_status_id) {
-				$implode[] = "o.order_status_id = '" . (int)$order_status_id . "'";
-			}
+            foreach ($order_statuses as $order_status_id) {
+                $status_conditions[] = "o.order_status_id = '" . (int)$order_status_id . "'";
+            }
 
-			if ($implode) {
-				$sql .= " WHERE (" . implode(" OR ", $implode) . ")";
-			}
-		} elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
-			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
-		} else {
-			$sql .= " WHERE o.order_status_id > '0'";
-		}
+            if ($status_conditions) {
+                $conditions[] = "(" . implode(" OR ", $status_conditions) . ")";
+            }
+        } elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
+            $conditions[] = "o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+        } else {
+            $conditions[] = "o.order_status_id > '0'";
+        }
 
-		if (!empty($data['filter_order_id'])) {
-			$sql .= " AND o.order_id = '" . (int)$data['filter_order_id'] . "'";
-		}
+        // Фильтр по ID заказа
+        if (!empty($data['filter_order_id'])) {
+            $conditions[] = "o.order_id = '" . (int)$data['filter_order_id'] . "'";
+        }
 
-		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
-		}
+        // Фильтр по клиенту
+        if (!empty($data['filter_customer'])) {
+            $conditions[] = "CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+        }
 
-		if (!empty($data['filter_date_added'])) {
-			$sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
-		}
+        // Фильтр по дате добавления
+        if (!empty($data['filter_date_added'])) {
+            $conditions[] = "DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+        }
 
-		if (!empty($data['filter_date_modified'])) {
-			$sql .= " AND DATE(o.date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
-		}
+        // Фильтр по дате изменения
+        if (!empty($data['filter_date_modified'])) {
+            $conditions[] = "DATE(o.date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
+        }
 
-		if (!empty($data['filter_shipment_date'])) {
-			$sql .= " AND DATE(o.shipment_date) = DATE('" . $this->db->escape($data['filter_shipment_date']) . "')";
-		}
+        // Фильтр по дате доставки
+        if (!empty($data['filter_shipment_date'])) {
+            $conditions[] = "DATE(o.shipment_date) = DATE('" . $this->db->escape($data['filter_shipment_date']) . "')";
+        }
 
-		if (!empty($data['filter_total'])) {
-			$sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
-		}
+        // Фильтр по общей сумме заказа
+        if (!empty($data['filter_total'])) {
+            $conditions[] = "o.total = '" . (float)$data['filter_total'] . "'";
+        }
 
-		$sort_data = array(
-			'o.order_id',
-			'customer',
-			'order_status',
-			'o.date_added',
-			'o.date_modified',
-			'o.shipment_date',
-			'o.total'
-		);
+        // Фильтр по телефону
+        if (!empty($data['filter_telephone'])) {
+            $conditions[] = "o.telephone LIKE '%" . $this->db->escape($data['filter_telephone']) . "%'";
+        }
 
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY o.order_id";
-		}
+        // Применение условий фильтрации
+        if ($conditions) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
 
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
+        // Сортировка
+        $sort_data = array(
+            'o.order_id',
+            'customer',
+            'order_status',
+            'o.date_added',
+            'o.date_modified',
+            'o.shipment_date',
+            'o.total'
+        );
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= " ORDER BY " . $data['sort'];
+        } else {
+            $sql .= " ORDER BY o.order_id";
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= " DESC";
+        } else {
+            $sql .= " ASC";
+        }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+        // Лимит и смещение
+        if (isset($data['start']) || isset($data['limit'])) {
+            $data['start'] = isset($data['start']) && $data['start'] >= 0 ? (int)$data['start'] : 0;
+            $data['limit'] = isset($data['limit']) && $data['limit'] > 0 ? (int)$data['limit'] : 20;
 
-		$query = $this->db->query($sql);
+            $sql .= " LIMIT " . $data['start'] . "," . $data['limit'];
+        }
 
-		return $query->rows;
-	}
+        $query = $this->db->query($sql);
 
-	public function getOrderProducts($order_id) {
+        return $query->rows;
+    }
+
+    public function getOrderProducts($order_id) {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 
 		return $query->rows;
@@ -262,56 +294,66 @@ class ModelSaleOrder extends Model {
 
 		return $query->rows;
 	}
-	
-	public function getTotalOrders($data = array()) {
-		$sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order`";
 
-		if (!empty($data['filter_order_status'])) {
-			$implode = array();
+    public function getTotalOrders($data = array()) {
+        $sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0'";
 
-			$order_statuses = explode(',', $data['filter_order_status']);
+        // Фильтр по статусу заказа
+        if (!empty($data['filter_order_status'])) {
+            $implode = array();
 
-			foreach ($order_statuses as $order_status_id) {
-				$implode[] = "order_status_id = '" . (int)$order_status_id . "'";
-			}
+            $order_statuses = explode(',', $data['filter_order_status']);
+            foreach ($order_statuses as $order_status_id) {
+                $implode[] = "order_status_id = '" . (int)$order_status_id . "'";
+            }
 
-			if ($implode) {
-				$sql .= " WHERE (" . implode(" OR ", $implode) . ")";
-			}
-		} elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
-			$sql .= " WHERE order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
-		} else {
-			$sql .= " WHERE order_status_id > '0'";
-		}
+            if ($implode) {
+                $sql .= " AND (" . implode(" OR ", $implode) . ")";
+            }
+        } elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
+            $sql .= " AND order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+        }
 
-		if (!empty($data['filter_order_id'])) {
-			$sql .= " AND order_id = '" . (int)$data['filter_order_id'] . "'";
-		}
+        // Фильтр по ID заказа
+        if (!empty($data['filter_order_id'])) {
+            $sql .= " AND order_id = '" . (int)$data['filter_order_id'] . "'";
+        }
 
-		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(firstname, ' ', lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
-		}
+        // Фильтр по клиенту
+        if (!empty($data['filter_customer'])) {
+            $sql .= " AND CONCAT(firstname, ' ', lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+        }
 
-		if (!empty($data['filter_date_added'])) {
-			$sql .= " AND DATE(date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
-		}
+        // Фильтр по дате добавления
+        if (!empty($data['filter_date_added'])) {
+            $sql .= " AND DATE(date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+        }
 
-		if (!empty($data['filter_date_modified'])) {
-			$sql .= " AND DATE(date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
-		}
+        // Фильтр по дате изменения
+        if (!empty($data['filter_date_modified'])) {
+            $sql .= " AND DATE(date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
+        }
 
-		if (!empty($data['filter_shipment_date'])) {
-			$sql .= " AND DATE(shipment_date) = DATE('" . $this->db->escape($data['filter_shipment_date']) . "')";
-		}
+        // Фильтр по дате доставки
+        if (!empty($data['filter_shipment_date'])) {
+            $sql .= " AND DATE(shipment_date) = DATE('" . $this->db->escape($data['filter_shipment_date']) . "')";
+        }
 
-		if (!empty($data['filter_total'])) {
-			$sql .= " AND total = '" . (float)$data['filter_total'] . "'";
-		}
+        // Фильтр по общей сумме заказа
+        if (!empty($data['filter_total'])) {
+            $sql .= " AND total = '" . (float)$data['filter_total'] . "'";
+        }
 
-		$query = $this->db->query($sql);
+        // Фильтр по телефону
+        if (!empty($data['filter_telephone'])) {
+            $sql .= " AND telephone LIKE '%" . $this->db->escape($data['filter_telephone']) . "%'";
+        }
 
-		return $query->row['total'];
-	}
+        $query = $this->db->query($sql);
+
+        return isset($query->row['total']) ? (int)$query->row['total'] : 0;
+    }
+
 
 	public function getTotalOrdersByStoreId($store_id) {
 		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE store_id = '" . (int)$store_id . "'");
