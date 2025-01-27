@@ -399,6 +399,7 @@ class ControllerSaleOrder extends Controller {
 		$data['filter_date_added'] = $filter_date_added;
 		$data['filter_date_modified'] = $filter_date_modified;
 		$data['filter_shipment_date'] = $filter_shipment_date;
+        $data['filter_telephone'] = $filter_telephone;
 
 		$data['sort'] = $sort;
 		$data['order'] = $order;
